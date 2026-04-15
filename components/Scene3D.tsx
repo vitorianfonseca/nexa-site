@@ -74,6 +74,7 @@ export default function Scene3D() {
     }
 
     function draw() {
+      if (!ctx) return;
       ctx.clearRect(0, 0, SIZE, SIZE);
 
       // Smooth lerp toward target
