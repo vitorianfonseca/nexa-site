@@ -116,6 +116,7 @@ export const translations = {
           name: "Vitória Fonseca",
           role: "Frontend & Design",
           initials: "VF",
+          image: "/vitoria.png",
           linkedin: "#",
         },
         {
@@ -285,6 +286,7 @@ export const translations = {
           name: "Vitória Fonseca",
           role: "Frontend & Design",
           initials: "VF",
+          image: "/vitoria.png",
           linkedin: "#",
         },
         {

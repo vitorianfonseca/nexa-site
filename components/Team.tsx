@@ -2,6 +2,7 @@
 
 import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
+import Image from "next/image";
 import { useLanguage } from "@/context/LanguageContext";
 
 const fadeUp = {
@@ -30,7 +31,7 @@ function MemberCard({
   member,
   index,
 }: {
-  member: { name: string; role: string; initials: string; linkedin: string };
+  member: { name: string; role: string; initials: string; image?: string; linkedin: string };
   index: number;
 }) {
   const gradients = [
@@ -79,15 +80,25 @@ function MemberCard({
           }}
         />
         <div
-          className="relative w-[72px] h-[72px] rounded-full flex items-center justify-center"
+          className="relative w-[72px] h-[72px] rounded-full flex items-center justify-center overflow-hidden"
           style={{
             background: `linear-gradient(135deg, ${g.from}, ${g.to})`,
             boxShadow: `0 4px 20px ${g.from}44`,
           }}
         >
-          <span className="text-white text-base font-bold tracking-tight">
-            {member.initials}
-          </span>
+          {member.image ? (
+            <Image
+              src={member.image}
+              alt={member.name}
+              fill
+              className="object-cover rounded-full"
+              sizes="72px"
+            />
+          ) : (
+            <span className="text-white text-base font-bold tracking-tight">
+              {member.initials}
+            </span>
+          )}
         </div>
       </div>
 
