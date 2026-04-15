@@ -95,6 +95,7 @@ export default function CTASection() {
 
   return (
     <section
+      id="cta"
       ref={ref}
       className="relative py-24 lg:py-32 overflow-hidden"
       style={{ background: "#0A0A12" }}

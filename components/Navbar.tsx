@@ -8,18 +8,32 @@ import { useLanguage } from "@/context/LanguageContext";
 
 export default function Navbar() {
   const { t, lang, toggle } = useLanguage();
-  const [scrolled, setScrolled] = useState(false);
+  const [isDark, setIsDark] = useState(true);
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState<string>("");
 
   useEffect(() => {
-    const onScroll = () => {
-      const hero = document.getElementById("hero");
-      const threshold = hero ? hero.offsetHeight - 80 : window.innerHeight * 0.85;
-      setScrolled(window.scrollY > threshold);
+    const darkIds = new Set(["hero", "work", "cta"]);
+    const allIds = ["hero", "work", "cta", "services", "process", "team", "contact"];
+
+    const check = () => {
+      const checkY = 65; // just below navbar
+      let current = "hero";
+      for (const id of allIds) {
+        const el = document.getElementById(id);
+        if (!el) continue;
+        const rect = el.getBoundingClientRect();
+        if (rect.top <= checkY && rect.bottom > checkY) {
+          current = id;
+          break;
+        }
+      }
+      setIsDark(darkIds.has(current));
     };
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+
+    window.addEventListener("scroll", check, { passive: true });
+    check();
+    return () => window.removeEventListener("scroll", check);
   }, []);
 
   // Active section detection via IntersectionObserver
@@ -50,8 +64,6 @@ export default function Navbar() {
     { label: t.navbar.contact, href: "#contact", id: "contact" },
   ];
 
-  // Dark hero = not scrolled; light sections = scrolled
-  const isDark = !scrolled;
 
   return (
     <header

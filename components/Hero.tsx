@@ -237,6 +237,22 @@ export default function Hero() {
             </Link>
           </motion.div>
 
+          {/* Availability — bottom right */}
+          <motion.div
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.55 }}
+            className="lg:ml-auto flex items-center gap-3"
+          >
+            <span className="relative flex h-2 w-2 shrink-0">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-60" style={{ background: "#4ade80" }} />
+              <span className="relative inline-flex rounded-full h-2 w-2" style={{ background: "#4ade80" }} />
+            </span>
+            <span className="text-xs tracking-[0.08em] uppercase font-medium" style={{ color: "rgba(255,255,255,0.7)" }}>
+              {lang === "en" ? "Available for new projects" : "Disponível para novos projetos"}
+            </span>
+          </motion.div>
+
         </div>
       </div>
 

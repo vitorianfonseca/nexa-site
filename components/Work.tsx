@@ -55,8 +55,8 @@ function ProjectCard({
             className="absolute inset-0 transition-all duration-500"
             style={{
               background: hovered
-                ? "linear-gradient(135deg, #0a0a14 0%, #130d20 100%)"
-                : "#ECEAE6",
+                ? "linear-gradient(135deg, #130d20 0%, #1e1040 100%)"
+                : "#0D0D1A",
             }}
           />
 
@@ -111,9 +111,7 @@ function ProjectCard({
               width: 40,
               height: 40,
               borderRadius: "50%",
-              border: hovered
-                ? "1px solid rgba(200,162,232,0.4)"
-                : "1px solid rgba(26,26,26,0.15)",
+              border: hovered ? "1px solid rgba(200,162,232,0.4)" : "1px solid rgba(255,255,255,0.1)",
               transition: "border-color 0.3s",
             }}
           />
@@ -127,9 +125,7 @@ function ProjectCard({
               width: 28,
               height: 28,
               borderRadius: "50%",
-              border: hovered
-                ? "0.5px solid rgba(42,19,99,0.3)"
-                : "0.5px solid rgba(26,26,26,0.1)",
+              border: hovered ? "0.5px solid rgba(42,19,99,0.4)" : "0.5px solid rgba(255,255,255,0.06)",
               transition: "border-color 0.3s",
             }}
           />
@@ -138,15 +134,9 @@ function ProjectCard({
           <div
             className="absolute top-3 left-3 px-2.5 py-1 rounded-lg text-xs font-semibold"
             style={{
-              background: hovered
-                ? "rgba(42,19,99,0.2)"
-                : "rgba(26,26,26,0.06)",
-              color: hovered
-                ? "rgba(200,150,255,0.9)"
-                : "rgba(26,26,26,0.35)",
-              border: hovered
-                ? "0.5px solid rgba(200,162,232,0.3)"
-                : "0.5px solid transparent",
+              background: hovered ? "rgba(42,19,99,0.3)" : "rgba(255,255,255,0.05)",
+              color: hovered ? "rgba(200,162,232,0.9)" : "rgba(255,255,255,0.25)",
+              border: hovered ? "0.5px solid rgba(200,162,232,0.3)" : "0.5px solid rgba(255,255,255,0.08)",
               transition: "all 0.3s",
             }}
           >
@@ -157,14 +147,14 @@ function ProjectCard({
         {/* Info */}
         <div>
           <motion.h3
-            animate={{ color: hovered ? "#2A1363" : "#1A1A1A" }}
+            animate={{ color: hovered ? "#C8A2E8" : "#EDE8FF" }}
             transition={{ duration: 0.2 }}
             className="font-bold tracking-[-0.03em] mb-2 leading-snug"
             style={{ fontSize: "clamp(1.15rem, 2vw, 1.4rem)" }}
           >
             {project.name}
           </motion.h3>
-          <p className="text-sm text-muted leading-relaxed mb-3 tracking-[-0.01em]">
+          <p className="text-sm leading-relaxed mb-3 tracking-[-0.01em]" style={{ color: "rgba(255,255,255,0.4)" }}>
             {project.description}
           </p>
           <div className="flex flex-wrap gap-1.5">
@@ -173,12 +163,8 @@ function ProjectCard({
                 key={tag}
                 className="text-xs font-medium px-2.5 py-0.5 rounded-full"
                 animate={{
-                  background: hovered
-                    ? "rgba(42,19,99,0.08)"
-                    : "rgba(26,26,26,0.05)",
-                  color: hovered
-                    ? "rgba(200,162,232,0.9)"
-                    : "rgba(26,26,26,0.45)",
+                  background: hovered ? "rgba(42,19,99,0.3)" : "rgba(255,255,255,0.06)",
+                  color: hovered ? "rgba(200,162,232,0.9)" : "rgba(255,255,255,0.3)",
                 }}
                 transition={{ duration: 0.2 }}
               >
@@ -255,18 +241,66 @@ export default function Work() {
     <section
       id="work"
       ref={ref}
-      className="py-24 lg:py-32 overflow-hidden"
-      style={{ background: "#F5F5F2" }}
+      className="py-24 lg:py-32 overflow-hidden relative"
+      style={{ background: "#0A0A12" }}
       aria-label="Our work"
     >
-      <div className="max-w-7xl mx-auto px-6 lg:px-8">
+      {/* Grid */}
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          backgroundImage: "linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(to right, rgba(255,255,255,0.03) 1px, transparent 1px)",
+          backgroundSize: "60px 60px",
+        }}
+        aria-hidden="true"
+      />
+      {/* Glow */}
+      <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
+        <div style={{ position: "absolute", width: 500, height: 500, borderRadius: "50%", background: "radial-gradient(circle, rgba(42,19,99,0.2) 0%, transparent 70%)", filter: "blur(80px)", top: -100, right: "10%" }} />
+        <div style={{ position: "absolute", width: 300, height: 300, borderRadius: "50%", background: "radial-gradient(circle, rgba(200,162,232,0.08) 0%, transparent 70%)", filter: "blur(60px)", bottom: 0, left: "20%" }} />
+      </div>
+
+      {/* Geometric shapes */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden" aria-hidden="true">
+        {/* Spinning rings */}
+        <motion.div
+          animate={{ rotate: 360 }}
+          transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+          style={{ position: "absolute", width: 220, height: 220, borderRadius: "50%", border: "0.5px solid rgba(200,162,232,0.1)", top: "-5%", right: "3%" }}
+        />
+        <motion.div
+          animate={{ rotate: -360 }}
+          transition={{ duration: 28, repeat: Infinity, ease: "linear" }}
+          style={{ position: "absolute", width: 140, height: 140, borderRadius: "50%", border: "0.5px solid rgba(42,19,99,0.25)", top: "5%", right: "7%" }}
+        />
+        <motion.div
+          animate={{ rotate: 360 }}
+          transition={{ duration: 16, repeat: Infinity, ease: "linear" }}
+          style={{ position: "absolute", width: 90, height: 90, borderRadius: "50%", border: "0.5px solid rgba(200,162,232,0.08)", bottom: "10%", left: "5%" }}
+        />
+        {/* Wireframe cube — bottom right */}
+        <motion.div
+          animate={{ rotateX: 360, rotateY: 360 }}
+          transition={{ duration: 18, repeat: Infinity, ease: "linear" }}
+          style={{ position: "absolute", width: 60, height: 60, border: "0.5px solid rgba(42,19,99,0.3)", bottom: "18%", right: "4%", transformStyle: "preserve-3d" }}
+        />
+        {/* Rotated square — top left */}
+        <motion.div
+          animate={{ rotate: 360 }}
+          transition={{ duration: 24, repeat: Infinity, ease: "linear" }}
+          style={{ position: "absolute", width: 50, height: 50, border: "0.5px solid rgba(200,162,232,0.12)", top: "20%", left: "2%", transform: "rotate(45deg)" }}
+        />
+      </div>
+
+      <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
         {/* Header row */}
         <div className="flex items-end justify-between mb-12">
           <div>
             <motion.p
               initial={{ opacity: 0 }}
               animate={inView ? { opacity: 1 } : {}}
-              className="text-xs font-semibold tracking-[0.15em] uppercase text-accent/70 mb-3"
+              className="text-xs font-semibold tracking-[0.15em] uppercase mb-3"
+              style={{ color: "rgba(200,162,232,0.7)" }}
             >
               Selected work
             </motion.p>
@@ -274,8 +308,8 @@ export default function Work() {
               initial={{ opacity: 0, y: 24 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] }}
-              className="font-bold text-foreground tracking-[-0.03em]"
-              style={{ fontSize: "clamp(1.75rem, 3vw, 2.8rem)" }}
+              className="font-bold tracking-[-0.03em]"
+              style={{ fontSize: "clamp(1.75rem, 3vw, 2.8rem)", color: "#EDE8FF" }}
             >
               {t.work.title}
             </motion.h2>
@@ -289,21 +323,17 @@ export default function Work() {
             className="hidden md:flex gap-2"
           >
             {[
-              { fn: prev, label: "Previous", icon: "←", disabled: false },
-              { fn: next, label: "Next", icon: "→", disabled: false },
-            ].map(({ fn, label, icon, disabled }) => (
+              { fn: prev, label: "Previous", icon: "←" },
+              { fn: next, label: "Next", icon: "→" },
+            ].map(({ fn, label, icon }) => (
               <motion.button
                 key={icon}
                 onClick={fn}
-                disabled={disabled}
                 aria-label={label}
-                whileHover={!disabled ? { scale: 1.05, backgroundColor: "#2A1363", color: "#fff" } : {}}
-                whileTap={!disabled ? { scale: 0.95 } : {}}
-                className={`w-10 h-10 rounded-full flex items-center justify-center text-sm transition-colors duration-200 ${
-                  disabled
-                    ? "text-muted/30 border border-[rgba(26,26,26,0.08)] cursor-not-allowed"
-                    : "text-foreground border border-[rgba(26,26,26,0.15)]"
-                }`}
+                whileHover={{ scale: 1.05, backgroundColor: "#2A1363", color: "#EDE8FF", borderColor: "transparent" }}
+                whileTap={{ scale: 0.95 }}
+                className="w-10 h-10 rounded-full flex items-center justify-center text-sm transition-colors duration-200"
+                style={{ color: "rgba(255,255,255,0.4)", border: "1px solid rgba(255,255,255,0.12)" }}
               >
                 {icon}
               </motion.button>
@@ -317,7 +347,7 @@ export default function Work() {
         initial={{ opacity: 0 }}
         animate={inView ? { opacity: 1 } : {}}
         transition={{ duration: 0.5, delay: 0.1 }}
-        className="pl-6 lg:pl-[max(24px,calc((100vw-1280px)/2+32px))]"
+        className="pl-6 lg:pl-[max(24px,calc((100vw-1280px)/2+32px))] relative z-10"
         onMouseEnter={() => { hoveringRef.current = true; }}
         onMouseLeave={() => { hoveringRef.current = false; }}
       >
@@ -347,7 +377,7 @@ export default function Work() {
       </motion.div>
 
       {/* Dots */}
-      <div className="flex gap-2 mt-8 pl-6 lg:pl-[max(24px,calc((100vw-1280px)/2+32px))]">
+      <div className="flex gap-2 mt-8 pl-6 lg:pl-[max(24px,calc((100vw-1280px)/2+32px))] relative z-10">
         {projects.map((_, i) => (
           <motion.button
             key={i}
@@ -355,7 +385,7 @@ export default function Work() {
             aria-label={`Go to project ${i + 1}`}
             animate={{
               width: i === activeIndex ? 28 : 7,
-              background: i === activeIndex ? "#2A1363" : "rgba(26,26,26,0.2)",
+              background: i === activeIndex ? "#C8A2E8" : "rgba(255,255,255,0.15)",
             }}
             className="h-1 rounded-full"
             whileHover={{ scale: 1.2 }}
