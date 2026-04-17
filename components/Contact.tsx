@@ -139,7 +139,7 @@ export default function Contact() {
           transition={{ duration: 0.6, delay: 0.15, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] }}
           className="rounded-2xl p-8 lg:p-10"
           style={{
-            background: "#F0EFF8",
+            background: "#FFFFFF",
             border: "0.5px solid rgba(42,19,99,0.08)",
             boxShadow: "0 4px 32px rgba(42,19,99,0.04), 0 1px 0 rgba(255,255,255,0.8) inset",
           }}
@@ -344,12 +344,13 @@ export default function Contact() {
                   <motion.button
                     type="submit"
                     disabled={loading}
-                    className="group relative inline-flex items-center gap-2.5 px-7 py-3.5 text-sm font-semibold rounded-full text-white overflow-hidden disabled:opacity-60 disabled:cursor-not-allowed"
+                    className="group relative inline-flex items-center gap-2.5 px-7 py-3.5 text-sm font-semibold rounded-full overflow-hidden disabled:opacity-60 disabled:cursor-not-allowed"
                     style={{
-                      background: "#2A1363",
-                      boxShadow: "0 4px 20px rgba(42,19,99,0.18)",
+                      background: "#EDE8FF",
+                      color: "#0A0A12",
+                      boxShadow: "0 4px 20px rgba(42,19,99,0.10)",
                     }}
-                    whileHover={loading ? {} : { scale: 1.02, boxShadow: "0 6px 28px rgba(42,19,99,0.45)" }}
+                    whileHover={loading ? {} : { scale: 1.02, boxShadow: "0 6px 28px rgba(42,19,99,0.18)" }}
                     whileTap={loading ? {} : { scale: 0.97 }}
                   >
                     {loading ? (
