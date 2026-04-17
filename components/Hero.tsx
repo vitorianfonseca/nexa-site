@@ -52,22 +52,6 @@ function ParticleField() {
         ctx.fill();
       }
 
-      for (let i = 0; i < particles.length; i++) {
-        for (let j = i + 1; j < particles.length; j++) {
-          const dx = particles[j].x - particles[i].x;
-          const dy = particles[j].y - particles[i].y;
-          const d = Math.sqrt(dx * dx + dy * dy);
-          if (d < 130) {
-            ctx.beginPath();
-            ctx.moveTo(particles[i].x, particles[i].y);
-            ctx.lineTo(particles[j].x, particles[j].y);
-            ctx.strokeStyle = `rgba(42, 19, 99, ${0.18 * (1 - d / 130)})`;
-            ctx.lineWidth = 0.5;
-            ctx.stroke();
-          }
-        }
-      }
-
       rafRef.current = requestAnimationFrame(draw);
     }
 
@@ -143,17 +127,6 @@ export default function Hero() {
 
         {/* TOP: pill + headline + subheadline */}
         <div className="pt-28 lg:pt-36">
-          <motion.div
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="inline-flex items-center gap-2 mb-8 px-3.5 py-1.5 rounded-full"
-            style={{ background: "rgba(200,162,232,0.08)", border: "0.5px solid rgba(200,162,232,0.25)" }}
-          >
-            <motion.span animate={{ scale: [1, 1.4, 1] }} transition={{ duration: 2, repeat: Infinity }} className="w-1.5 h-1.5 rounded-full" style={{ background: "#C8A2E8" }} />
-            <span className="text-xs font-semibold tracking-[0.12em] uppercase" style={{ color: "#C8A2E8" }}>Leiria, Portugal</span>
-          </motion.div>
-
           <motion.h1
             initial={{ opacity: 0, y: 28 }}
             animate={{ opacity: 1, y: 0 }}
@@ -172,8 +145,8 @@ export default function Hero() {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.22 }}
-            className="text-base lg:text-lg tracking-[-0.01em] max-w-sm leading-relaxed"
-            style={{ color: "rgba(255,255,255,0.5)" }}
+            className="text-base lg:text-lg tracking-[-0.01em] max-w-md leading-relaxed"
+            style={{ color: "rgba(255,255,255,0.72)" }}
           >
             {t.hero.subheadline}
           </motion.p>
@@ -200,12 +173,12 @@ export default function Hero() {
               >
                 <span
                   className="text-xs font-medium tracking-[0.12em] uppercase px-5"
-                  style={{ color: "rgba(255,255,255,0.2)" }}
+                  style={{ color: "rgba(255,255,255,0.6)" }}
                 >
                   {item}
                 </span>
                 {i < 4 && (
-                  <span style={{ color: "rgba(200,162,232,0.2)", fontSize: 10 }}>·</span>
+                  <span style={{ color: "rgba(200,162,232,0.4)", fontSize: 10 }}>·</span>
                 )}
               </motion.span>
             ))}
@@ -225,14 +198,13 @@ export default function Hero() {
           >
             <Link
               href="#work"
-              className="group relative inline-flex items-center gap-2 px-6 py-3.5 text-sm font-semibold rounded-full overflow-hidden transition-all duration-300"
-              style={{ color: "#EDE8FF", background: "linear-gradient(135deg, #2A1363, #7E4CC4, #C8A2E8)", boxShadow: "0 4px 32px rgba(42,19,99,0.6), 0 0 60px rgba(42,19,99,0.3)" }}
+              className="group inline-flex items-center gap-2 px-6 py-3.5 text-sm font-semibold rounded-full transition-all duration-200 hover:opacity-90"
+              style={{ color: "#0A0A12", background: "#EDE8FF" }}
             >
-              <motion.span className="absolute inset-0 rounded-full" initial={false} whileHover={{ opacity: 1 }} animate={{ opacity: 0 }} style={{ background: "linear-gradient(135deg, #7E4CC4, #C8A2E8)" }} transition={{ duration: 0.3 }} />
-              <span className="relative">{t.hero.ctaPrimary}</span>
-              <motion.span className="relative" animate={{ x: [0, 3, 0] }} transition={{ duration: 1.5, repeat: Infinity }}>→</motion.span>
+              <span>{t.hero.ctaPrimary}</span>
+              <span className="transition-transform duration-300 group-hover:translate-x-1">→</span>
             </Link>
-            <Link href="#contact" className="text-sm font-medium tracking-[-0.01em]" style={{ color: "rgba(255,255,255,0.45)" }}>
+            <Link href="#contact" className="text-sm font-medium tracking-[-0.01em]" style={{ color: "rgba(255,255,255,0.65)" }}>
               {t.hero.ctaSecondary}
             </Link>
           </motion.div>

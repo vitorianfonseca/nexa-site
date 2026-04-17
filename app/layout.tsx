@@ -3,6 +3,7 @@ import localFont from "next/font/local";
 import "./globals.css";
 import { LanguageProvider } from "@/context/LanguageContext";
 import Cursor from "@/components/Cursor";
+import LangSync from "@/components/LangSync";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -78,6 +79,7 @@ export default function RootLayout({
     >
       <body className="font-sans bg-background text-foreground antialiased">
         <LanguageProvider>
+          <LangSync />
           <Cursor />
           {children}
         </LanguageProvider>

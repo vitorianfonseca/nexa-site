@@ -108,19 +108,6 @@ function MemberCard({
           {member.name}
         </p>
         <p className="text-muted text-xs mt-0.5 tracking-[-0.01em]">{member.role}</p>
-
-        {/* Skill dots */}
-        <div className="flex gap-1 mt-2">
-          {[...Array(3)].map((_, i) => (
-            <motion.div
-              key={i}
-              className="w-1.5 h-1.5 rounded-full"
-              style={{ background: `linear-gradient(135deg, ${g.from}, ${g.to})` }}
-              animate={{ opacity: [0.4, 1, 0.4] }}
-              transition={{ duration: 2, repeat: Infinity, delay: i * 0.3 + index * 0.5 }}
-            />
-          ))}
-        </div>
       </div>
 
       {/* LinkedIn */}
@@ -128,15 +115,11 @@ function MemberCard({
         href={member.linkedin}
         aria-label={`${member.name} on LinkedIn`}
         className="text-muted hover:text-accent transition-colors duration-200 shrink-0"
-        style={{ opacity: 0 }}
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
         whileHover={{ scale: 1.15 }}
-        animate={{}}
         target="_blank"
         rel="noopener noreferrer"
-        whileInView={{ opacity: 1 }}
-        onMouseEnter={(e) => {
-          (e.currentTarget as HTMLElement).style.opacity = "1";
-        }}
       >
         <LinkedInIcon />
       </motion.a>

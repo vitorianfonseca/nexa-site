@@ -1,41 +1,36 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { motion, useMotionValue, useSpring } from "framer-motion";
 
 export default function Cursor() {
-  const dotX = useMotionValue(-100);
-  const dotY = useMotionValue(-100);
-  const ringX = useSpring(useMotionValue(-100), { stiffness: 120, damping: 18 });
-  const ringY = useSpring(useMotionValue(-100), { stiffness: 120, damping: 18 });
-  const ringXMv = useRef(ringX);
-  const ringYMv = useRef(ringY);
+  const mouseX = useMotionValue(-100);
+  const mouseY = useMotionValue(-100);
+
+  // Snappier spring — feels responsive, not floaty
+  const ringX = useSpring(mouseX, { stiffness: 320, damping: 26, mass: 0.55 });
+  const ringY = useSpring(mouseY, { stiffness: 320, damping: 26, mass: 0.55 });
 
   const [hovered, setHovered] = useState(false);
   const [clicked, setClicked] = useState(false);
   const [hidden, setHidden] = useState(false);
 
   useEffect(() => {
-    const rx = ringXMv.current;
-    const ry = ringYMv.current;
-
     const onMove = (e: MouseEvent) => {
-      dotX.set(e.clientX);
-      dotY.set(e.clientY);
-      rx.set(e.clientX);
-      ry.set(e.clientY);
+      mouseX.set(e.clientX);
+      mouseY.set(e.clientY);
     };
-
     const onDown = () => setClicked(true);
     const onUp = () => setClicked(false);
     const onLeave = () => setHidden(true);
     const onEnter = () => setHidden(false);
-
     const checkHover = (e: MouseEvent) => {
       const el = e.target as Element;
-      const interactive =
-        el.closest("a, button, [role='button'], input, select, textarea, label, [data-cursor-hover]");
-      setHovered(!!interactive);
+      setHovered(
+        !!el.closest(
+          "a, button, [role='button'], input, select, textarea, label, [data-cursor-hover]"
+        )
+      );
     };
 
     window.addEventListener("mousemove", onMove);
@@ -53,57 +48,51 @@ export default function Cursor() {
       document.documentElement.removeEventListener("mouseleave", onLeave);
       document.documentElement.removeEventListener("mouseenter", onEnter);
     };
-  }, [dotX, dotY]);
+  }, [mouseX, mouseY]);
 
   return (
     <>
-      {/* Dot — tracks exactly */}
+      {/* Dot — sits exactly on pointer */}
       <motion.div
         className="fixed top-0 left-0 pointer-events-none z-[9999]"
-        style={{
-          x: dotX,
-          y: dotY,
-          translateX: "-50%",
-          translateY: "-50%",
-          mixBlendMode: "difference",
-        }}
+        style={{ x: mouseX, y: mouseY, translateX: "-50%", translateY: "-50%" }}
         animate={{
           opacity: hidden ? 0 : 1,
-          scale: clicked ? 0.5 : hovered ? 0 : 1,
+          scale: clicked ? 0.4 : hovered ? 0 : 1,
         }}
-        transition={{ duration: 0.15 }}
+        transition={{ duration: 0.1 }}
       >
         <div
           style={{
-            width: 6,
-            height: 6,
+            width: 4,
+            height: 4,
             borderRadius: "50%",
-            background: "#ffffff",
+            background: "#C8A2E8",
           }}
         />
       </motion.div>
 
-      {/* Ring — spring follow */}
+      {/* Ring — spring follow, accent color (no blend mode) */}
       <motion.div
         className="fixed top-0 left-0 pointer-events-none z-[9998]"
-        style={{
-          x: ringX,
-          y: ringY,
-          translateX: "-50%",
-          translateY: "-50%",
-          width: 36,
-          height: 36,
-          borderRadius: "50%",
-          border: "1.5px solid #ffffff",
-          mixBlendMode: "difference",
-        }}
+        style={{ x: ringX, y: ringY, translateX: "-50%", translateY: "-50%" }}
         animate={{
           opacity: hidden ? 0 : 1,
-          scale: clicked ? 0.85 : hovered ? 1.6 : 1,
-          backgroundColor: hovered ? "rgba(255,255,255,0.15)" : "rgba(0,0,0,0)",
+          scale: clicked ? 0.75 : hovered ? 1.5 : 1,
         }}
-        transition={{ duration: 0.2 }}
-      />
+        transition={{ duration: 0.14 }}
+      >
+        <div
+          style={{
+            width: 26,
+            height: 26,
+            borderRadius: "50%",
+            border: `1px solid rgba(200, 162, 232, ${hovered ? 0.75 : 0.45})`,
+            backgroundColor: hovered ? "rgba(200, 162, 232, 0.07)" : "transparent",
+            transition: "border-color 0.15s ease, background-color 0.15s ease",
+          }}
+        />
+      </motion.div>
     </>
   );
 }

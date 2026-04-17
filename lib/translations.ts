@@ -30,6 +30,8 @@ export const translations = {
     services: {
       title: "What we do",
       arrow: "→",
+      countSuffix: "services",
+      exploreHint: "click to explore",
       items: [
         {
           number: "01",
@@ -54,31 +56,42 @@ export const translations = {
     work: {
       title: "Selected work",
       viewLabel: "View →",
+      viewProject: "View project →",
       projects: [
         {
-          name: "DSTools",
-          description:
-            "A comprehensive guide and base-builder for Don't Starve Together.",
-          tags: ["Next.js", "TypeScript", "Prisma", "PostgreSQL"],
-          href: "#",
+          name: "DST Tools",
+          description: "Base planning tool for Don't Starve Together.",
+          tags: ["React", "TypeScript", "Prisma", "PostgreSQL"],
+          href: "https://dst-tools.vercel.app/",
+          image: "/projects/dstools.jpg",
         },
         {
-          name: "Leiriagenda",
-          description: "Event discovery and booking platform for Leiria.",
+          name: "LeiriAgenda",
+          description: "Event discovery platform for Leiria.",
           tags: ["React", "TypeScript", "Supabase"],
-          href: "#",
+          href: "https://leiriagenda-rouge.vercel.app/",
+          image: "/projects/leiriagenda.jpg",
         },
         {
-          name: "Landing Page — Restaurante",
-          description: "Demo landing page for a restaurant.",
+          name: "Forge Studio",
+          description: "Landing page for a gym in Leiria.",
           tags: ["Next.js", "Tailwind CSS"],
-          href: "#",
+          href: "https://forge-studio-landing.vercel.app/",
+          image: "/projects/forge-studio.jpg",
         },
         {
-          name: "Landing Page — Clínica",
-          description: "Demo landing page for a medical clinic.",
+          name: "Taberna do Sal",
+          description: "Landing page for a traditional Portuguese restaurant.",
           tags: ["Next.js", "Tailwind CSS"],
-          href: "#",
+          href: "https://taberna-do-sal.vercel.app/",
+          image: "/projects/restaurante.jpg",
+        },
+        {
+          name: "Clínica Nova Vida",
+          description: "Landing page for a medical clinic.",
+          tags: ["Next.js", "Tailwind CSS"],
+          href: "https://clinica-nova-vida.vercel.app/",
+          image: "/projects/clinica.jpg",
         },
       ],
     },
@@ -135,8 +148,9 @@ export const translations = {
     },
     cta: {
       headline: "Ready to build something?",
-      subtext: "Tell us about your project.",
+      subtext: "Tell us about your project and let's get started.",
       button: "Get in touch",
+      trustSignals: ["No contracts", "Fast delivery", "Real results"],
     },
     contact: {
       title: "Let's talk",
@@ -155,6 +169,10 @@ export const translations = {
         "Other",
       ],
       submit: "Send message",
+      sending: "Sending...",
+      successTitle: "Message sent.",
+      successBody: "We'll be in touch soon.",
+      errorFallback: "Something went wrong. Please try again.",
       email: "hello@bynexa.dev",
       location: "Leiria, Portugal",
     },
@@ -200,6 +218,8 @@ export const translations = {
     services: {
       title: "O que fazemos",
       arrow: "→",
+      countSuffix: "serviços",
+      exploreHint: "clique para explorar",
       items: [
         {
           number: "01",
@@ -224,31 +244,42 @@ export const translations = {
     work: {
       title: "Trabalhos selecionados",
       viewLabel: "Ver →",
+      viewProject: "Ver projeto →",
       projects: [
         {
-          name: "DSTools",
-          description:
-            "Guia e construtor de bases para o Don't Starve Together.",
-          tags: ["Next.js", "TypeScript", "Prisma", "PostgreSQL"],
-          href: "#",
+          name: "DST Tools",
+          description: "Ferramenta de planeamento de bases para Don't Starve Together.",
+          tags: ["React", "TypeScript", "Prisma", "PostgreSQL"],
+          href: "https://dst-tools.vercel.app/",
+          image: "/projects/dstools.jpg",
         },
         {
-          name: "Leiriagenda",
-          description: "Plataforma de descoberta e reserva de eventos em Leiria.",
+          name: "LeiriAgenda",
+          description: "Plataforma de descoberta de eventos em Leiria.",
           tags: ["React", "TypeScript", "Supabase"],
-          href: "#",
+          href: "https://leiriagenda-rouge.vercel.app/",
+          image: "/projects/leiriagenda.jpg",
         },
         {
-          name: "Landing Page — Restaurante",
-          description: "Landing page demo para um restaurante.",
+          name: "Forge Studio",
+          description: "Landing page para um ginásio em Leiria.",
           tags: ["Next.js", "Tailwind CSS"],
-          href: "#",
+          href: "https://forge-studio-landing.vercel.app/",
+          image: "/projects/forge-studio.jpg",
         },
         {
-          name: "Landing Page — Clínica",
-          description: "Landing page demo para uma clínica médica.",
+          name: "Taberna do Sal",
+          description: "Landing page para um restaurante tradicional português.",
           tags: ["Next.js", "Tailwind CSS"],
-          href: "#",
+          href: "https://taberna-do-sal.vercel.app/",
+          image: "/projects/restaurante.jpg",
+        },
+        {
+          name: "Clínica Nova Vida",
+          description: "Landing page para uma clínica médica.",
+          tags: ["Next.js", "Tailwind CSS"],
+          href: "https://clinica-nova-vida.vercel.app/",
+          image: "/projects/clinica.jpg",
         },
       ],
     },
@@ -305,8 +336,9 @@ export const translations = {
     },
     cta: {
       headline: "Prontos para construir algo?",
-      subtext: "Fale-nos do seu projeto.",
+      subtext: "Conte-nos sobre o seu projeto e vamos começar.",
       button: "Falar connosco",
+      trustSignals: ["Sem contratos", "Entrega rápida", "Resultados reais"],
     },
     contact: {
       title: "Vamos falar",
@@ -325,11 +357,15 @@ export const translations = {
         "Outro",
       ],
       submit: "Enviar mensagem",
+      sending: "A enviar...",
+      successTitle: "Mensagem enviada.",
+      successBody: "Entraremos em contacto em breve.",
+      errorFallback: "Algo correu mal. Por favor tente novamente.",
       email: "hello@bynexa.dev",
       location: "Leiria, Portugal",
     },
     footer: {
-      tagline: "Built to last.",
+      tagline: "Construído para durar.",
       links: {
         work: "Trabalhos",
         services: "Serviços",

@@ -127,11 +127,10 @@ export default function Navbar() {
 
           <Link
             href="#contact"
-            className="inline-flex items-center px-4 py-2 text-sm font-semibold rounded-full transition-all duration-200 tracking-[-0.01em]"
+            className="inline-flex items-center px-4 py-2 text-sm font-semibold rounded-full transition-all duration-300 tracking-[-0.01em] hover:opacity-85"
             style={{
-              color: "#EDE8FF",
-              background: "linear-gradient(135deg, #2A1363, #7E4CC4, #C8A2E8)",
-              boxShadow: "0 2px 12px rgba(42,19,99,0.35)",
+              color: isDark ? "#0A0A12" : "#EDE8FF",
+              background: isDark ? "#EDE8FF" : "#2A1363",
             }}
           >
             {t.navbar.cta}
@@ -204,7 +203,7 @@ export default function Navbar() {
                   href="#contact"
                   onClick={() => setMenuOpen(false)}
                   className="inline-flex items-center px-4 py-2 text-sm font-semibold rounded-full"
-                  style={{ color: "#EDE8FF", background: "linear-gradient(135deg, #2A1363, #7E4CC4, #C8A2E8)" }}
+                  style={{ color: "#EDE8FF", background: "#2A1363" }}
                 >
                   {t.navbar.cta}
                 </Link>

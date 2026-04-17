@@ -7,6 +7,28 @@ import { useLanguage } from "@/context/LanguageContext";
 const inputClass =
   "w-full bg-transparent border-b py-3 text-sm text-foreground placeholder:text-muted/35 focus:outline-none transition-colors duration-200 tracking-[-0.01em]";
 
+// Chevron icon for select
+function ChevronDown() {
+  return (
+    <svg
+      width="11"
+      height="7"
+      viewBox="0 0 11 7"
+      fill="none"
+      className="absolute right-0 bottom-4 pointer-events-none"
+      aria-hidden="true"
+    >
+      <path
+        d="M1 1L5.5 5.5L10 1"
+        stroke="currentColor"
+        strokeWidth="1.4"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
 export default function Contact() {
   const { t } = useLanguage();
   const ref = useRef<HTMLElement>(null);
@@ -21,16 +43,36 @@ export default function Contact() {
     message: "",
   });
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitted(true);
+    setLoading(true);
+    setError(null);
+
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        throw new Error(data.error || t.contact.errorFallback);
+      }
+
+      setSubmitted(true);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : t.contact.errorFallback);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const borderColor = (field: string) =>
-    focused === field
-      ? "border-accent"
-      : "border-[rgba(26,26,26,0.12)]";
+    focused === field ? "border-accent" : "border-[rgba(26,26,26,0.12)]";
 
   return (
     <section
@@ -97,8 +139,9 @@ export default function Contact() {
           transition={{ duration: 0.6, delay: 0.15, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] }}
           className="rounded-2xl p-8 lg:p-10"
           style={{
-            background: "#F5F5F2",
-            border: "0.5px solid rgba(26,26,26,0.07)",
+            background: "#F0EFF8",
+            border: "0.5px solid rgba(42,19,99,0.08)",
+            boxShadow: "0 4px 32px rgba(42,19,99,0.04), 0 1px 0 rgba(255,255,255,0.8) inset",
           }}
         >
           <AnimatePresence mode="wait">
@@ -137,10 +180,10 @@ export default function Contact() {
                 </motion.div>
                 <div>
                   <p className="font-semibold text-foreground tracking-[-0.02em] text-lg">
-                    Message sent.
+                    {t.contact.successTitle}
                   </p>
                   <p className="text-sm text-muted mt-1.5 tracking-[-0.01em]">
-                    We&apos;ll be in touch soon.
+                    {t.contact.successBody}
                   </p>
                 </div>
               </motion.div>
@@ -242,20 +285,23 @@ export default function Contact() {
                   >
                     {t.contact.fields.projectType}
                   </label>
-                  <select
-                    id="projectType"
-                    required
-                    className={`${inputClass} ${borderColor("projectType")} appearance-none cursor-pointer`}
-                    onFocus={() => setFocused("projectType")}
-                    onBlur={() => setFocused(null)}
-                    value={form.projectType}
-                    onChange={(e) => setForm((s) => ({ ...s, projectType: e.target.value }))}
-                  >
-                    <option value="" disabled>—</option>
-                    {t.contact.projectTypes.map((type) => (
-                      <option key={type} value={type}>{type}</option>
-                    ))}
-                  </select>
+                  <div className="relative" style={{ color: "rgba(107,107,107,0.6)" }}>
+                    <select
+                      id="projectType"
+                      required
+                      className={`${inputClass} ${borderColor("projectType")} appearance-none pr-5`}
+                      onFocus={() => setFocused("projectType")}
+                      onBlur={() => setFocused(null)}
+                      value={form.projectType}
+                      onChange={(e) => setForm((s) => ({ ...s, projectType: e.target.value }))}
+                    >
+                      <option value="" disabled>—</option>
+                      {t.contact.projectTypes.map((type) => (
+                        <option key={type} value={type}>{type}</option>
+                      ))}
+                    </select>
+                    <ChevronDown />
+                  </div>
                   {focused === "projectType" && (
                     <motion.div
                       layoutId="input-focus"
@@ -293,26 +339,50 @@ export default function Contact() {
                   )}
                 </div>
 
-                {/* Submit */}
-                <div className="md:col-span-2 pt-2">
+                {/* Submit row */}
+                <div className="md:col-span-2 pt-2 flex flex-col gap-3 items-start">
                   <motion.button
                     type="submit"
-                    className="relative inline-flex items-center gap-2.5 px-7 py-3.5 text-sm font-semibold rounded-full text-white overflow-hidden"
+                    disabled={loading}
+                    className="group relative inline-flex items-center gap-2.5 px-7 py-3.5 text-sm font-semibold rounded-full text-white overflow-hidden disabled:opacity-60 disabled:cursor-not-allowed"
                     style={{
-                      background: "linear-gradient(135deg, #2A1363, #C8A2E8)",
-                      boxShadow: "0 4px 20px rgba(42,19,99,0.3)",
+                      background: "#2A1363",
+                      boxShadow: "0 4px 20px rgba(42,19,99,0.18)",
                     }}
-                    whileHover={{ scale: 1.02, boxShadow: "0 6px 28px rgba(42,19,99,0.45)" }}
-                    whileTap={{ scale: 0.97 }}
+                    whileHover={loading ? {} : { scale: 1.02, boxShadow: "0 6px 28px rgba(42,19,99,0.45)" }}
+                    whileTap={loading ? {} : { scale: 0.97 }}
                   >
-                    {t.contact.submit}
-                    <motion.span
-                      animate={{ x: [0, 3, 0] }}
-                      transition={{ duration: 1.5, repeat: Infinity }}
-                    >
-                      →
-                    </motion.span>
+                    {loading ? (
+                      <>
+                        <svg className="animate-spin w-4 h-4" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="3" />
+                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                        </svg>
+                        {t.contact.sending}
+                      </>
+                    ) : (
+                      <>
+                        {t.contact.submit}
+                        <span className="transition-transform duration-300 group-hover:translate-x-1">→</span>
+                      </>
+                    )}
                   </motion.button>
+
+                  {/* Error message */}
+                  <AnimatePresence>
+                    {error && (
+                      <motion.p
+                        initial={{ opacity: 0, y: -4 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0 }}
+                        className="text-xs tracking-[-0.01em]"
+                        style={{ color: "#dc2626" }}
+                        role="alert"
+                      >
+                        {error}
+                      </motion.p>
+                    )}
+                  </AnimatePresence>
                 </div>
               </motion.form>
             )}

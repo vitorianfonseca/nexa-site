@@ -52,23 +52,6 @@ function ParticleField() {
         ctx.fill();
       }
 
-      // Lines between close particles
-      for (let i = 0; i < particles.length; i++) {
-        for (let j = i + 1; j < particles.length; j++) {
-          const dx = particles[j].x - particles[i].x;
-          const dy = particles[j].y - particles[i].y;
-          const d = Math.sqrt(dx * dx + dy * dy);
-          if (d < 120) {
-            ctx.beginPath();
-            ctx.moveTo(particles[i].x, particles[i].y);
-            ctx.lineTo(particles[j].x, particles[j].y);
-            ctx.strokeStyle = `rgba(42, 19, 99, ${0.15 * (1 - d / 120)})`;
-            ctx.lineWidth = 0.5;
-            ctx.stroke();
-          }
-        }
-      }
-
       rafRef.current = requestAnimationFrame(draw);
     }
 
@@ -212,37 +195,16 @@ export default function CTASection() {
             {/* CTA button with glow */}
             <Link
               href="#contact"
-              className="group relative inline-flex items-center gap-3 px-8 py-4 rounded-full text-sm font-semibold overflow-hidden transition-all duration-300"
-              style={{
-                color: "#EDE8FF",
-                background: "linear-gradient(135deg, #2A1363, #7E4CC4, #C8A2E8)",
-                boxShadow: "0 0 32px rgba(42,19,99,0.5), 0 0 64px rgba(42,19,99,0.25)",
-              }}
+              className="group inline-flex items-center gap-3 px-8 py-4 rounded-full text-sm font-semibold transition-all duration-200 hover:opacity-90"
+              style={{ color: "#0A0A12", background: "#EDE8FF" }}
             >
-              {/* Shimmer sweep */}
-              <motion.div
-                animate={{ x: ["-100%", "200%"] }}
-                transition={{ duration: 2.5, repeat: Infinity, ease: "linear", repeatDelay: 1 }}
-                className="absolute inset-0 pointer-events-none"
-                style={{
-                  background:
-                    "linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent)",
-                  transform: "skewX(-15deg)",
-                }}
-              />
-              <span className="relative">{t.cta.button}</span>
-              <motion.span
-                className="relative"
-                animate={{ x: [0, 4, 0] }}
-                transition={{ duration: 1.5, repeat: Infinity }}
-              >
-                →
-              </motion.span>
+              <span>{t.cta.button}</span>
+              <span className="transition-transform duration-300 group-hover:translate-x-1">→</span>
             </Link>
 
             {/* Trust signals */}
-            <div className="flex items-center gap-4" style={{ color: "rgba(255,255,255,0.2)" }}>
-              {["No contracts", "Fast delivery", "Real results"].map((s, i) => (
+            <div className="flex items-center gap-4" style={{ color: "rgba(255,255,255,0.35)" }}>
+              {t.cta.trustSignals.map((s, i) => (
                 <motion.span
                   key={s}
                   initial={{ opacity: 0, y: 6 }}

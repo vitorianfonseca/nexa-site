@@ -127,7 +127,7 @@ export default function Services() {
             transition={{ duration: 0.6, delay: 0.15 }}
             className="text-sm text-muted max-w-xs leading-relaxed lg:text-right"
           >
-            {t.services.items.length} services · hover to explore
+            {t.services.items.length} {t.services.countSuffix} · {t.services.exploreHint}
           </motion.p>
         </div>
 
