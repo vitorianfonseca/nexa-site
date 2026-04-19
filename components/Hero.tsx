@@ -107,7 +107,7 @@ export default function Hero() {
         initial={{ opacity: 0, scale: 0.85 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 1.6, delay: 0.4, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] }}
-        className="absolute hidden lg:block pointer-events-none"
+        className="absolute hidden lg:block"
         style={{ zIndex: 5, opacity: 0.45, right: "4%", top: "16%" }}
         aria-hidden="true"
       >
@@ -126,7 +126,7 @@ export default function Hero() {
       <div className="max-w-7xl mx-auto px-6 lg:px-8 w-full relative z-10 flex flex-col min-h-[calc(100vh-64px)]">
 
         {/* TOP: pill + headline + subheadline */}
-        <div className="pt-28 lg:pt-36">
+        <div className="pt-36 lg:pt-52">
           <motion.h1
             initial={{ opacity: 0, y: 28 }}
             animate={{ opacity: 1, y: 0 }}

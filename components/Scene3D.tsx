@@ -1,178 +1,190 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import * as THREE from "three";
 
-// Golden-ratio distribution of N points on a unit sphere
-function generateSpherePoints(n: number): [number, number, number][] {
-  const pts: [number, number, number][] = [];
-  const goldenAngle = Math.PI * (3 - Math.sqrt(5));
-  for (let i = 0; i < n; i++) {
-    const y = 1 - (i / (n - 1)) * 2;
-    const r = Math.sqrt(Math.max(0, 1 - y * y));
-    const theta = goldenAngle * i;
-    pts.push([Math.cos(theta) * r, y, Math.sin(theta) * r]);
+const vertexShader = /* glsl */`
+  uniform float uTime;
+  varying vec3 vNormal;
+  varying vec3 vViewDir;
+  varying vec3 vPos;
+
+  float wave(vec3 p, float t) {
+    return
+      sin(p.x * 1.8 + t * 0.50) * 0.40 +
+      sin(p.y * 2.2 + t * 0.40) * 0.35 +
+      sin(p.z * 1.5 + t * 0.65) * 0.30 +
+      sin((p.x + p.z) * 1.3 + t * 0.35) * 0.25 +
+      sin((p.y + p.z) * 1.7 + t * 0.45) * 0.20;
   }
-  return pts;
-}
 
-// Pre-compute edges (pairs within 3D distance threshold)
-function buildEdges(pts: [number, number, number][], threshold: number): [number, number][] {
-  const edges: [number, number][] = [];
-  for (let i = 0; i < pts.length; i++) {
-    for (let j = i + 1; j < pts.length; j++) {
-      const dx = pts[j][0] - pts[i][0];
-      const dy = pts[j][1] - pts[i][1];
-      const dz = pts[j][2] - pts[i][2];
-      if (Math.sqrt(dx * dx + dy * dy + dz * dz) < threshold) {
-        edges.push([i, j]);
-      }
-    }
+  void main() {
+    float disp = wave(position, uTime) * 0.13;
+    vec3 newPos = position + normal * disp;
+
+    vNormal   = normalize(normalMatrix * normal);
+    vPos      = newPos;
+    vViewDir  = normalize(cameraPosition - (modelMatrix * vec4(newPos, 1.0)).xyz);
+
+    gl_Position = projectionMatrix * modelViewMatrix * vec4(newPos, 1.0);
   }
-  return edges;
-}
+`;
 
-function rotY(x: number, y: number, z: number, a: number): [number, number, number] {
-  const c = Math.cos(a), s = Math.sin(a);
-  return [x * c - z * s, y, x * s + z * c];
-}
-function rotX(x: number, y: number, z: number, a: number): [number, number, number] {
-  const c = Math.cos(a), s = Math.sin(a);
-  return [x, y * c - z * s, y * s + z * c];
-}
+const fragmentShader = /* glsl */`
+  uniform float uTime;
+  varying vec3 vNormal;
+  varying vec3 vViewDir;
+  varying vec3 vPos;
 
-const N = 160;
-const EDGE_THRESHOLD = 0.42;
-const BASE_POINTS = generateSpherePoints(N);
-const EDGES = buildEdges(BASE_POINTS, EDGE_THRESHOLD);
+  // HSL → RGB
+  vec3 hsl(float h, float s, float l) {
+    float c = (1.0 - abs(2.0 * l - 1.0)) * s;
+    h = mod(h, 1.0) * 6.0;
+    float x = c * (1.0 - abs(mod(h, 2.0) - 1.0));
+    vec3 rgb;
+    if      (h < 1.0) rgb = vec3(c, x, 0.0);
+    else if (h < 2.0) rgb = vec3(x, c, 0.0);
+    else if (h < 3.0) rgb = vec3(0.0, c, x);
+    else if (h < 4.0) rgb = vec3(0.0, x, c);
+    else if (h < 5.0) rgb = vec3(x, 0.0, c);
+    else              rgb = vec3(c, 0.0, x);
+    float m = l - c * 0.5;
+    return rgb + m;
+  }
+
+  void main() {
+    vec3 N = normalize(vNormal);
+    vec3 V = normalize(vViewDir);
+
+    // Fresnel — 0 = facing camera, 1 = silhouette
+    float fresnel = 1.0 - abs(dot(N, V));
+    fresnel = pow(fresnel, 1.4);
+
+    // Iridescent hue: shifts with fresnel angle + time + position
+    float hue = fract(
+      fresnel * 0.75
+      + uTime * 0.06
+      + vPos.y * 0.18
+      + vPos.x * 0.12
+      // anchor the spectrum around purple (0.75)
+      + 0.62
+    );
+
+    vec3 iridColor = hsl(hue, 0.90, 0.62);
+
+    // Very dark base — almost black
+    vec3 base = vec3(0.03, 0.01, 0.09);
+
+    // Blend: dark core, holo on edges
+    float blend = fresnel * 0.92 + 0.04;
+    vec3 col = mix(base, iridColor, blend);
+
+    // Extra bright rim pulse
+    float rim = pow(fresnel, 0.7) * (0.7 + 0.3 * sin(uTime * 0.8));
+    col += iridColor * rim * 0.35;
+
+    // Subtle inner glow
+    col += vec3(0.18, 0.06, 0.45) * (1.0 - fresnel) * 0.25;
+
+    gl_FragColor = vec4(col, 0.88);
+  }
+`;
 
 export default function Scene3D() {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const mouseRef = useRef({ rx: 0, ry: 0 });
-  const targetRef = useRef({ rx: 0, ry: 0 });
-  const rafRef = useRef<number>(0);
+  const mountRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
+    const el = mountRef.current;
+    if (!el) return;
 
     const SIZE = 520;
-    canvas.width = SIZE;
-    canvas.height = SIZE;
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    renderer.setSize(SIZE, SIZE);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.0;
+    el.appendChild(renderer.domElement);
 
-    const cx = SIZE / 2;
-    const cy = SIZE / 2;
-    const SCALE = SIZE * 0.34;
-    const FOV = SIZE * 1.5;
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(38, 1, 0.1, 100);
+    camera.position.set(0, 0, 3.8);
 
-    let autoRotY = 0;
+    const uTime = { value: 0 };
+    const geo = new THREE.SphereGeometry(1.1, 128, 128);
+    const mat = new THREE.ShaderMaterial({
+      vertexShader,
+      fragmentShader,
+      uniforms: { uTime },
+      transparent: true,
+      side: THREE.FrontSide,
+    });
 
-    function project(x: number, y: number, z: number) {
-      const s = FOV / (FOV + z * SCALE);
-      return { px: cx + x * SCALE * s, py: cy + y * SCALE * s, s, z };
-    }
+    const mesh = new THREE.Mesh(geo, mat);
+    scene.add(mesh);
 
-    function draw() {
-      if (!ctx) return;
-      ctx.clearRect(0, 0, SIZE, SIZE);
+    // Drag + inertia
+    let rotX = 0.18, rotY = 0;
+    let velX = 0, velY = 0;
+    let isDragging = false;
+    let prev = { x: 0, y: 0 };
+    let autoSpin = true;
+    let autoY = 0;
 
-      // Smooth lerp toward target
-      mouseRef.current.rx += (targetRef.current.rx - mouseRef.current.rx) * 0.06;
-      mouseRef.current.ry += (targetRef.current.ry - mouseRef.current.ry) * 0.06;
-      autoRotY += 0.004;
+    const cv = renderer.domElement;
 
-      const ry = autoRotY + mouseRef.current.ry;
-      const rx = mouseRef.current.rx;
-
-      // Rotate & project all points
-      const proj = BASE_POINTS.map(([x, y, z]) => {
-        const [rx1, ry1, rz1] = rotY(x, y, z, ry);
-        const [rx2, ry2, rz2] = rotX(rx1, ry1, rz1, rx);
-        return project(rx2, ry2, rz2);
-      });
-
-      // Sort by depth so front points draw on top
-      const order = proj.map((_, i) => i).sort((a, b) => proj[a].z - proj[b].z);
-
-      // Draw edges
-      for (const [i, j] of EDGES) {
-        const p1 = proj[i], p2 = proj[j];
-        const avgZ = (p1.z + p2.z) / 2;
-        const brightness = (avgZ + 1) / 2; // 0..1
-        const alpha = brightness * 0.35 + 0.04;
-        ctx.beginPath();
-        ctx.moveTo(p1.px, p1.py);
-        ctx.lineTo(p2.px, p2.py);
-        ctx.strokeStyle = `rgba(126, 76, 196, ${alpha})`;
-        ctx.lineWidth = 0.6;
-        ctx.stroke();
-      }
-
-      // Draw points
-      for (const i of order) {
-        const p = proj[i];
-        const brightness = (p.z + 1) / 2;
-        const r = brightness * 2.2 + 0.6;
-        const alpha = brightness * 0.85 + 0.12;
-
-        // Soft glow — bright highlights use #C8A2E8, core uses #7E4CC4
-        const grd = ctx.createRadialGradient(p.px, p.py, 0, p.px, p.py, r * 4);
-        grd.addColorStop(0, `rgba(200, 162, 232, ${alpha * 0.6})`);
-        grd.addColorStop(1, "rgba(59, 30, 127, 0)");
-        ctx.beginPath();
-        ctx.arc(p.px, p.py, r * 4, 0, Math.PI * 2);
-        ctx.fillStyle = grd;
-        ctx.fill();
-
-        // Core dot
-        ctx.beginPath();
-        ctx.arc(p.px, p.py, r, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(200, 162, 232, ${alpha})`;
-        ctx.fill();
-      }
-
-      // Outer ambient glow ring
-      const grd2 = ctx.createRadialGradient(cx, cy, SIZE * 0.28, cx, cy, SIZE * 0.46);
-      grd2.addColorStop(0, "rgba(126, 76, 196, 0)");
-      grd2.addColorStop(0.7, "rgba(126, 76, 196, 0.04)");
-      grd2.addColorStop(1, "rgba(126, 76, 196, 0)");
-      ctx.beginPath();
-      ctx.arc(cx, cy, SIZE * 0.46, 0, Math.PI * 2);
-      ctx.fillStyle = grd2;
-      ctx.fill();
-
-      rafRef.current = requestAnimationFrame(draw);
-    }
-
+    const onDown = (e: MouseEvent) => {
+      isDragging = true; autoSpin = false;
+      prev = { x: e.clientX, y: e.clientY };
+      velX = 0; velY = 0;
+      cv.style.cursor = "grabbing";
+    };
     const onMove = (e: MouseEvent) => {
-      const rect = canvas.getBoundingClientRect();
-      const nx = (e.clientX - rect.left) / rect.width - 0.5;
-      const ny = (e.clientY - rect.top) / rect.height - 0.5;
-      targetRef.current.ry = nx * 1.2;
-      targetRef.current.rx = ny * 0.6;
+      if (!isDragging) return;
+      velX = (e.clientX - prev.x) * 0.009;
+      velY = (e.clientY - prev.y) * 0.009;
+      rotY += velX; rotX += velY;
+      rotX = Math.max(-1.1, Math.min(1.1, rotX));
+      prev = { x: e.clientX, y: e.clientY };
     };
-    const onLeave = () => {
-      targetRef.current.rx = 0;
-      targetRef.current.ry = 0;
-    };
+    const onUp = () => { isDragging = false; cv.style.cursor = "grab"; };
 
-    canvas.addEventListener("mousemove", onMove);
-    canvas.addEventListener("mouseleave", onLeave);
-    draw();
+    cv.addEventListener("mousedown", onDown);
+    window.addEventListener("mousemove", onMove);
+    window.addEventListener("mouseup", onUp);
+    cv.style.cursor = "grab";
+
+    let rafId = 0;
+    const tick = (t: number) => {
+      rafId = requestAnimationFrame(tick);
+      uTime.value = t * 0.001;
+
+      if (!isDragging) {
+        velX *= 0.91; velY *= 0.91;
+        rotY += velX; rotX += velY;
+        if (Math.abs(velX) + Math.abs(velY) < 0.0005) autoSpin = true;
+        if (autoSpin) autoY += 0.004;
+      }
+
+      mesh.rotation.y = rotY + autoY;
+      mesh.rotation.x = rotX;
+      renderer.render(scene, camera);
+    };
+    rafId = requestAnimationFrame(tick);
 
     return () => {
-      canvas.removeEventListener("mousemove", onMove);
-      canvas.removeEventListener("mouseleave", onLeave);
-      cancelAnimationFrame(rafRef.current);
+      cancelAnimationFrame(rafId);
+      cv.removeEventListener("mousedown", onDown);
+      window.removeEventListener("mousemove", onMove);
+      window.removeEventListener("mouseup", onUp);
+      renderer.dispose();
+      if (cv.parentNode === el) el.removeChild(cv);
     };
   }, []);
 
   return (
-    <canvas
-      ref={canvasRef}
-      className="w-full h-full"
-      style={{ maxWidth: 520, maxHeight: 520 }}
+    <div
+      ref={mountRef}
+      style={{ width: 520, height: 520, cursor: "grab" }}
       aria-hidden="true"
     />
   );
