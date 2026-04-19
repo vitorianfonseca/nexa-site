@@ -1,13 +1,12 @@
 "use client";
 
-import { useRef, useState, useEffect, useCallback } from "react";
-import { motion, useInView, AnimatePresence, useMotionValue } from "framer-motion";
+import { useRef, useState, useCallback } from "react";
+import { motion, useInView, AnimatePresence, useMotionValue, animate, PanInfo } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import { useLanguage } from "@/context/LanguageContext";
 
-const STEP = 420;   // card width (400) + gap (20)
-const SPEED = 0.10; // px/ms  →  full loop in ~(N×STEP / SPEED) ms
+const STEP = 420; // card width (400) + gap (20)
 
 // ── Project-specific visual mockups ────────────────────────────
 
@@ -340,67 +339,25 @@ export default function Work() {
   const projects = t.work.projects;
   const N = projects.length;
 
-  // Triple copies for seamless infinite loop in both directions
-  const looped = [...projects, ...projects, ...projects];
+  const [current, setCurrent] = useState(0);
+  const x = useMotionValue(0);
 
-  // x starts at copy-2 origin: -(N × STEP)
-  const xMV = useMotionValue(-(N * STEP));
-  const outerRef = useRef<HTMLDivElement>(null);
-  const trackRef = useRef<HTMLDivElement>(null);
-  const hoveredRef = useRef(false);
-  const draggingRef = useRef(false);
-  const rafRef = useRef<number>(0);
-  const lastTimeRef = useRef<number | undefined>(undefined);
+  const goTo = useCallback((index: number) => {
+    const clamped = Math.max(0, Math.min(index, N - 1));
+    setCurrent(clamped);
+    animate(x, -clamped * STEP, { type: "spring", stiffness: 280, damping: 28 });
+  }, [N, x]);
 
-  // Keep x in the middle-copy range [-(2N×STEP), -(N×STEP)]
-  const normalize = useCallback(() => {
-    let x = xMV.get();
-    while (x <= -(2 * N * STEP)) x += N * STEP;
-    while (x > -(N * STEP)) x -= N * STEP;
-    xMV.set(x);
-  }, [N, xMV]);
-
-  // ── Continuous RAF marquee ───────────────────────────────────
-  useEffect(() => {
-    if (!inView) return;
-
-    const tick = (now: number) => {
-      if (lastTimeRef.current !== undefined) {
-        const dt = Math.min(now - lastTimeRef.current, 50); // cap on tab-switch
-        if (!hoveredRef.current && !draggingRef.current) {
-          const next = xMV.get() - SPEED * dt;
-          // seamless loop: once past copy-3 origin, teleport back to copy-2
-          xMV.set(next <= -(2 * N * STEP) ? next + N * STEP : next);
-        }
-      }
-      lastTimeRef.current = now;
-      rafRef.current = requestAnimationFrame(tick);
-    };
-
-    rafRef.current = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(rafRef.current);
-  }, [inView, N, xMV]);
-
-  // ── Trackpad / wheel support ─────────────────────────────────
-  useEffect(() => {
-    const el = outerRef.current;
-    if (!el) return;
-
-    const onWheel = (e: WheelEvent) => {
-      // Ignore mostly-vertical scroll (page scroll)
-      if (Math.abs(e.deltaX) < Math.abs(e.deltaY) * 0.4) return;
-      e.preventDefault();
-
-      let x = xMV.get() - e.deltaX;
-      // Keep within looped range
-      while (x <= -(2 * N * STEP)) x += N * STEP;
-      while (x > -(N * STEP)) x -= N * STEP;
-      xMV.set(x);
-    };
-
-    el.addEventListener("wheel", onWheel, { passive: false });
-    return () => el.removeEventListener("wheel", onWheel);
-  }, [N, xMV]);
+  const handleDragEnd = useCallback((_: unknown, info: PanInfo) => {
+    const { offset, velocity } = info;
+    let next = current;
+    if (velocity.x < -300 || offset.x < -STEP / 3) {
+      next = Math.min(current + 1, N - 1);
+    } else if (velocity.x > 300 || offset.x > STEP / 3) {
+      next = Math.max(current - 1, 0);
+    }
+    goTo(next);
+  }, [current, N, goTo]);
 
   return (
     <section
@@ -426,57 +383,88 @@ export default function Work() {
       </div>
 
       <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
-        {/* Header */}
-        <div className="mb-12">
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={inView ? { opacity: 1 } : {}}
-            className="text-xs font-semibold tracking-[0.15em] uppercase mb-3"
-            style={{ color: "rgba(200,162,232,0.7)" }}
-          >
-            Selected work
-          </motion.p>
-          <motion.h2
-            initial={{ opacity: 0, y: 24 }}
-            animate={inView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] }}
-            className="font-bold tracking-[-0.03em]"
-            style={{ fontSize: "clamp(1.75rem, 3vw, 2.8rem)", color: "#EDE8FF" }}
-          >
-            {t.work.title}
-          </motion.h2>
-        </div>
+        {/* Header + nav */}
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] }}
+          className="mb-12 flex items-end justify-between"
+        >
+          <div>
+            <p className="text-xs font-semibold tracking-[0.15em] uppercase mb-3" style={{ color: "rgba(200,162,232,0.7)" }}>
+              Selected work
+            </p>
+            <h2
+              className="font-bold tracking-[-0.03em]"
+              style={{ fontSize: "clamp(1.75rem, 3vw, 2.8rem)", color: "#EDE8FF" }}
+            >
+              {t.work.title}
+            </h2>
+          </div>
+
+          {/* Counter + arrows */}
+          <div className="flex items-center gap-3 pb-1">
+            <span
+              className="text-sm font-mono tabular-nums"
+              style={{ color: "rgba(255,255,255,0.25)" }}
+            >
+              {String(current + 1).padStart(2, "0")} / {String(N).padStart(2, "0")}
+            </span>
+            <button
+              onClick={() => goTo(current - 1)}
+              disabled={current === 0}
+              aria-label="Previous project"
+              className="w-9 h-9 rounded-full flex items-center justify-center transition-all duration-200"
+              style={{
+                border: "0.5px solid rgba(255,255,255,0.12)",
+                background: "rgba(255,255,255,0.04)",
+                color: current === 0 ? "rgba(255,255,255,0.2)" : "rgba(255,255,255,0.7)",
+                cursor: current === 0 ? "not-allowed" : "pointer",
+              }}
+            >
+              ←
+            </button>
+            <button
+              onClick={() => goTo(current + 1)}
+              disabled={current === N - 1}
+              aria-label="Next project"
+              className="w-9 h-9 rounded-full flex items-center justify-center transition-all duration-200"
+              style={{
+                border: "0.5px solid rgba(255,255,255,0.12)",
+                background: current === N - 1 ? "rgba(255,255,255,0.04)" : "rgba(200,162,232,0.12)",
+                color: current === N - 1 ? "rgba(255,255,255,0.2)" : "rgba(200,162,232,0.9)",
+                cursor: current === N - 1 ? "not-allowed" : "pointer",
+              }}
+            >
+              →
+            </button>
+          </div>
+        </motion.div>
       </div>
 
-      {/* Carousel — continuous marquee */}
+      {/* Carousel */}
       <motion.div
-        ref={outerRef}
         initial={{ opacity: 0 }}
         animate={inView ? { opacity: 1 } : {}}
-        transition={{ duration: 0.5, delay: 0.1 }}
-        className="pl-6 lg:pl-[max(24px,calc((100vw-1280px)/2+32px))] relative z-10"
+        transition={{ duration: 0.5, delay: 0.15 }}
+        className="pl-6 lg:pl-[max(24px,calc((100vw-1280px)/2+32px))] overflow-hidden relative z-10"
       >
         <motion.div
-          ref={trackRef}
           className="flex gap-5 pr-12"
           drag="x"
-          dragConstraints={{ left: -(looped.length * STEP), right: 0 }}
-          style={{ x: xMV }}
-          onDragStart={() => { draggingRef.current = true; }}
-          onDragEnd={() => {
-            normalize();
-            // short delay so Framer's drag release doesn't conflict with RAF
-            setTimeout(() => { draggingRef.current = false; }, 60);
-          }}
+          dragConstraints={{ left: -(N - 1) * STEP, right: 0 }}
+          dragElastic={0.05}
+          style={{ x }}
+          onDragEnd={handleDragEnd}
           whileDrag={{ cursor: "grabbing" }}
         >
-          {looped.map((project, i) => (
+          {projects.map((project, i) => (
             <ProjectCard
-              key={i}
+              key={project.name}
               project={project}
-              index={i % N}
-              onHoverStart={() => { hoveredRef.current = true; }}
-              onHoverEnd={() => { hoveredRef.current = false; }}
+              index={i}
+              onHoverStart={() => {}}
+              onHoverEnd={() => {}}
             />
           ))}
         </motion.div>
