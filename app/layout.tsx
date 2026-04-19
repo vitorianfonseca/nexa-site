@@ -4,6 +4,7 @@ import "./globals.css";
 import { LanguageProvider } from "@/context/LanguageContext";
 import Cursor from "@/components/Cursor";
 import LangSync from "@/components/LangSync";
+import LenisProvider from "@/components/LenisProvider";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -79,9 +80,11 @@ export default function RootLayout({
     >
       <body className="font-sans bg-background text-foreground antialiased">
         <LanguageProvider>
-          <LangSync />
-          <Cursor />
-          {children}
+          <LenisProvider>
+            <LangSync />
+            <Cursor />
+            {children}
+          </LenisProvider>
         </LanguageProvider>
       </body>
     </html>
