@@ -1,9 +1,6 @@
 "use client";
 
 import { motion } from "framer-motion";
-import dynamic from "next/dynamic";
-
-const Spline = dynamic(() => import("@splinetool/react-spline"), { ssr: false });
 
 export default function HeroVisual() {
   return (
@@ -19,16 +16,17 @@ export default function HeroVisual() {
         }}
       />
 
-      {/* Spline scene */}
+      {/* Spline scene via iframe */}
       <motion.div
         initial={{ opacity: 0, scale: 0.85 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 1.2, delay: 0.2, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] }}
         className="absolute inset-0 z-10"
       >
-        <Spline
-          scene="https://prod.spline.design/KtZN8led9CRTvYQdfT5wNH6b/scene.splinecode"
-          style={{ width: "100%", height: "100%" }}
+        <iframe
+          src="https://my.spline.design/holoblobs-KtZN8led9CRTvYQdfT5wNH6b/"
+          style={{ width: "100%", height: "100%", border: "none", background: "transparent" }}
+          loading="lazy"
         />
       </motion.div>
     </div>
