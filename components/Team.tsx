@@ -26,7 +26,6 @@ function LinkedInIcon() {
   );
 }
 
-// Gradient ring for avatar with 3D tilt
 function MemberCard({
   member,
   index,
@@ -40,7 +39,6 @@ function MemberCard({
     { from: "#8B5CF6", to: "#C8A2E8" },
   ];
   const g = gradients[index % gradients.length];
-
   const tiltRef = useRef<HTMLDivElement>(null);
 
   const onMove = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -65,9 +63,7 @@ function MemberCard({
       onMouseMove={onMove}
       onMouseLeave={onLeave}
       className="group flex items-center gap-5 rounded-2xl p-5 cursor-default"
-      data-cursor-hover
     >
-      {/* Avatar with glow */}
       <div className="relative shrink-0" aria-hidden="true">
         <motion.div
           animate={{ scale: [1, 1.05, 1], opacity: [0.5, 0.9, 0.5] }}
@@ -87,37 +83,28 @@ function MemberCard({
           }}
         >
           {member.image ? (
-            <Image
-              src={member.image}
-              alt={member.name}
-              fill
-              className="object-cover rounded-full"
-              sizes="72px"
-            />
+            <Image src={member.image} alt={member.name} fill className="object-cover rounded-full" sizes="72px" />
           ) : (
-            <span className="text-white text-base font-bold tracking-tight">
-              {member.initials}
-            </span>
+            <span className="text-white text-base font-bold tracking-tight">{member.initials}</span>
           )}
         </div>
       </div>
 
-      {/* Info */}
       <div className="flex-1 min-w-0">
-        <p className="font-semibold text-foreground text-sm tracking-[-0.01em]">
+        <p className="font-semibold text-sm tracking-[-0.01em]" style={{ color: "#111111" }}>
           {member.name}
         </p>
-        <p className="text-muted text-xs mt-0.5 tracking-[-0.01em]">{member.role}</p>
+        <p className="text-xs mt-0.5 tracking-[-0.01em]" style={{ color: "rgba(26,26,26,0.5)" }}>
+          {member.role}
+        </p>
       </div>
 
-      {/* LinkedIn */}
       <motion.a
         href={member.linkedin}
         aria-label={`${member.name} on LinkedIn`}
-        className="text-muted hover:text-accent transition-colors duration-200 shrink-0"
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        whileHover={{ scale: 1.15 }}
+        className="shrink-0 transition-colors duration-200"
+        style={{ color: "rgba(26,26,26,0.25)" }}
+        whileHover={{ color: "#2A1363", scale: 1.15 }}
         target="_blank"
         rel="noopener noreferrer"
       >
@@ -137,29 +124,25 @@ export default function Team() {
       id="team"
       ref={ref}
       className="relative py-24 lg:py-32 overflow-hidden"
-      style={{ background: "#F5F5F2" }}
+      style={{ background: "#FAFAF8" }}
       aria-label="Our team"
     >
-      {/* Subtle glow */}
       <div
         className="absolute right-0 top-0 w-[400px] h-[400px] pointer-events-none"
-        style={{
-          background: "radial-gradient(circle, rgba(42,19,99,0.06) 0%, transparent 70%)",
-          filter: "blur(60px)",
-        }}
+        style={{ background: "radial-gradient(circle, rgba(42,19,99,0.04) 0%, transparent 70%)", filter: "blur(60px)" }}
         aria-hidden="true"
       />
 
-      <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
+      <div className="max-w-[1536px] mx-auto px-10 lg:px-24 relative z-10">
         <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-start">
-          {/* Left */}
           <div>
             <motion.p
               variants={fadeUp}
               initial="hidden"
               animate={inView ? "visible" : "hidden"}
               custom={-0.1}
-              className="text-xs font-semibold tracking-[0.15em] uppercase text-accent/70 mb-4"
+              className="text-xs font-semibold tracking-[0.15em] uppercase mb-4"
+              style={{ color: "rgba(200,162,232,0.75)" }}
             >
               {t.team.members.length} builders
             </motion.p>
@@ -169,8 +152,8 @@ export default function Team() {
               initial="hidden"
               animate={inView ? "visible" : "hidden"}
               custom={0}
-              className="font-bold text-foreground tracking-[-0.03em] mb-6"
-              style={{ fontSize: "clamp(1.75rem, 3vw, 2.8rem)" }}
+              className="font-bold tracking-[-0.03em] mb-6"
+              style={{ fontSize: "clamp(1.75rem, 3vw, 2.8rem)", color: "#111111" }}
             >
               {t.team.title}
             </motion.h2>
@@ -180,12 +163,12 @@ export default function Team() {
               initial="hidden"
               animate={inView ? "visible" : "hidden"}
               custom={0.1}
-              className="text-base text-muted leading-relaxed tracking-[-0.01em] max-w-lg"
+              className="text-sm leading-relaxed max-w-lg"
+              style={{ color: "rgba(26,26,26,0.5)" }}
             >
               {t.team.description}
             </motion.p>
 
-            {/* Decorative rings */}
             <div className="mt-10 relative h-24 hidden lg:block" aria-hidden="true">
               {[80, 56, 38].map((s, i) => (
                 <motion.div
@@ -207,7 +190,6 @@ export default function Team() {
             </div>
           </div>
 
-          {/* Right: team members */}
           <motion.div
             initial="hidden"
             animate={inView ? "visible" : "hidden"}

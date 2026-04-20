@@ -1,190 +1,205 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import * as THREE from "three";
 
-const vertexShader = /* glsl */`
-  uniform float uTime;
-  varying vec3 vNormal;
-  varying vec3 vViewDir;
-  varying vec3 vPos;
+const N = 180;
+const THRESH = 0.42;
+const FOV = 3.8;
+const SCALE_FACTOR = 0.43;
 
-  float wave(vec3 p, float t) {
-    return
-      sin(p.x * 1.8 + t * 0.50) * 0.40 +
-      sin(p.y * 2.2 + t * 0.40) * 0.35 +
-      sin(p.z * 1.5 + t * 0.65) * 0.30 +
-      sin((p.x + p.z) * 1.3 + t * 0.35) * 0.25 +
-      sin((p.y + p.z) * 1.7 + t * 0.45) * 0.20;
+// Fibonacci sphere — distribuição uniforme de pontos
+function fibSphere(n: number): [number, number, number][] {
+  const pts: [number, number, number][] = [];
+  const phi = Math.PI * (3 - Math.sqrt(5));
+  for (let i = 0; i < n; i++) {
+    const y = 1 - (i / (n - 1)) * 2;
+    const r = Math.sqrt(Math.max(0, 1 - y * y));
+    const t = phi * i;
+    pts.push([Math.cos(t) * r, y, Math.sin(t) * r]);
   }
+  return pts;
+}
 
-  void main() {
-    float disp = wave(position, uTime) * 0.13;
-    vec3 newPos = position + normal * disp;
-
-    vNormal   = normalize(normalMatrix * normal);
-    vPos      = newPos;
-    vViewDir  = normalize(cameraPosition - (modelMatrix * vec4(newPos, 1.0)).xyz);
-
-    gl_Position = projectionMatrix * modelViewMatrix * vec4(newPos, 1.0);
+function buildEdges(pts: [number, number, number][]): [number, number][] {
+  const edges: [number, number][] = [];
+  for (let i = 0; i < pts.length; i++) {
+    for (let j = i + 1; j < pts.length; j++) {
+      const dx = pts[j][0] - pts[i][0];
+      const dy = pts[j][1] - pts[i][1];
+      const dz = pts[j][2] - pts[i][2];
+      if (dx * dx + dy * dy + dz * dz < THRESH * THRESH) edges.push([i, j]);
+    }
   }
-`;
+  return edges;
+}
 
-const fragmentShader = /* glsl */`
-  uniform float uTime;
-  varying vec3 vNormal;
-  varying vec3 vViewDir;
-  varying vec3 vPos;
+function rotateX([x, y, z]: [number, number, number], a: number): [number, number, number] {
+  const c = Math.cos(a), s = Math.sin(a);
+  return [x, y * c - z * s, y * s + z * c];
+}
+function rotateY([x, y, z]: [number, number, number], a: number): [number, number, number] {
+  const c = Math.cos(a), s = Math.sin(a);
+  return [x * c + z * s, y, -x * s + z * c];
+}
 
-  // HSL → RGB
-  vec3 hsl(float h, float s, float l) {
-    float c = (1.0 - abs(2.0 * l - 1.0)) * s;
-    h = mod(h, 1.0) * 6.0;
-    float x = c * (1.0 - abs(mod(h, 2.0) - 1.0));
-    vec3 rgb;
-    if      (h < 1.0) rgb = vec3(c, x, 0.0);
-    else if (h < 2.0) rgb = vec3(x, c, 0.0);
-    else if (h < 3.0) rgb = vec3(0.0, c, x);
-    else if (h < 4.0) rgb = vec3(0.0, x, c);
-    else if (h < 5.0) rgb = vec3(x, 0.0, c);
-    else              rgb = vec3(c, 0.0, x);
-    float m = l - c * 0.5;
-    return rgb + m;
-  }
+const BASE_PTS = fibSphere(N);
+const EDGES = buildEdges(BASE_PTS);
 
-  void main() {
-    vec3 N = normalize(vNormal);
-    vec3 V = normalize(vViewDir);
-
-    // Fresnel — 0 = facing camera, 1 = silhouette
-    float fresnel = 1.0 - abs(dot(N, V));
-    fresnel = pow(fresnel, 1.4);
-
-    // Iridescent hue: shifts with fresnel angle + time + position
-    float hue = fract(
-      fresnel * 0.75
-      + uTime * 0.06
-      + vPos.y * 0.18
-      + vPos.x * 0.12
-      // anchor the spectrum around purple (0.75)
-      + 0.62
-    );
-
-    vec3 iridColor = hsl(hue, 0.90, 0.62);
-
-    // Very dark base — almost black
-    vec3 base = vec3(0.03, 0.01, 0.09);
-
-    // Blend: dark core, holo on edges
-    float blend = fresnel * 0.92 + 0.04;
-    vec3 col = mix(base, iridColor, blend);
-
-    // Extra bright rim pulse
-    float rim = pow(fresnel, 0.7) * (0.7 + 0.3 * sin(uTime * 0.8));
-    col += iridColor * rim * 0.35;
-
-    // Subtle inner glow
-    col += vec3(0.18, 0.06, 0.45) * (1.0 - fresnel) * 0.25;
-
-    gl_FragColor = vec4(col, 0.88);
-  }
-`;
+// Pré-renderiza o glow dot numa canvas offscreen
+function makeGlowSprite(): HTMLCanvasElement {
+  const size = 48;
+  const c = document.createElement("canvas");
+  c.width = size; c.height = size;
+  const ctx = c.getContext("2d")!;
+  const grad = ctx.createRadialGradient(size / 2, size / 2, 0, size / 2, size / 2, size / 2);
+  grad.addColorStop(0,   "rgba(220, 200, 255, 1.0)");
+  grad.addColorStop(0.25,"rgba(185, 150, 255, 0.75)");
+  grad.addColorStop(0.55,"rgba(130,  90, 220, 0.35)");
+  grad.addColorStop(1,   "rgba( 80,  40, 180, 0.0)");
+  ctx.fillStyle = grad;
+  ctx.fillRect(0, 0, size, size);
+  return c;
+}
 
 export default function Scene3D() {
-  const mountRef = useRef<HTMLDivElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
-    const el = mountRef.current;
-    if (!el) return;
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
 
     const SIZE = 520;
-    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-    renderer.setSize(SIZE, SIZE);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.0;
-    el.appendChild(renderer.domElement);
+    const CX = SIZE / 2;
+    const CY = SIZE / 2;
+    const SCALE = SIZE * SCALE_FACTOR;
 
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(38, 1, 0.1, 100);
-    camera.position.set(0, 0, 3.8);
+    const glow = makeGlowSprite();
 
-    const uTime = { value: 0 };
-    const geo = new THREE.SphereGeometry(1.1, 128, 128);
-    const mat = new THREE.ShaderMaterial({
-      vertexShader,
-      fragmentShader,
-      uniforms: { uTime },
-      transparent: true,
-      side: THREE.FrontSide,
-    });
-
-    const mesh = new THREE.Mesh(geo, mat);
-    scene.add(mesh);
-
-    // Drag + inertia
-    let rotX = 0.18, rotY = 0;
+    // Estado de rotação
+    let rx = 0.22, ry = 0;
     let velX = 0, velY = 0;
-    let isDragging = false;
-    let prev = { x: 0, y: 0 };
-    let autoSpin = true;
-    let autoY = 0;
+    let dragging = false;
+    let autoSpin = true, autoY = 0;
+    let prevX = 0, prevY = 0;
 
-    const cv = renderer.domElement;
-
-    const onDown = (e: MouseEvent) => {
-      isDragging = true; autoSpin = false;
-      prev = { x: e.clientX, y: e.clientY };
-      velX = 0; velY = 0;
-      cv.style.cursor = "grabbing";
+    // Projeção perspetiva — retorna [screenX, screenY, z_world]
+    const project = ([x, y, z]: [number, number, number]): [number, number, number] => {
+      const p = FOV / (FOV + z + 1);
+      return [CX + x * SCALE * p, CY - y * SCALE * p, z];
     };
-    const onMove = (e: MouseEvent) => {
-      if (!isDragging) return;
-      velX = (e.clientX - prev.x) * 0.009;
-      velY = (e.clientY - prev.y) * 0.009;
-      rotY += velX; rotX += velY;
-      rotX = Math.max(-1.1, Math.min(1.1, rotX));
-      prev = { x: e.clientX, y: e.clientY };
+
+    const draw = () => {
+      ctx.clearRect(0, 0, SIZE, SIZE);
+
+      // Aplica rotações
+      const rotated = BASE_PTS.map(pt => rotateY(rotateX(pt, rx), ry + autoY));
+
+      // Ordena arestas por z médio (back to front)
+      const edgeOrder = EDGES
+        .map(([i, j]) => ({ i, j, z: (rotated[i][2] + rotated[j][2]) / 2 }))
+        .sort((a, b) => a.z - b.z);
+
+      // Desenha arestas
+      for (const { i, j, z } of edgeOrder) {
+        const depth = (z + 1) / 2; // 0=trás, 1=frente
+        if (depth < 0.05) continue;
+
+        const [x1, y1] = project(rotated[i]);
+        const [x2, y2] = project(rotated[j]);
+
+        const alpha = 0.03 + depth * 0.38;
+        // Azul-violeta atrás → roxo brilhante à frente
+        const br = Math.round(60  + depth * 120);
+        const bg = Math.round(20  + depth *  60);
+        const bb = Math.round(160 + depth *  80);
+
+        ctx.beginPath();
+        ctx.moveTo(x1, y1);
+        ctx.lineTo(x2, y2);
+        ctx.strokeStyle = `rgba(${br},${bg},${bb},${alpha})`;
+        ctx.lineWidth = 0.5 + depth * 0.5;
+        ctx.stroke();
+      }
+
+      // Ordena pontos back to front
+      const dotOrder = rotated
+        .map((p, i) => ({ i, z: p[2] }))
+        .sort((a, b) => a.z - b.z);
+
+      // Desenha dots com glow sprite
+      for (const { i, z } of dotOrder) {
+        const depth = (z + 1) / 2;
+        if (depth < 0.08) continue;
+
+        const [sx, sy] = project(rotated[i]);
+        const coreR  = 0.7 + depth * 2.6;
+        const glowR  = coreR * 4.5;
+
+        // Glow (sprite pré-renderizado)
+        ctx.globalAlpha = depth * 0.75;
+        ctx.drawImage(glow, sx - glowR, sy - glowR, glowR * 2, glowR * 2);
+        ctx.globalAlpha = 1;
+
+        // Core dot
+        ctx.beginPath();
+        ctx.arc(sx, sy, coreR, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(${Math.round(200 + depth * 50)}, ${Math.round(180 + depth * 30)}, 255, ${0.5 + depth * 0.5})`;
+        ctx.fill();
+      }
     };
-    const onUp = () => { isDragging = false; cv.style.cursor = "grab"; };
 
-    cv.addEventListener("mousedown", onDown);
-    window.addEventListener("mousemove", onMove);
-    window.addEventListener("mouseup", onUp);
-    cv.style.cursor = "grab";
-
+    // Loop de animação
     let rafId = 0;
-    const tick = (t: number) => {
-      rafId = requestAnimationFrame(tick);
-      uTime.value = t * 0.001;
-
-      if (!isDragging) {
+    const loop = () => {
+      rafId = requestAnimationFrame(loop);
+      if (!dragging) {
         velX *= 0.91; velY *= 0.91;
-        rotY += velX; rotX += velY;
+        rx += velX; ry += velY;
+        rx = Math.max(-1.1, Math.min(1.1, rx));
         if (Math.abs(velX) + Math.abs(velY) < 0.0005) autoSpin = true;
         if (autoSpin) autoY += 0.004;
       }
-
-      mesh.rotation.y = rotY + autoY;
-      mesh.rotation.x = rotX;
-      renderer.render(scene, camera);
+      draw();
     };
-    rafId = requestAnimationFrame(tick);
+    rafId = requestAnimationFrame(loop);
+
+    // Drag
+    const onDown = (e: MouseEvent) => {
+      dragging = true; autoSpin = false;
+      prevX = e.clientX; prevY = e.clientY;
+      velX = 0; velY = 0;
+      canvas.style.cursor = "grabbing";
+    };
+    const onMove = (e: MouseEvent) => {
+      if (!dragging) return;
+      velY = (e.clientX - prevX) * 0.009;
+      velX = (e.clientY - prevY) * 0.009;
+      rx += velX; ry += velY;
+      rx = Math.max(-1.1, Math.min(1.1, rx));
+      prevX = e.clientX; prevY = e.clientY;
+    };
+    const onUp = () => { dragging = false; canvas.style.cursor = "grab"; };
+
+    canvas.addEventListener("mousedown", onDown);
+    window.addEventListener("mousemove", onMove);
+    window.addEventListener("mouseup", onUp);
 
     return () => {
       cancelAnimationFrame(rafId);
-      cv.removeEventListener("mousedown", onDown);
+      canvas.removeEventListener("mousedown", onDown);
       window.removeEventListener("mousemove", onMove);
       window.removeEventListener("mouseup", onUp);
-      renderer.dispose();
-      if (cv.parentNode === el) el.removeChild(cv);
     };
   }, []);
 
   return (
-    <div
-      ref={mountRef}
-      style={{ width: 520, height: 520, cursor: "grab" }}
+    <canvas
+      ref={canvasRef}
+      width={520}
+      height={520}
+      style={{ cursor: "grab" }}
       aria-hidden="true"
     />
   );

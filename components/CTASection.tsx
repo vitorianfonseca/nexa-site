@@ -1,75 +1,9 @@
 "use client";
 
-import { useRef, useEffect } from "react";
+import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
 import Link from "next/link";
 import { useLanguage } from "@/context/LanguageContext";
-import { DarkGeometry } from "./FloatingGeometry";
-
-// Canvas particle field
-function ParticleField() {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const rafRef = useRef<number>(0);
-
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
-
-    const resize = () => {
-      canvas.width = canvas.offsetWidth;
-      canvas.height = canvas.offsetHeight;
-    };
-    resize();
-    window.addEventListener("resize", resize);
-
-    const N = 60;
-    const particles = Array.from({ length: N }, () => ({
-      x: Math.random() * canvas.width,
-      y: Math.random() * canvas.height,
-      vx: (Math.random() - 0.5) * 0.4,
-      vy: (Math.random() - 0.5) * 0.4,
-      r: Math.random() * 1.5 + 0.5,
-      alpha: Math.random() * 0.4 + 0.1,
-    }));
-
-    function draw() {
-      if (!canvas || !ctx) return;
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-      for (const p of particles) {
-        p.x += p.vx;
-        p.y += p.vy;
-        if (p.x < 0) p.x = canvas.width;
-        if (p.x > canvas.width) p.x = 0;
-        if (p.y < 0) p.y = canvas.height;
-        if (p.y > canvas.height) p.y = 0;
-
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(200, 162, 232, ${p.alpha})`;
-        ctx.fill();
-      }
-
-      rafRef.current = requestAnimationFrame(draw);
-    }
-
-    draw();
-    return () => {
-      window.removeEventListener("resize", resize);
-      cancelAnimationFrame(rafRef.current);
-    };
-  }, []);
-
-  return (
-    <canvas
-      ref={canvasRef}
-      className="absolute inset-0 w-full h-full pointer-events-none"
-      aria-hidden="true"
-    />
-  );
-}
 
 export default function CTASection() {
   const { t, lang } = useLanguage();
@@ -81,21 +15,16 @@ export default function CTASection() {
       id="cta"
       ref={ref}
       className="relative py-24 lg:py-32 overflow-hidden"
-      style={{ background: "#0A0A12" }}
+      style={{ background: "#070410" }}
       aria-label="Call to action"
     >
-      {/* Particle canvas */}
-      <ParticleField />
-
-      {/* CSS 3D geometry */}
-      <DarkGeometry />
 
       {/* Top/bottom gradient lines */}
       <div
         className="absolute top-0 left-0 right-0 h-px pointer-events-none"
         style={{
           background:
-            "linear-gradient(to right, transparent, rgba(42,19,99,0.6), rgba(200,162,232,0.4), transparent)",
+            "linear-gradient(to right, transparent, rgba(200,162,232,0.65), rgba(200,162,232,0.65), rgba(200,162,232,0.65), transparent)",
         }}
         aria-hidden="true"
       />
@@ -108,7 +37,14 @@ export default function CTASection() {
         aria-hidden="true"
       />
 
-      <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
+      {/* Watermark */}
+      <div className="absolute inset-0 flex items-end justify-start pointer-events-none select-none overflow-hidden" aria-hidden="true">
+        <span style={{ fontSize: "clamp(7rem, 20vw, 20rem)", fontWeight: 900, letterSpacing: "-0.06em", color: "rgba(212,204,255,0.022)", lineHeight: 1, userSelect: "none", transform: "translateX(-6%)" }}>
+          Nexa
+        </span>
+      </div>
+
+      <div className="max-w-[1536px] mx-auto px-10 lg:px-24 relative z-10">
         <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-12 lg:gap-20">
           {/* Left: headline */}
           <motion.div
@@ -121,7 +57,7 @@ export default function CTASection() {
               animate={inView ? { opacity: 1 } : {}}
               transition={{ delay: 0.1 }}
               className="text-xs tracking-[0.18em] uppercase mb-6 font-semibold"
-              style={{ color: "rgba(255,255,255,0.3)" }}
+              style={{ color: "rgba(200,162,232,0.65)" }}
             >
               {lang === "en" ? "Next step" : "Próximo passo"}
             </motion.p>
@@ -132,43 +68,19 @@ export default function CTASection() {
             >
               {lang === "en" ? (
                 <>
-                  <span style={{ color: "#EDE8FF" }}>Ready to</span>
+                  <span style={{ color: "#D4CCFF" }}>Ready to build</span>
                   <br />
-                  <span
-                    style={{
-                      background: "linear-gradient(90deg, #2A1363, #C8A2E8, #2A1363, #C8A2E8)",
-                      backgroundSize: "200% auto",
-                      WebkitBackgroundClip: "text",
-                      WebkitTextFillColor: "transparent",
-                      backgroundClip: "text",
-                      animation: "textShimmer 3s linear infinite",
-                      display: "inline-block",
-                    }}
-                  >
-                    build something
-                  </span>
+                  <span style={{ color: "#FFFFFF", fontStyle: "italic", fontWeight: 200, letterSpacing: "0.01em" }}>something</span>
                   <br />
-                  <span style={{ color: "#EDE8FF" }}>exceptional?</span>
+                  <span style={{ color: "#D4CCFF" }}>exceptional?</span>
                 </>
               ) : (
                 <>
-                  <span style={{ color: "#EDE8FF" }}>Prontos para</span>
+                  <span style={{ color: "#D4CCFF" }}>Prontos para construir</span>
                   <br />
-                  <span
-                    style={{
-                      background: "linear-gradient(90deg, #2A1363, #C8A2E8, #2A1363, #C8A2E8)",
-                      backgroundSize: "200% auto",
-                      WebkitBackgroundClip: "text",
-                      WebkitTextFillColor: "transparent",
-                      backgroundClip: "text",
-                      animation: "textShimmer 3s linear infinite",
-                      display: "inline-block",
-                    }}
-                  >
-                    construir algo
-                  </span>
+                  <span style={{ color: "#FFFFFF", fontStyle: "italic", fontWeight: 200, letterSpacing: "0.01em" }}>algo</span>
                   <br />
-                  <span style={{ color: "#EDE8FF" }}>extraordinário?</span>
+                  <span style={{ color: "#D4CCFF" }}>extraordinário?</span>
                 </>
               )}
             </h2>
@@ -196,7 +108,7 @@ export default function CTASection() {
             <Link
               href="#contact"
               className="group inline-flex items-center gap-3 px-8 py-4 rounded-full text-sm font-semibold transition-all duration-200 hover:opacity-90"
-              style={{ color: "#0A0A12", background: "#EDE8FF" }}
+              style={{ color: "#070410", background: "#EDE8FF" }}
             >
               <span>{t.cta.button}</span>
               <span className="transition-transform duration-300 group-hover:translate-x-1">→</span>

@@ -14,7 +14,7 @@ export default function Navbar() {
 
   useEffect(() => {
     const darkIds = new Set(["hero", "work", "cta"]);
-    const allIds = ["hero", "work", "cta", "services", "process", "team", "contact"];
+    const allIds = ["hero", "work", "cta", "services", "team", "contact"];
 
     const check = () => {
       const checkY = 65; // just below navbar
@@ -31,9 +31,9 @@ export default function Navbar() {
       setIsDark(darkIds.has(current));
     };
 
-    window.addEventListener("scroll", check, { passive: true });
+    window.addEventListener("lenis-scroll", check, { passive: true });
     check();
-    return () => window.removeEventListener("scroll", check);
+    return () => window.removeEventListener("lenis-scroll", check);
   }, []);
 
   // Active section detection via IntersectionObserver
@@ -58,8 +58,8 @@ export default function Navbar() {
   }, []);
 
   const navLinks = [
-    { label: t.navbar.work, href: "#work", id: "work" },
     { label: t.navbar.services, href: "#services", id: "services" },
+    { label: t.navbar.work, href: "#work", id: "work" },
     { label: t.navbar.about, href: "#team", id: "team" },
     { label: t.navbar.contact, href: "#contact", id: "contact" },
   ];
@@ -67,18 +67,22 @@ export default function Navbar() {
 
   return (
     <header
-      className="fixed top-0 left-0 right-0 z-50 backdrop-blur-xl transition-all duration-500"
+      className="fixed top-0 left-0 right-0 z-50"
       style={{
         background: isDark
-          ? "rgba(10,10,18,0.55)"
-          : "rgba(250,250,248,0.88)",
+          ? "rgba(7,4,16,0.97)"
+          : "rgba(250,250,248,0.97)",
         borderBottom: isDark
-          ? "1px solid rgba(255,255,255,0.06)"
-          : "1px solid rgba(26,26,26,0.07)",
+          ? "0.5px solid rgba(255,255,255,0.07)"
+          : "0.5px solid rgba(42,19,99,0.08)",
+        boxShadow: isDark
+          ? "0 1px 0 rgba(255,255,255,0.03), 0 4px 24px rgba(0,0,0,0.4)"
+          : "0 1px 0 rgba(255,255,255,0.9), 0 4px 24px rgba(42,19,99,0.05)",
+        transition: "background 0.5s ease, border-color 0.5s ease, box-shadow 0.5s ease",
       }}
     >
       <nav
-        className="max-w-7xl mx-auto px-6 lg:px-8 h-16 flex items-center justify-between"
+        className="max-w-[1536px] mx-auto px-10 lg:px-24 h-16 flex items-center justify-between"
         aria-label="Main navigation"
       >
         {/* Logo — inverted on dark hero */}
@@ -90,23 +94,25 @@ export default function Navbar() {
             <li key={link.href}>
               <Link
                 href={link.href}
-                className="text-sm transition-colors duration-300 tracking-[-0.01em] relative"
+                className="text-sm tracking-[-0.01em] relative px-3 py-1.5 rounded-full transition-all duration-200"
                 style={{
-                  color:
-                    activeSection === link.id
-                      ? isDark ? "#EDE8FF" : "#1A1A1A"
-                      : isDark ? "rgba(237,232,255,0.45)" : "#6B6B6B",
+                  color: activeSection === link.id
+                    ? isDark ? "#EDE8FF" : "#1A1A1A"
+                    : isDark ? "rgba(237,232,255,0.45)" : "#6B6B6B",
+                  background: activeSection === link.id
+                    ? isDark ? "rgba(255,255,255,0.08)" : "rgba(42,19,99,0.06)"
+                    : "transparent",
+                }}
+                onMouseEnter={e => {
+                  if (activeSection !== link.id)
+                    (e.currentTarget as HTMLElement).style.background = isDark ? "rgba(255,255,255,0.06)" : "rgba(42,19,99,0.04)";
+                }}
+                onMouseLeave={e => {
+                  if (activeSection !== link.id)
+                    (e.currentTarget as HTMLElement).style.background = "transparent";
                 }}
               >
                 {link.label}
-                {activeSection === link.id && (
-                  <motion.span
-                    layoutId="nav-indicator"
-                    className="absolute -bottom-1 left-0 right-0 h-px"
-                    style={{ background: isDark ? "#C8A2E8" : "#2A1363" }}
-                    transition={{ duration: 0.2 }}
-                  />
-                )}
               </Link>
             </li>
           ))}
@@ -129,7 +135,7 @@ export default function Navbar() {
             href="#contact"
             className="inline-flex items-center px-4 py-2 text-sm font-semibold rounded-full transition-all duration-300 tracking-[-0.01em] hover:opacity-85"
             style={{
-              color: isDark ? "#0A0A12" : "#EDE8FF",
+              color: isDark ? "#070410" : "#EDE8FF",
               background: isDark ? "#EDE8FF" : "#2A1363",
             }}
           >

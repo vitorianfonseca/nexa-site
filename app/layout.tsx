@@ -1,10 +1,22 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
+import { Cormorant_Garamond } from "next/font/google";
 import "./globals.css";
+
+const cormorant = Cormorant_Garamond({
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700"],
+  style: ["normal", "italic"],
+  variable: "--font-cormorant",
+  display: "swap",
+});
 import { LanguageProvider } from "@/context/LanguageContext";
 import Cursor from "@/components/Cursor";
 import LangSync from "@/components/LangSync";
 import LenisProvider from "@/components/LenisProvider";
+import SplineBg from "@/components/SplineBg";
+import LoadingScreen from "@/components/LoadingScreen";
+import Navbar from "@/components/Navbar";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -75,11 +87,22 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable}`}
+      className={`${geistSans.variable} ${geistMono.variable} ${cormorant.variable}`}
       suppressHydrationWarning
     >
+      <head>
+        <link rel="preconnect" href="https://my.spline.design" />
+        <link rel="dns-prefetch" href="//my.spline.design" />
+        <link rel="preconnect" href="https://prod.spline.design" />
+        <link rel="dns-prefetch" href="//prod.spline.design" />
+        <link rel="preload" href="/dark.svg" as="image" type="image/svg+xml" />
+        <link rel="preload" href="/white.svg" as="image" type="image/svg+xml" />
+      </head>
       <body className="font-sans bg-background text-foreground antialiased">
         <LanguageProvider>
+          <LoadingScreen />
+          <SplineBg />
+          <Navbar />
           <LenisProvider>
             <LangSync />
             <Cursor />

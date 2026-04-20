@@ -47,38 +47,52 @@ export default function Footer() {
 
   return (
     <footer
-      className="relative border-t py-12 overflow-hidden"
-      style={{ borderColor: "rgba(26,26,26,0.07)" }}
+      className="relative py-12 overflow-hidden"
+      style={{ background: "#04020C" }}
       aria-label="Site footer"
     >
-      {/* Subtle gradient line at top */}
       <div
         className="absolute top-0 left-0 right-0 h-px"
-        style={{
-          background: "linear-gradient(to right, transparent, rgba(42,19,99,0.12), transparent)",
-        }}
+        style={{ background: "linear-gradient(to right, transparent, rgba(200,162,232,0.18), transparent)" }}
         aria-hidden="true"
       />
 
-      <div className="max-w-7xl mx-auto px-6 lg:px-8">
-        {/* Top row */}
+      {/* Large background wordmark */}
+      <div
+        className="absolute inset-0 flex items-center justify-center pointer-events-none select-none overflow-hidden"
+        aria-hidden="true"
+      >
+        <span
+          style={{
+            fontSize: "clamp(8rem, 22vw, 22rem)",
+            fontWeight: 900,
+            letterSpacing: "-0.06em",
+            color: "rgba(212,204,255,0.018)",
+            lineHeight: 1,
+            userSelect: "none",
+          }}
+        >
+          Nexa
+        </span>
+      </div>
+
+      <div className="max-w-[1536px] mx-auto px-10 lg:px-24">
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-8 mb-10">
-          {/* Logo + tagline */}
           <div className="flex flex-col gap-2">
-            <Logo />
-            <p className="text-xs text-muted/45 pl-9 tracking-[-0.01em]">
+            <Logo dark />
+            <p className="text-xs pl-9 tracking-[-0.01em]" style={{ color: "rgba(255,255,255,0.35)" }}>
               {t.footer.tagline}
             </p>
           </div>
 
-          {/* Nav links */}
           <nav aria-label="Footer navigation">
             <ul className="flex flex-wrap gap-6">
               {navLinks.map((link) => (
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="text-sm text-muted hover:text-accent transition-colors duration-200 tracking-[-0.01em]"
+                    className="text-sm tracking-[-0.01em] transition-colors duration-200 hover:opacity-70"
+                    style={{ color: "rgba(255,255,255,0.55)" }}
                   >
                     {link.label}
                   </Link>
@@ -87,7 +101,6 @@ export default function Footer() {
             </ul>
           </nav>
 
-          {/* Social links */}
           <div className="flex items-center gap-5">
             {socialLinks.map((link) => (
               <motion.a
@@ -96,8 +109,8 @@ export default function Footer() {
                 aria-label={`Nexa on ${link.label}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-muted transition-colors duration-200"
-                whileHover={{ color: "#2A1363", scale: 1.15 }}
+                style={{ color: "rgba(255,255,255,0.2)" }}
+                whileHover={{ color: "#C8A2E8", scale: 1.15 }}
                 transition={{ duration: 0.15 }}
               >
                 {link.icon}
@@ -106,22 +119,20 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* Bottom */}
         <div
           className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pt-6"
           style={{ borderTop: "0.5px solid rgba(26,26,26,0.06)" }}
         >
-          <p className="text-xs text-muted/35 tracking-[-0.01em]">
+          <p className="text-xs tracking-[-0.01em]" style={{ color: "rgba(255,255,255,0.3)" }}>
             {t.footer.copyright}
           </p>
 
-          {/* Animated status dot */}
           <div className="flex items-center gap-2">
             <span className="relative flex h-1.5 w-1.5">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-60" />
               <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-400" />
             </span>
-            <span className="text-[10px] text-muted/40 tracking-wide">All systems operational</span>
+            <span className="text-[10px] tracking-wide" style={{ color: "rgba(255,255,255,0.3)" }}>All systems operational</span>
           </div>
         </div>
       </div>

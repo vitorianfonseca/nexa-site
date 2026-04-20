@@ -11,6 +11,7 @@ export default function TechMarquee() {
     <section
       className="relative py-8 overflow-hidden"
       style={{
+        background: "#FAFAF8",
         borderTop: "0.5px solid rgba(26,26,26,0.06)",
         borderBottom: "0.5px solid rgba(26,26,26,0.06)",
       }}

@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState, useCallback } from "react";
+import { useRef, useState, useCallback, useEffect } from "react";
 import { motion, useInView, AnimatePresence, useMotionValue, animate, PanInfo } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
@@ -264,13 +264,13 @@ function ProjectCard({
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.25 }}
                 className="absolute inset-0 flex items-center justify-center"
-                style={{ background: "rgba(10,10,18,0.55)", backdropFilter: "blur(4px)" }}
+                style={{ background: "rgba(10,10,18,0.72)" }}
               >
                 <span
                   className="text-white font-semibold text-sm tracking-[-0.01em] px-5 py-2 rounded-full"
                   style={{
                     background: "#EDE8FF",
-                    color: "#0A0A12",
+                    color: "#070410",
                     boxShadow: "0 4px 20px rgba(42,19,99,0.3)",
                   }}
                 >
@@ -287,7 +287,6 @@ function ProjectCard({
               background: hovered ? "rgba(42,19,99,0.5)" : "rgba(0,0,0,0.45)",
               color: hovered ? "rgba(200,162,232,0.95)" : "rgba(255,255,255,0.4)",
               border: hovered ? "0.5px solid rgba(200,162,232,0.35)" : "0.5px solid rgba(255,255,255,0.1)",
-              backdropFilter: "blur(8px)",
               transition: "all 0.3s",
             }}
           >
@@ -341,11 +340,31 @@ export default function Work() {
 
   const [current, setCurrent] = useState(0);
   const x = useMotionValue(0);
+  const carouselRef = useRef<HTMLDivElement>(null);
 
   const goTo = useCallback((index: number) => {
     const clamped = Math.max(0, Math.min(index, N - 1));
     setCurrent(clamped);
     animate(x, -clamped * STEP, { type: "spring", stiffness: 280, damping: 28 });
+  }, [N, x]);
+
+  // Touchpad horizontal scroll — non-passive to allow preventDefault
+  useEffect(() => {
+    const el = carouselRef.current;
+    if (!el) return;
+    let lastScroll = 0;
+    const onWheel = (e: WheelEvent) => {
+      if (Math.abs(e.deltaX) <= Math.abs(e.deltaY)) return;
+      e.preventDefault();
+      e.stopPropagation();
+      const now = Date.now();
+      if (now - lastScroll < 400) return;
+      lastScroll = now;
+      if (e.deltaX > 20) setCurrent((c) => { const n = Math.min(c + 1, N - 1); animate(x, -n * STEP, { type: "spring", stiffness: 280, damping: 28 }); return n; });
+      else if (e.deltaX < -20) setCurrent((c) => { const n = Math.max(c - 1, 0); animate(x, -n * STEP, { type: "spring", stiffness: 280, damping: 28 }); return n; });
+    };
+    el.addEventListener("wheel", onWheel, { passive: false });
+    return () => el.removeEventListener("wheel", onWheel);
   }, [N, x]);
 
   const handleDragEnd = useCallback((_: unknown, info: PanInfo) => {
@@ -364,26 +383,11 @@ export default function Work() {
       id="work"
       ref={ref}
       className="py-24 lg:py-32 overflow-hidden relative"
-      style={{ background: "#0A0A12" }}
+      style={{ background: "#070410" }}
       aria-label="Our work"
     >
-      {/* Grid */}
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          backgroundImage: "linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(to right, rgba(255,255,255,0.03) 1px, transparent 1px)",
-          backgroundSize: "60px 60px",
-        }}
-        aria-hidden="true"
-      />
-      {/* Glow */}
-      <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
-        <div style={{ position: "absolute", width: 500, height: 500, borderRadius: "50%", background: "radial-gradient(circle, rgba(42,19,99,0.2) 0%, transparent 70%)", filter: "blur(80px)", top: -100, right: "10%" }} />
-        <div style={{ position: "absolute", width: 300, height: 300, borderRadius: "50%", background: "radial-gradient(circle, rgba(200,162,232,0.08) 0%, transparent 70%)", filter: "blur(60px)", bottom: 0, left: "20%" }} />
-      </div>
-
-      <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
-        {/* Header + nav */}
+      <div className="max-w-[1536px] mx-auto px-10 lg:px-24 relative z-10">
+        {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 24 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
@@ -391,7 +395,7 @@ export default function Work() {
           className="mb-12 flex items-end justify-between"
         >
           <div>
-            <p className="text-xs font-semibold tracking-[0.15em] uppercase mb-3" style={{ color: "rgba(200,162,232,0.7)" }}>
+            <p className="text-xs font-semibold tracking-[0.15em] uppercase mb-3" style={{ color: "rgba(200,162,232,0.65)" }}>
               Selected work
             </p>
             <h2
@@ -401,73 +405,84 @@ export default function Work() {
               {t.work.title}
             </h2>
           </div>
-
-          {/* Counter + arrows */}
-          <div className="flex items-center gap-3 pb-1">
-            <span
-              className="text-sm font-mono tabular-nums"
-              style={{ color: "rgba(255,255,255,0.25)" }}
-            >
-              {String(current + 1).padStart(2, "0")} / {String(N).padStart(2, "0")}
-            </span>
-            <button
-              onClick={() => goTo(current - 1)}
-              disabled={current === 0}
-              aria-label="Previous project"
-              className="w-9 h-9 rounded-full flex items-center justify-center transition-all duration-200"
-              style={{
-                border: "0.5px solid rgba(255,255,255,0.12)",
-                background: "rgba(255,255,255,0.04)",
-                color: current === 0 ? "rgba(255,255,255,0.2)" : "rgba(255,255,255,0.7)",
-                cursor: current === 0 ? "not-allowed" : "pointer",
-              }}
-            >
-              ←
-            </button>
-            <button
-              onClick={() => goTo(current + 1)}
-              disabled={current === N - 1}
-              aria-label="Next project"
-              className="w-9 h-9 rounded-full flex items-center justify-center transition-all duration-200"
-              style={{
-                border: "0.5px solid rgba(255,255,255,0.12)",
-                background: current === N - 1 ? "rgba(255,255,255,0.04)" : "rgba(200,162,232,0.12)",
-                color: current === N - 1 ? "rgba(255,255,255,0.2)" : "rgba(200,162,232,0.9)",
-                cursor: current === N - 1 ? "not-allowed" : "pointer",
-              }}
-            >
-              →
-            </button>
-          </div>
+          <span className="text-sm font-mono tabular-nums pb-1" style={{ color: "rgba(255,255,255,0.25)" }}>
+            {String(current + 1).padStart(2, "0")} / {String(N).padStart(2, "0")}
+          </span>
         </motion.div>
       </div>
 
-      {/* Carousel */}
+      {/* Carousel + side arrows */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={inView ? { opacity: 1 } : {}}
         transition={{ duration: 0.5, delay: 0.15 }}
-        className="pl-6 lg:pl-[max(24px,calc((100vw-1280px)/2+32px))] overflow-hidden relative z-10"
+        className="max-w-[1536px] mx-auto px-10 lg:px-24 relative z-10"
+        ref={carouselRef}
       >
-        <motion.div
-          className="flex gap-5 pr-12"
-          drag="x"
-          dragConstraints={{ left: -(N - 1) * STEP, right: 0 }}
-          dragElastic={0.05}
-          style={{ x }}
-          onDragEnd={handleDragEnd}
-          whileDrag={{ cursor: "grabbing" }}
-        >
-          {projects.map((project, i) => (
-            <ProjectCard
-              key={project.name}
-              project={project}
-              index={i}
-              onHoverStart={() => {}}
-              onHoverEnd={() => {}}
-            />
-          ))}
-        </motion.div>
+        <div className="relative">
+          {/* Left arrow */}
+          <button
+            onClick={() => goTo(current - 1)}
+            disabled={current === 0}
+            aria-label="Previous project"
+            className="absolute left-0 top-[120px] z-20 w-11 h-11 rounded-full flex items-center justify-center transition-all duration-200"
+            style={{
+              border: "0.5px solid rgba(255,255,255,0.14)",
+              background: "rgba(7,4,16,0.85)",
+              color: current === 0 ? "rgba(255,255,255,0.2)" : "rgba(255,255,255,0.85)",
+              cursor: current === 0 ? "not-allowed" : "pointer",
+            }}
+          >
+            ←
+          </button>
+
+          {/* Right arrow */}
+          <button
+            onClick={() => goTo(current + 1)}
+            disabled={current === N - 1}
+            aria-label="Next project"
+            className="absolute right-0 top-[120px] z-20 w-11 h-11 rounded-full flex items-center justify-center transition-all duration-200"
+            style={{
+              border: "0.5px solid rgba(200,162,232,0.25)",
+              background: current === N - 1 ? "rgba(7,4,16,0.85)" : "rgba(200,162,232,0.12)",
+              color: current === N - 1 ? "rgba(255,255,255,0.2)" : "rgba(200,162,232,0.9)",
+              cursor: current === N - 1 ? "not-allowed" : "pointer",
+            }}
+          >
+            →
+          </button>
+
+          {/* Viewport: clipped between arrows, fade at edges */}
+          <div
+            className="overflow-hidden"
+            style={{
+              marginLeft: 64,
+              marginRight: 64,
+              maskImage: "linear-gradient(to right, transparent, black 40px, black calc(100% - 40px), transparent)",
+              WebkitMaskImage: "linear-gradient(to right, transparent, black 40px, black calc(100% - 40px), transparent)",
+            }}
+          >
+            <motion.div
+              className="flex gap-5"
+              drag="x"
+              dragConstraints={{ left: -(N - 1) * STEP, right: 0 }}
+              dragElastic={0.05}
+              style={{ x, willChange: "transform" }}
+              onDragEnd={handleDragEnd}
+              whileDrag={{ cursor: "grabbing" }}
+            >
+              {projects.map((project, i) => (
+                <ProjectCard
+                  key={project.name}
+                  project={project}
+                  index={i}
+                  onHoverStart={() => {}}
+                  onHoverEnd={() => {}}
+                />
+              ))}
+            </motion.div>
+          </div>
+        </div>
       </motion.div>
     </section>
   );
