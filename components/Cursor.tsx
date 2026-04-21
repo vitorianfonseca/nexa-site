@@ -13,6 +13,11 @@ export default function Cursor() {
   const [hovered, setHovered] = useState(false);
   const [clicked, setClicked] = useState(false);
   const [hidden, setHidden] = useState(false);
+  const [isTouch, setIsTouch] = useState(true);
+
+  useEffect(() => {
+    setIsTouch(!window.matchMedia("(pointer: fine)").matches);
+  }, []);
   const lastMoveAt = useRef(Date.now());
 
   useEffect(() => {
@@ -57,6 +62,8 @@ export default function Cursor() {
       document.documentElement.removeEventListener("mouseenter", onEnter);
     };
   }, [mouseX, mouseY]);
+
+  if (isTouch) return null;
 
   return (
     <>
