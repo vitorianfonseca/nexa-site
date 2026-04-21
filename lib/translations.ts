@@ -8,8 +8,8 @@ export const translations = {
       cta: "Get a quote",
     },
     hero: {
-      headline: "We build websites that work.",
-      subheadline: "Modern, fast, and built to last.",
+      headline: "We build websites that perform.",
+      subheadline: "Fast, modern, and crafted to turn visitors into customers.",
       ctaPrimary: "See our work",
       ctaSecondary: "Get in touch →",
     },
@@ -194,8 +194,8 @@ export const translations = {
       cta: "Pedir orçamento",
     },
     hero: {
-      headline: "Construímos websites que funcionam.",
-      subheadline: "Modernos, rápidos e construídos para durar.",
+      headline: "Construímos websites que performam.",
+      subheadline: "Rápidos, modernos e feitos para converter visitantes em clientes.",
       ctaPrimary: "Ver trabalhos",
       ctaSecondary: "Falar connosco →",
     },

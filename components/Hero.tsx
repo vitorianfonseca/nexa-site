@@ -72,9 +72,9 @@ export default function Hero() {
             }}
           >
             {lang === "en" ? (
-              <>We build{" "}<span style={{ fontStyle: "italic", fontWeight: 200, letterSpacing: "0.01em" }}>websites</span><br />that work.</>
+              <>We build{" "}<span style={{ fontStyle: "italic", fontWeight: 200, letterSpacing: "0.01em" }}>websites</span><br />that perform.</>
             ) : (
-              <>Construímos{" "}<span style={{ fontStyle: "italic", fontWeight: 200, letterSpacing: "0.01em" }}>websites</span><br />que funcionam.</>
+              <>Construímos{" "}<span style={{ fontStyle: "italic", fontWeight: 200, letterSpacing: "0.01em" }}>websites</span><br />que performam.</>
             )}
           </motion.h1>
 
@@ -135,6 +135,33 @@ export default function Hero() {
           </motion.div>
         </div>
       </div>
+
+      {/* Rotating stamp */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1.2 }}
+        className="absolute bottom-24 right-8 lg:bottom-20 lg:right-24 hidden lg:flex items-center justify-center"
+        aria-hidden="true"
+        style={{ width: 120, height: 120 }}
+      >
+        <motion.svg
+          viewBox="0 0 100 100"
+          width="120"
+          height="120"
+          animate={{ rotate: 360 }}
+          transition={{ duration: 22, repeat: Infinity, ease: "linear" }}
+          style={{ position: "absolute" }}
+        >
+          <defs>
+            <path id="stamp-circle" d="M 50,50 m -38,0 a 38,38 0 1,1 76,0 a 38,38 0 1,1 -76,0" />
+          </defs>
+          <text fontSize="7.2" fill="rgba(255,255,255,0.28)" letterSpacing="2.2">
+            <textPath href="#stamp-circle">WEB AGENCY · LEIRIA, PORTUGAL · NEXA · </textPath>
+          </text>
+        </motion.svg>
+        <div className="w-1.5 h-1.5 rounded-full" style={{ background: "rgba(200,162,232,0.55)" }} />
+      </motion.div>
 
       {/* Scroll indicator */}
       <motion.div
