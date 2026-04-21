@@ -42,7 +42,7 @@ body {
 }
 
 /* Hide default cursor on all interactive elements */
-a, button, [role="button"], input, select, textarea, label {
+a, button, [role="button"], input, select, textarea, label, [href] {
   cursor: none;
 }
 

@@ -42,10 +42,10 @@ export default function Cursor() {
       );
     };
 
-    // Hide when inside an iframe (mousemove stops firing) — only after first move
+    // Hide only when mouse enters an iframe (mousemove stops completely)
     const iframeCheck = setInterval(() => {
-      if (hasMoved.current && Date.now() - lastMoveAt.current > 200) setHidden(true);
-    }, 100);
+      if (hasMoved.current && Date.now() - lastMoveAt.current > 1500) setHidden(true);
+    }, 500);
 
     window.addEventListener("mousemove", onMove);
     window.addEventListener("mousemove", checkHover);
