@@ -21,7 +21,7 @@ export default function Logo({ className = "", dark = false }: LogoProps) {
         alt=""
         aria-hidden="true"
         style={{ width: "auto", flexShrink: 0, display: "block" }}
-        className="h-8 md:h-10 group-hover:opacity-80 transition-opacity duration-200"
+        className="h-6 md:h-10 group-hover:opacity-80 transition-opacity duration-200"
       />
 
       {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -29,7 +29,7 @@ export default function Logo({ className = "", dark = false }: LogoProps) {
         src={dark ? "/name_light.svg" : "/name_dark.svg"}
         alt="Nexa"
         style={{ width: "auto", flexShrink: 0, display: "block", marginTop: -4 }}
-        className="h-[22px] md:h-[30px] group-hover:opacity-80 transition-opacity duration-200"
+        className="h-[16px] md:h-[30px] group-hover:opacity-80 transition-opacity duration-200"
       />
     </Link>
   );
