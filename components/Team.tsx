@@ -31,7 +31,7 @@ function MemberCard({
   member,
   index,
 }: {
-  member: { name: string; role: string; initials: string; image?: string; linkedin: string };
+  member: { name: string; role: string; initials: string; image?: string };
   index: number;
 }) {
   const gradients = [

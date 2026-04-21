@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState, useEffect } from "react";
+import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
 import Link from "next/link";
 import { useLanguage } from "@/context/LanguageContext";
@@ -9,25 +9,6 @@ export default function CTASection() {
   const { t, lang } = useLanguage();
   const ref = useRef<HTMLElement>(null);
   const inView = useInView(ref, { once: true, margin: "-80px" });
-  const [splineLoaded, setSplineLoaded] = useState(false);
-
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-
-    // Only load CTA Spline when hero is out of view (avoids two WebGL contexts simultaneously)
-    const obs = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setSplineLoaded(true);
-          obs.disconnect();
-        }
-      },
-      { rootMargin: "200px" }
-    );
-    obs.observe(el);
-    return () => obs.disconnect();
-  }, []);
 
   return (
     <section
@@ -45,7 +26,7 @@ export default function CTASection() {
       />
 
 
-      {/* Glow behind stars — contrast during dark animation frames */}
+      {/* Glow */}
       <div
         className="absolute pointer-events-none"
         style={{
@@ -53,28 +34,6 @@ export default function CTASection() {
           background: "radial-gradient(ellipse at 55% 50%, rgba(125,43,110,0.25) 0%, rgba(42,19,99,0.18) 40%, transparent 70%)",
           filter: "blur(45px)",
         }}
-        aria-hidden="true"
-      />
-
-      {/* Spline stars */}
-      <div
-        className="absolute pointer-events-none"
-        style={{ zIndex: 3, left: "42%", right: "-10%", top: "2%", bottom: "-12%" }}
-        aria-hidden="true"
-      >
-        {splineLoaded && (
-          <iframe
-            src="https://my.spline.design/ai-ab586tHgjlNDgx12H1Fqd6YT/?v=3"
-            style={{ width: "100%", height: "100%", border: "none" }}
-            title="CTA visual"
-          />
-        )}
-      </div>
-
-      {/* Cover Spline watermark */}
-      <div
-        className="absolute bottom-0 right-0 pointer-events-none"
-        style={{ width: 160, height: 40, background: "#070410", zIndex: 20 }}
         aria-hidden="true"
       />
 
