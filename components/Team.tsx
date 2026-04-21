@@ -99,17 +99,6 @@ function MemberCard({
         </p>
       </div>
 
-      <motion.a
-        href={member.linkedin}
-        aria-label={`${member.name} on LinkedIn`}
-        className="shrink-0 transition-colors duration-200"
-        style={{ color: "rgba(26,26,26,0.25)" }}
-        whileHover={{ color: "#2A1363", scale: 1.15 }}
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        <LinkedInIcon />
-      </motion.a>
     </div>
   );
 }

@@ -16,9 +16,14 @@ export default function Logo({ className = "", dark = false }: LogoProps) {
     >
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
-        src={dark ? "/nexa.svg" : "/logo.svg"}
+        src="/nexa-logo.svg"
         alt="Nexa"
-        style={{ height: 40, width: "auto" }}
+        style={{
+          height: 36,
+          width: "auto",
+          filter: dark ? "brightness(0) invert(1)" : "none",
+          transition: "filter 0.4s ease",
+        }}
         className="group-hover:opacity-70 transition-opacity duration-200"
       />
     </Link>
