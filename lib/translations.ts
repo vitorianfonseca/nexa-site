@@ -92,6 +92,13 @@ export const translations = {
           href: "https://clinica-nova-vida.vercel.app/",
           image: "/projects/clinica.webp",
         },
+        {
+          name: "Barba & Brio",
+          description: "Landing page for a barber shop.",
+          tags: ["Next.js", "Tailwind CSS"],
+          href: "https://landing-page-barber-shop-two.vercel.app",
+          image: "/projects/barber_Shop.webp",
+        },
       ],
     },
     process: {
@@ -277,6 +284,13 @@ export const translations = {
           tags: ["Next.js", "Tailwind CSS"],
           href: "https://clinica-nova-vida.vercel.app/",
           image: "/projects/clinica.webp",
+        },
+        {
+          name: "Barba & Brio",
+          description: "Landing page para uma barbearia.",
+          tags: ["Next.js", "Tailwind CSS"],
+          href: "https://landing-page-barber-shop-two.vercel.app",
+          image: "/projects/barber_Shop.webp",
         },
       ],
     },
