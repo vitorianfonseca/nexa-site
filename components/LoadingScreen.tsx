@@ -49,6 +49,7 @@ export default function LoadingScreen() {
             transition={{ duration: 0.55, delay: 0.08, ease: [0.16, 1, 0.3, 1] }}
             style={{ height: 28, overflow: "hidden", display: "flex", alignItems: "flex-start" }}
           >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src="/name_light.svg"
               alt="Nexa"
