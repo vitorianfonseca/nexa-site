@@ -16,7 +16,7 @@ export default function Logo({ className = "", dark = false }: LogoProps) {
     >
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
-        src={dark ? "/white.svg" : "/dark.svg"}
+        src={dark ? "/nexa.svg" : "/logo.svg"}
         alt="Nexa"
         style={{ height: 40, width: "auto" }}
         className="group-hover:opacity-70 transition-opacity duration-200"
