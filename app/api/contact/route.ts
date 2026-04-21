@@ -23,10 +23,10 @@ export async function POST(req: NextRequest) {
     });
 
     await transporter.sendMail({
-      from: `"Nexa Contact Form" <${process.env.GMAIL_USER}>`,
+      from: `"${name}" <${process.env.GMAIL_USER}>`,
       to: "hello@bynexa.dev",
-      replyTo: email,
-      subject: `[Nexa] ${projectType} — ${name}`,
+      replyTo: `"${name}" <${email}>`,
+      subject: `[Nexa] ${projectType} — ${name} <${email}>`,
       html: `
         <div style="font-family: system-ui, -apple-system, sans-serif; max-width: 600px; margin: 0 auto; color: #1a1a1a;">
           <div style="background: linear-gradient(135deg, #2A1363 0%, #7E4CC4 60%, #C8A2E8 100%); padding: 28px 32px; border-radius: 12px 12px 0 0;">
