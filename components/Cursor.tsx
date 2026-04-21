@@ -13,7 +13,7 @@ export default function Cursor() {
   const [hovered, setHovered] = useState(false);
   const [clicked, setClicked] = useState(false);
   const [hidden, setHidden] = useState(false);
-  const [isTouch, setIsTouch] = useState(true);
+  const [isTouch, setIsTouch] = useState(false);
 
   useEffect(() => {
     setIsTouch(!window.matchMedia("(pointer: fine)").matches);
