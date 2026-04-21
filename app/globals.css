@@ -21,6 +21,10 @@ select.custom-select {
   padding-right: 20px;
 }
 
+h1, h2 {
+  font-family: 'Cabinet Grotesk', var(--font-geist-sans), sans-serif;
+}
+
 html {
   scroll-behavior: auto;
 }

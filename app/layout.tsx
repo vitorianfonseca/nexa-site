@@ -96,6 +96,7 @@ export default function RootLayout({
         <link rel="preconnect" href="https://prod.spline.design" />
         <link rel="dns-prefetch" href="//prod.spline.design" />
         <link rel="preload" href="/nexa-logo.svg" as="image" type="image/svg+xml" />
+        <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@800,700,500&display=swap" />
       </head>
       <body className="font-sans bg-background text-foreground antialiased">
         <LanguageProvider>
