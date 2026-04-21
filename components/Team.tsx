@@ -18,6 +18,7 @@ const fadeUp = {
   }),
 };
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function LinkedInIcon() {
   return (
     <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">

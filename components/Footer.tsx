@@ -1,10 +1,12 @@
 "use client";
 
+import React from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import Logo from "./Logo";
 import { useLanguage } from "@/context/LanguageContext";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function GitHubIcon() {
   return (
     <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
@@ -13,6 +15,7 @@ function GitHubIcon() {
   );
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function LinkedInIcon() {
   return (
     <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
@@ -21,6 +24,7 @@ function LinkedInIcon() {
   );
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function InstagramIcon() {
   return (
     <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
@@ -39,11 +43,13 @@ export default function Footer() {
     { label: t.footer.links.contact, href: "#contact" },
   ];
 
-  const socialLinks = [
-    { icon: <GitHubIcon />, href: "#", label: "GitHub" },
-    { icon: <LinkedInIcon />, href: "#", label: "LinkedIn" },
-    { icon: <InstagramIcon />, href: "#", label: "Instagram" },
-  ];
+  // Social links — re-enable when URLs are ready
+  // const socialLinks = [
+  //   { icon: <GitHubIcon />, href: "https://github.com/bynexa", label: "GitHub" },
+  //   { icon: <LinkedInIcon />, href: "https://linkedin.com/company/bynexa", label: "LinkedIn" },
+  //   { icon: <InstagramIcon />, href: "https://instagram.com/bynexa", label: "Instagram" },
+  // ];
+  const socialLinks: { icon: React.ReactNode; href: string; label: string }[] = [];
 
   return (
     <footer

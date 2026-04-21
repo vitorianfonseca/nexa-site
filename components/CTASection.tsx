@@ -12,23 +12,21 @@ export default function CTASection() {
   const [splineLoaded, setSplineLoaded] = useState(false);
 
   useEffect(() => {
-    // Load early via intersection (600px before) OR after 4s — whichever first
-    const timer = setTimeout(() => setSplineLoaded(true), 4000);
-
     const el = ref.current;
     if (!el) return;
+
+    // Only load CTA Spline when hero is out of view (avoids two WebGL contexts simultaneously)
     const obs = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          clearTimeout(timer);
           setSplineLoaded(true);
           obs.disconnect();
         }
       },
-      { rootMargin: "600px" }
+      { rootMargin: "200px" }
     );
     obs.observe(el);
-    return () => { clearTimeout(timer); obs.disconnect(); };
+    return () => obs.disconnect();
   }, []);
 
   return (
