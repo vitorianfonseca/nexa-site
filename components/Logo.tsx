@@ -29,21 +29,13 @@ export default function Logo({ className = "", dark = false }: LogoProps) {
         className="group-hover:opacity-80 transition-opacity duration-200"
       />
 
-      {/* Wordmark — cropped to remove SVG whitespace */}
-      <div style={{ height: 24, overflow: "hidden", flexShrink: 0 }}>
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src={dark ? "/name_light.svg" : "/name_dark.svg"}
-          alt="Nexa"
-          style={{
-            height: 51,
-            width: "auto",
-            display: "block",
-            marginTop: -15,
-          }}
-          className="group-hover:opacity-80 transition-opacity duration-200"
-        />
-      </div>
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src={dark ? "/name_light.svg" : "/name_dark.svg"}
+        alt="Nexa"
+        style={{ height: 22, width: "auto", flexShrink: 0, display: "block" }}
+        className="group-hover:opacity-80 transition-opacity duration-200"
+      />
     </Link>
   );
 }
