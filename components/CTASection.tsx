@@ -93,7 +93,7 @@ export default function CTASection() {
         <div style={{ overflow: "hidden" }}>
           {lang === "en" ? (
             <h2
-              className="font-bold leading-[0.92] tracking-[-0.04em] mb-16"
+              className="font-bold leading-[0.92] tracking-[-0.04em] mb-8"
               style={{ fontSize: "clamp(2.2rem, 5vw, 6.5rem)" }}
             >
               <motion.span
@@ -110,7 +110,7 @@ export default function CTASection() {
                 initial={{ opacity: 0, y: 60 }}
                 animate={inView ? { opacity: 1, y: 0 } : {}}
                 transition={{ duration: 0.9, delay: 0.08, ease: [0.16, 1, 0.3, 1] }}
-                style={{ color: "#FFFFFF", fontStyle: "italic", fontWeight: 200, letterSpacing: "0.01em", paddingLeft: "clamp(0rem, 4vw, 5rem)" }}
+                style={{ color: "#FFFFFF", fontStyle: "italic", fontWeight: 200, letterSpacing: "0.01em", paddingLeft: "clamp(0rem, 2.5vw, 3rem)" }}
               >
                 something
               </motion.span>
@@ -119,14 +119,14 @@ export default function CTASection() {
                 initial={{ opacity: 0, y: 60 }}
                 animate={inView ? { opacity: 1, y: 0 } : {}}
                 transition={{ duration: 0.9, delay: 0.16, ease: [0.16, 1, 0.3, 1] }}
-                style={{ color: "#D4CCFF", paddingLeft: "clamp(0rem, 8vw, 10rem)" }}
+                style={{ color: "#D4CCFF", paddingLeft: "clamp(0rem, 5vw, 6rem)" }}
               >
                 exceptional?
               </motion.span>
             </h2>
           ) : (
             <h2
-              className="font-bold leading-[0.92] tracking-[-0.04em] mb-16"
+              className="font-bold leading-[0.92] tracking-[-0.04em] mb-8"
               style={{ fontSize: "clamp(2.2rem, 5vw, 6.5rem)" }}
             >
               <motion.span
@@ -143,7 +143,7 @@ export default function CTASection() {
                 initial={{ opacity: 0, y: 60 }}
                 animate={inView ? { opacity: 1, y: 0 } : {}}
                 transition={{ duration: 0.9, delay: 0.08, ease: [0.16, 1, 0.3, 1] }}
-                style={{ color: "#FFFFFF", fontStyle: "italic", fontWeight: 200, letterSpacing: "0.01em", paddingLeft: "clamp(0rem, 4vw, 5rem)" }}
+                style={{ color: "#FFFFFF", fontStyle: "italic", fontWeight: 200, letterSpacing: "0.01em", paddingLeft: "clamp(0rem, 2.5vw, 3rem)" }}
               >
                 construir algo
               </motion.span>
@@ -152,7 +152,7 @@ export default function CTASection() {
                 initial={{ opacity: 0, y: 60 }}
                 animate={inView ? { opacity: 1, y: 0 } : {}}
                 transition={{ duration: 0.9, delay: 0.16, ease: [0.16, 1, 0.3, 1] }}
-                style={{ color: "#D4CCFF", paddingLeft: "clamp(0rem, 8vw, 10rem)" }}
+                style={{ color: "#D4CCFF", paddingLeft: "clamp(0rem, 5vw, 6rem)" }}
               >
                 extraordinário?
               </motion.span>
@@ -165,7 +165,7 @@ export default function CTASection() {
           initial={{ opacity: 0, y: 24 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.7, delay: 0.35, ease: [0.16, 1, 0.3, 1] }}
-          className="flex flex-col sm:flex-row sm:items-center gap-8 lg:gap-16 pointer-events-auto"
+          className="flex flex-col sm:flex-row sm:items-center gap-6 lg:gap-10 pointer-events-auto"
         >
           <p className="text-sm leading-relaxed max-w-xs" style={{ color: "rgba(255,255,255,0.35)" }}>
             {t.cta.subtext}
