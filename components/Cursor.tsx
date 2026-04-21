@@ -4,8 +4,8 @@ import { useEffect, useRef, useState } from "react";
 import { motion, useMotionValue, useSpring } from "framer-motion";
 
 export default function Cursor() {
-  const mouseX = useMotionValue(-100);
-  const mouseY = useMotionValue(-100);
+  const mouseX = useMotionValue(typeof window !== "undefined" ? window.innerWidth / 2 : -100);
+  const mouseY = useMotionValue(typeof window !== "undefined" ? window.innerHeight / 2 : -100);
 
   const ringX = useSpring(mouseX, { stiffness: 320, damping: 26, mass: 0.55 });
   const ringY = useSpring(mouseY, { stiffness: 320, damping: 26, mass: 0.55 });
@@ -18,10 +18,12 @@ export default function Cursor() {
   useEffect(() => {
     setIsTouch(!window.matchMedia("(pointer: fine)").matches);
   }, []);
-  const lastMoveAt = useRef(Date.now());
+  const lastMoveAt = useRef(0);
+  const hasMoved = useRef(false);
 
   useEffect(() => {
     const onMove = (e: MouseEvent) => {
+      hasMoved.current = true;
       lastMoveAt.current = Date.now();
       mouseX.set(e.clientX);
       mouseY.set(e.clientY);
@@ -40,9 +42,9 @@ export default function Cursor() {
       );
     };
 
-    // Hide when inside an iframe (mousemove stops firing)
+    // Hide when inside an iframe (mousemove stops firing) — only after first move
     const iframeCheck = setInterval(() => {
-      if (Date.now() - lastMoveAt.current > 200) setHidden(true);
+      if (hasMoved.current && Date.now() - lastMoveAt.current > 200) setHidden(true);
     }, 100);
 
     window.addEventListener("mousemove", onMove);
