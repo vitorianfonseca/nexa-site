@@ -287,9 +287,20 @@ export default function Work() {
                       </motion.div>
                     </div>
 
-                    {/* Arrow */}
+                    {/* Arrow — desktop: animated, mobile: always visible link */}
+                    <a
+                      href={project.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="lg:hidden shrink-0 text-base"
+                      style={{ color: "rgba(200,162,232,0.6)" }}
+                      onClick={(e) => e.stopPropagation()}
+                      aria-label={`View ${project.name}`}
+                    >
+                      ↗
+                    </a>
                     <motion.span
-                      className="shrink-0 text-lg"
+                      className="shrink-0 text-lg hidden lg:block"
                       animate={{
                         opacity: isActive ? 1 : 0,
                         x: isActive ? 0 : -6,

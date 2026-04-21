@@ -56,9 +56,9 @@ export default function CTASection() {
         aria-hidden="true"
       />
 
-      {/* Spline stars — loads after hero WebGL unloads */}
+      {/* Spline stars — desktop only, loads after hero WebGL unloads */}
       <div
-        className="absolute pointer-events-none"
+        className="absolute pointer-events-none hidden md:block"
         style={{ zIndex: 3, left: "42%", right: "-10%", top: "2%", bottom: "-12%" }}
         aria-hidden="true"
       >

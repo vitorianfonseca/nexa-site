@@ -59,7 +59,7 @@ export default function Hero() {
       <div className="max-w-[1536px] mx-auto px-10 lg:px-24 w-full relative z-10 flex flex-col min-h-[calc(100vh-64px)]">
 
         {/* TOP: headline + subheadline */}
-        <div className="pt-36 lg:pt-52">
+        <div className="pt-20 sm:pt-28 lg:pt-52">
           <motion.h1
             initial={{ opacity: 0, y: 28 }}
             animate={{ opacity: 1, y: 0 }}
