@@ -12,16 +12,11 @@ export default function CTASection() {
   const [splineReady, setSplineReady] = useState(false);
 
   useEffect(() => {
-    // Start loading as soon as hero leaves viewport — Spline is ready long before user reaches CTA
     const hero = document.getElementById("hero");
     if (!hero) { setSplineReady(true); return; }
-
     const obs = new IntersectionObserver(
       ([entry]) => {
-        if (!entry.isIntersecting) {
-          setSplineReady(true);
-          obs.disconnect();
-        }
+        if (!entry.isIntersecting) { setSplineReady(true); obs.disconnect(); }
       },
       { threshold: 0 }
     );
@@ -34,7 +29,7 @@ export default function CTASection() {
       id="cta"
       ref={ref}
       className="relative overflow-hidden"
-      style={{ background: "#070410", paddingTop: "clamp(5rem, 10vw, 9rem)", paddingBottom: "clamp(5rem, 10vw, 9rem)" }}
+      style={{ background: "#070410" }}
       aria-label="Call to action"
     >
       {/* Top line */}
@@ -44,32 +39,16 @@ export default function CTASection() {
         aria-hidden="true"
       />
 
-
       {/* Glow */}
       <div
-        className="absolute pointer-events-none"
+        className="absolute pointer-events-none hidden md:block"
         style={{
-          zIndex: 2, left: "38%", right: "-5%", top: "0", bottom: "0",
+          zIndex: 2, left: "45%", right: "-5%", top: "0", bottom: "0",
           background: "radial-gradient(ellipse at 55% 50%, rgba(125,43,110,0.25) 0%, rgba(42,19,99,0.18) 40%, transparent 70%)",
           filter: "blur(45px)",
         }}
         aria-hidden="true"
       />
-
-      {/* Spline stars — desktop only, loads after hero WebGL unloads */}
-      <div
-        className="absolute pointer-events-none hidden md:block"
-        style={{ zIndex: 3, left: "42%", right: "-10%", top: "2%", bottom: "-12%" }}
-        aria-hidden="true"
-      >
-        {splineReady && (
-          <iframe
-            src="https://my.spline.design/ai-ab586tHgjlNDgx12H1Fqd6YT/?v=3"
-            style={{ width: "100%", height: "100%", border: "none" }}
-            title="CTA visual"
-          />
-        )}
-      </div>
 
       {/* Cover Spline watermark */}
       <div
@@ -78,126 +57,104 @@ export default function CTASection() {
         aria-hidden="true"
       />
 
-      <div className="max-w-[1536px] mx-auto px-10 lg:px-24 relative pointer-events-none" style={{ zIndex: 10 }}>
-        <div className="lg:pl-[18%]">
-        <motion.p
-          initial={{ opacity: 0 }}
-          animate={inView ? { opacity: 1 } : {}}
-          transition={{ duration: 0.5 }}
-          className="text-xs tracking-[0.18em] uppercase mb-8 font-semibold"
-          style={{ color: "rgba(200,162,232,0.65)" }}
-        >
-          {lang === "en" ? "Next step" : "Próximo passo"}
-        </motion.p>
+      <div className="max-w-[1536px] mx-auto relative" style={{ zIndex: 10 }}>
+        <div className="grid lg:grid-cols-2 items-center min-h-[480px]">
 
-        {/* Staircase headline */}
-        <div style={{ overflow: "hidden" }}>
-          {lang === "en" ? (
-            <h2
-              className="font-bold leading-[0.92] tracking-[-0.04em] mb-8"
-              style={{ fontSize: "clamp(2.2rem, 5vw, 6.5rem)" }}
+          {/* Left: content */}
+          <div
+            className="px-10 lg:px-24 py-20 lg:py-28 flex flex-col pointer-events-none"
+            style={{ pointerEvents: "none" }}
+          >
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={inView ? { opacity: 1 } : {}}
+              transition={{ duration: 0.5 }}
+              className="text-xs tracking-[0.18em] uppercase mb-8 font-semibold"
+              style={{ color: "rgba(200,162,232,0.65)" }}
             >
-              <motion.span
-                className="block"
-                initial={{ opacity: 0, y: 60 }}
-                animate={inView ? { opacity: 1, y: 0 } : {}}
-                transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
-                style={{ color: "#D4CCFF" }}
-              >
-                Ready to build
-              </motion.span>
-              <motion.span
-                className="block"
-                initial={{ opacity: 0, y: 60 }}
-                animate={inView ? { opacity: 1, y: 0 } : {}}
-                transition={{ duration: 0.9, delay: 0.08, ease: [0.16, 1, 0.3, 1] }}
-                style={{ color: "#FFFFFF", fontStyle: "italic", fontWeight: 200, letterSpacing: "0.01em", paddingLeft: "clamp(0rem, 2.5vw, 3rem)" }}
-              >
-                something
-              </motion.span>
-              <motion.span
-                className="block"
-                initial={{ opacity: 0, y: 60 }}
-                animate={inView ? { opacity: 1, y: 0 } : {}}
-                transition={{ duration: 0.9, delay: 0.16, ease: [0.16, 1, 0.3, 1] }}
-                style={{ color: "#D4CCFF", paddingLeft: "clamp(0rem, 5vw, 6rem)" }}
-              >
-                exceptional?
-              </motion.span>
-            </h2>
-          ) : (
-            <h2
-              className="font-bold leading-[0.92] tracking-[-0.04em] mb-8"
-              style={{ fontSize: "clamp(2.2rem, 5vw, 6.5rem)" }}
-            >
-              <motion.span
-                className="block"
-                initial={{ opacity: 0, y: 60 }}
-                animate={inView ? { opacity: 1, y: 0 } : {}}
-                transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
-                style={{ color: "#D4CCFF" }}
-              >
-                Prontos para
-              </motion.span>
-              <motion.span
-                className="block"
-                initial={{ opacity: 0, y: 60 }}
-                animate={inView ? { opacity: 1, y: 0 } : {}}
-                transition={{ duration: 0.9, delay: 0.08, ease: [0.16, 1, 0.3, 1] }}
-                style={{ color: "#FFFFFF", fontStyle: "italic", fontWeight: 200, letterSpacing: "0.01em", paddingLeft: "clamp(0rem, 2.5vw, 3rem)" }}
-              >
-                construir algo
-              </motion.span>
-              <motion.span
-                className="block"
-                initial={{ opacity: 0, y: 60 }}
-                animate={inView ? { opacity: 1, y: 0 } : {}}
-                transition={{ duration: 0.9, delay: 0.16, ease: [0.16, 1, 0.3, 1] }}
-                style={{ color: "#D4CCFF", paddingLeft: "clamp(0rem, 5vw, 6rem)" }}
-              >
-                extraordinário?
-              </motion.span>
-            </h2>
-          )}
-        </div>
+              {lang === "en" ? "Next step" : "Próximo passo"}
+            </motion.p>
 
-        {/* CTA block */}
-        <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.7, delay: 0.35, ease: [0.16, 1, 0.3, 1] }}
-          className="flex flex-col sm:flex-row sm:items-center gap-6 lg:gap-10 pointer-events-auto"
-        >
-          <p className="text-sm leading-relaxed max-w-xs" style={{ color: "rgba(255,255,255,0.35)" }}>
-            {t.cta.subtext}
-          </p>
-
-          <div className="flex flex-col gap-5">
-            <Link
-              href="#contact"
-              className="group inline-flex items-center gap-3 px-8 py-4 rounded-full text-sm font-semibold transition-all duration-200 hover:opacity-90 self-start"
-              style={{ color: "#070410", background: "#EDE8FF" }}
-            >
-              <span>{t.cta.button}</span>
-              <span className="transition-transform duration-300 group-hover:translate-x-1">→</span>
-            </Link>
-
-            <div className="flex items-center gap-5">
-              {t.cta.trustSignals.map((s, i) => (
-                <motion.span
-                  key={s}
-                  initial={{ opacity: 0 }}
-                  animate={inView ? { opacity: 1 } : {}}
-                  transition={{ delay: 0.55 + i * 0.08 }}
-                  className="text-[11px] tracking-wide"
-                  style={{ color: "rgba(255,255,255,0.3)" }}
-                >
-                  ✓ {s}
-                </motion.span>
-              ))}
+            {/* Staircase headline */}
+            <div style={{ overflow: "hidden" }}>
+              {lang === "en" ? (
+                <h2 className="font-bold leading-[0.92] tracking-[-0.04em] mb-8" style={{ fontSize: "clamp(2.2rem, 4.5vw, 5.5rem)" }}>
+                  <motion.span className="block" initial={{ opacity: 0, y: 60 }} animate={inView ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }} style={{ color: "#D4CCFF" }}>
+                    Ready to build
+                  </motion.span>
+                  <motion.span className="block" initial={{ opacity: 0, y: 60 }} animate={inView ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.9, delay: 0.08, ease: [0.16, 1, 0.3, 1] }} style={{ color: "#FFFFFF", fontStyle: "italic", fontWeight: 200, letterSpacing: "0.01em", paddingLeft: "clamp(0rem, 2.5vw, 3rem)" }}>
+                    something
+                  </motion.span>
+                  <motion.span className="block" initial={{ opacity: 0, y: 60 }} animate={inView ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.9, delay: 0.16, ease: [0.16, 1, 0.3, 1] }} style={{ color: "#D4CCFF", paddingLeft: "clamp(0rem, 5vw, 6rem)" }}>
+                    exceptional?
+                  </motion.span>
+                </h2>
+              ) : (
+                <h2 className="font-bold leading-[0.92] tracking-[-0.04em] mb-8" style={{ fontSize: "clamp(2.2rem, 4.5vw, 5.5rem)" }}>
+                  <motion.span className="block" initial={{ opacity: 0, y: 60 }} animate={inView ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }} style={{ color: "#D4CCFF" }}>
+                    Prontos para
+                  </motion.span>
+                  <motion.span className="block" initial={{ opacity: 0, y: 60 }} animate={inView ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.9, delay: 0.08, ease: [0.16, 1, 0.3, 1] }} style={{ color: "#FFFFFF", fontStyle: "italic", fontWeight: 200, letterSpacing: "0.01em", paddingLeft: "clamp(0rem, 2.5vw, 3rem)" }}>
+                    construir algo
+                  </motion.span>
+                  <motion.span className="block" initial={{ opacity: 0, y: 60 }} animate={inView ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.9, delay: 0.16, ease: [0.16, 1, 0.3, 1] }} style={{ color: "#D4CCFF", paddingLeft: "clamp(0rem, 5vw, 6rem)" }}>
+                    extraordinário?
+                  </motion.span>
+                </h2>
+              )}
             </div>
+
+            {/* CTA block */}
+            <motion.div
+              initial={{ opacity: 0, y: 24 }}
+              animate={inView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.7, delay: 0.35, ease: [0.16, 1, 0.3, 1] }}
+              className="flex flex-col sm:flex-row sm:items-center gap-6 lg:gap-10"
+              style={{ pointerEvents: "auto" }}
+            >
+              <p className="text-sm leading-relaxed max-w-xs" style={{ color: "rgba(255,255,255,0.35)" }}>
+                {t.cta.subtext}
+              </p>
+
+              <div className="flex flex-col gap-5">
+                <Link
+                  href="#contact"
+                  className="group inline-flex items-center gap-3 px-8 py-4 rounded-full text-sm font-semibold transition-all duration-200 hover:opacity-90 self-start"
+                  style={{ color: "#070410", background: "#EDE8FF" }}
+                >
+                  <span>{t.cta.button}</span>
+                  <span className="transition-transform duration-300 group-hover:translate-x-1">→</span>
+                </Link>
+
+                <div className="flex items-center gap-5">
+                  {t.cta.trustSignals.map((s, i) => (
+                    <motion.span
+                      key={s}
+                      initial={{ opacity: 0 }}
+                      animate={inView ? { opacity: 1 } : {}}
+                      transition={{ delay: 0.55 + i * 0.08 }}
+                      className="text-[11px] tracking-wide"
+                      style={{ color: "rgba(255,255,255,0.3)" }}
+                    >
+                      ✓ {s}
+                    </motion.span>
+                  ))}
+                </div>
+              </div>
+            </motion.div>
           </div>
-        </motion.div>
+
+          {/* Right: Spline stars */}
+          <div className="hidden lg:block relative overflow-hidden self-stretch" aria-hidden="true">
+            {splineReady && (
+              <iframe
+                src="https://my.spline.design/ai-ab586tHgjlNDgx12H1Fqd6YT/?v=3"
+                style={{ position: "absolute", inset: "-15% -15% -15% -10%", width: "125%", height: "125%", border: "none" }}
+                title="CTA visual"
+              />
+            )}
+          </div>
+
         </div>
       </div>
     </section>
