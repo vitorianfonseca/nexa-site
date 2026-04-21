@@ -79,6 +79,7 @@ export default function CTASection() {
       />
 
       <div className="max-w-[1536px] mx-auto px-10 lg:px-24 relative pointer-events-none" style={{ zIndex: 10 }}>
+        <div className="lg:pl-[18%]">
         <motion.p
           initial={{ opacity: 0 }}
           animate={inView ? { opacity: 1 } : {}}
@@ -197,6 +198,7 @@ export default function CTASection() {
             </div>
           </div>
         </motion.div>
+        </div>
       </div>
     </section>
   );
