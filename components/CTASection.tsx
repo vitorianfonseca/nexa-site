@@ -12,20 +12,20 @@ export default function CTASection() {
   const [splineReady, setSplineReady] = useState(false);
 
   useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
+    // Start loading as soon as hero leaves viewport — Spline is ready long before user reaches CTA
+    const hero = document.getElementById("hero");
+    if (!hero) { setSplineReady(true); return; }
 
     const obs = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) {
-          // Wait 700ms so the hero WebGL context has time to fully unload
-          setTimeout(() => setSplineReady(true), 700);
+        if (!entry.isIntersecting) {
+          setSplineReady(true);
           obs.disconnect();
         }
       },
-      { rootMargin: "0px" }
+      { threshold: 0 }
     );
-    obs.observe(el);
+    obs.observe(hero);
     return () => obs.disconnect();
   }, []);
 
