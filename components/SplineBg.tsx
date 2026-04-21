@@ -1,37 +1,61 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
+
+const SPLINE_SRC = "https://my.spline.design/abstractnirvana-KYhkRlGqxUrOI1xAsyknGLDl/";
 
 export default function SplineBg() {
   const ref = useRef<HTMLDivElement>(null);
   const iframeRef = useRef<HTMLIFrameElement>(null);
-  const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
-    const hero = document.getElementById("hero");
-    if (!hero) return;
+    const el = ref.current;
+    const iframe = iframeRef.current;
+    if (!el || !iframe) return;
+
+    // Ensure visible on mount
+    el.style.opacity = "1";
+    if (!iframe.src || iframe.src === "about:blank") {
+      iframe.src = SPLINE_SRC;
+    }
+
+    let hideTimer: ReturnType<typeof setTimeout> | null = null;
 
     const obs = new IntersectionObserver(
       ([e]) => {
-        const el = ref.current;
-        const iframeEl = iframeRef.current;
-        if (!el || !iframeEl) return;
-
         if (e.isIntersecting) {
-          iframeEl.style.display = "block";
+          // Cancel any pending hide
+          if (hideTimer) { clearTimeout(hideTimer); hideTimer = null; }
+          // Restore src if it was cleared
+          if (!iframe.src || iframe.src === "about:blank") {
+            iframe.src = SPLINE_SRC;
+          }
           el.style.opacity = "1";
         } else {
           el.style.opacity = "0";
-          setTimeout(() => {
-            if (iframeRef.current && ref.current?.style.opacity === "0") {
-              iframeRef.current.style.display = "none";
+          // Only clear src after the fade completes
+          hideTimer = setTimeout(() => {
+            if (el.style.opacity === "0") {
+              iframe.src = "about:blank";
             }
-          }, 450);
+          }, 500);
         }
       },
       { threshold: 0 }
     );
-    obs.observe(hero);
+
+    const setup = () => {
+      const hero = document.getElementById("hero");
+      if (!hero) return false;
+      obs.observe(hero);
+      return true;
+    };
+
+    if (!setup()) {
+      const timer = setTimeout(setup, 200);
+      return () => { clearTimeout(timer); obs.disconnect(); };
+    }
+
     return () => obs.disconnect();
   }, []);
 
@@ -50,16 +74,8 @@ export default function SplineBg() {
     >
       <iframe
         ref={iframeRef}
-        src="https://my.spline.design/abstractnirvana-KYhkRlGqxUrOI1xAsyknGLDl/"
-        onLoad={() => setLoaded(true)}
-        style={{
-          width: "100%",
-          height: "100%",
-          border: "none",
-          opacity: loaded ? 1 : 0,
-          transition: "opacity 1s ease",
-        }}
-        sandbox="allow-scripts allow-same-origin"
+        src={SPLINE_SRC}
+        style={{ width: "100%", height: "100%", border: "none" }}
         title="background"
       />
       <div style={{ position: "absolute", bottom: 0, right: 0, width: 220, height: 44, background: "#070410" }} />

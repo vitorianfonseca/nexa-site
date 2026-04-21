@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { motion, useInView } from "framer-motion";
 import { useLanguage } from "@/context/LanguageContext";
 
@@ -8,15 +8,27 @@ export default function Services() {
   const { t, lang } = useLanguage();
   const ref = useRef<HTMLElement>(null);
   const inView = useInView(ref, { once: true, margin: "-80px" });
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
   return (
     <section
       id="services"
       ref={ref}
       className="relative py-24 lg:py-32 overflow-hidden"
-      style={{ background: "#FAFAF8" }}
+      style={{
+        background: "#FAFAF8",
+        backgroundImage: "radial-gradient(circle, rgba(42,19,99,0.06) 1px, transparent 1px)",
+        backgroundSize: "28px 28px",
+      }}
       aria-label="Our services"
     >
+      {/* Fade out the dot grid at edges */}
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{ background: "radial-gradient(ellipse at center, transparent 40%, #FAFAF8 90%)" }}
+        aria-hidden="true"
+      />
+
       {/* Watermark */}
       <div className="absolute inset-0 flex items-end justify-end pointer-events-none select-none overflow-hidden" aria-hidden="true">
         <span style={{ fontSize: "clamp(7rem, 20vw, 20rem)", fontWeight: 900, letterSpacing: "-0.06em", color: "rgba(26,26,26,0.04)", lineHeight: 1, userSelect: "none", transform: "translateX(8%)" }}>
@@ -27,7 +39,7 @@ export default function Services() {
       <div className="max-w-[1536px] mx-auto px-10 lg:px-24 relative z-10">
         <div className="grid lg:grid-cols-[1fr_1.6fr] gap-16 lg:gap-24 items-start">
 
-          {/* Left: header */}
+          {/* Left: sticky header */}
           <div className="lg:sticky lg:top-32">
             <motion.p
               initial={{ opacity: 0 }}
@@ -73,20 +85,38 @@ export default function Services() {
                   hidden: { opacity: 0, y: 16 },
                   visible: { opacity: 1, y: 0, transition: { duration: 0.55, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] } },
                 }}
-                className="group"
+                className="group relative"
                 style={{ borderTop: "0.5px solid rgba(26,26,26,0.08)" }}
+                onMouseEnter={() => setHoveredIndex(index)}
+                onMouseLeave={() => setHoveredIndex(null)}
               >
-                <div className="flex gap-6 py-7">
-                  <span
-                    className="text-xs tracking-[0.2em] tabular-nums shrink-0 pt-1"
-                    style={{ color: "rgba(26,26,26,0.3)" }}
+                {/* Purple left accent — appears on hover */}
+                <motion.div
+                  className="absolute left-0 top-0 bottom-0 w-[2px]"
+                  initial={{ scaleY: 0 }}
+                  animate={{ scaleY: hoveredIndex === index ? 1 : 0 }}
+                  transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+                  style={{
+                    background: "linear-gradient(to bottom, #2A1363, rgba(200,162,232,0.5))",
+                    transformOrigin: "top",
+                  }}
+                  aria-hidden="true"
+                />
+
+                <div className="flex gap-6 py-7 pl-6">
+                  <motion.span
+                    className="text-xs tracking-[0.2em] tabular-nums shrink-0 pt-1 transition-colors duration-300"
+                    animate={{ color: hoveredIndex === index ? "rgba(42,19,99,0.7)" : "rgba(26,26,26,0.3)" }}
                   >
                     {item.number}
-                  </span>
+                  </motion.span>
                   <div className="flex-1 min-w-0">
                     <h3
-                      className="font-semibold tracking-[-0.025em] mb-2 transition-colors duration-200 group-hover:text-accent"
-                      style={{ fontSize: "clamp(1rem, 1.5vw, 1.25rem)", color: "#111111" }}
+                      className="font-semibold tracking-[-0.025em] mb-2 transition-colors duration-300"
+                      style={{
+                        fontSize: "clamp(1rem, 1.5vw, 1.25rem)",
+                        color: hoveredIndex === index ? "#2A1363" : "#111111",
+                      }}
                     >
                       {item.title}
                     </h3>

@@ -1,24 +1,26 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion, useMotionValue, useSpring } from "framer-motion";
 
 export default function Cursor() {
   const mouseX = useMotionValue(-100);
   const mouseY = useMotionValue(-100);
 
-  // Snappier spring — feels responsive, not floaty
   const ringX = useSpring(mouseX, { stiffness: 320, damping: 26, mass: 0.55 });
   const ringY = useSpring(mouseY, { stiffness: 320, damping: 26, mass: 0.55 });
 
   const [hovered, setHovered] = useState(false);
   const [clicked, setClicked] = useState(false);
   const [hidden, setHidden] = useState(false);
+  const lastMoveAt = useRef(Date.now());
 
   useEffect(() => {
     const onMove = (e: MouseEvent) => {
+      lastMoveAt.current = Date.now();
       mouseX.set(e.clientX);
       mouseY.set(e.clientY);
+      setHidden(false);
     };
     const onDown = () => setClicked(true);
     const onUp = () => setClicked(false);
@@ -33,6 +35,11 @@ export default function Cursor() {
       );
     };
 
+    // Hide when inside an iframe (mousemove stops firing)
+    const iframeCheck = setInterval(() => {
+      if (Date.now() - lastMoveAt.current > 200) setHidden(true);
+    }, 100);
+
     window.addEventListener("mousemove", onMove);
     window.addEventListener("mousemove", checkHover);
     window.addEventListener("mousedown", onDown);
@@ -41,6 +48,7 @@ export default function Cursor() {
     document.documentElement.addEventListener("mouseenter", onEnter);
 
     return () => {
+      clearInterval(iframeCheck);
       window.removeEventListener("mousemove", onMove);
       window.removeEventListener("mousemove", checkHover);
       window.removeEventListener("mousedown", onDown);

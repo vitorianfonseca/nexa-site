@@ -48,7 +48,7 @@ export default function Footer() {
   return (
     <footer
       className="relative py-12 overflow-hidden"
-      style={{ background: "#04020C" }}
+      style={{ background: "#070410" }}
       aria-label="Site footer"
     >
       <div

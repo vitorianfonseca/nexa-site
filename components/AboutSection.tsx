@@ -32,9 +32,9 @@ function MemberCard({
   inView: boolean;
 }) {
   const gradients = [
+    { from: "#2A1363", to: "#7D2B6E" },
+    { from: "#7D2B6E", to: "#C8A2E8" },
     { from: "#2A1363", to: "#C8A2E8" },
-    { from: "#6366F1", to: "#8B5CF6" },
-    { from: "#8B5CF6", to: "#C8A2E8" },
   ];
   const g = gradients[index % gradients.length];
 
@@ -102,6 +102,16 @@ export default function AboutSection() {
           Nexa
         </span>
       </div>
+
+      {/* Thin purple accent line — left edge, full height */}
+      <motion.div
+        className="absolute left-0 top-0 bottom-0 w-[3px] pointer-events-none"
+        initial={{ scaleY: 0 }}
+        animate={inView ? { scaleY: 1 } : {}}
+        transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
+        style={{ background: "linear-gradient(to bottom, #2A1363, rgba(200,162,232,0.3), transparent)", transformOrigin: "top" }}
+        aria-hidden="true"
+      />
 
       <div className="max-w-[1536px] mx-auto px-10 lg:px-24 relative z-10">
 
@@ -181,7 +191,7 @@ export default function AboutSection() {
                 animate={inView ? { scaleY: 1 } : {}}
                 transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] as [number, number, number, number], delay: 0.4 }}
                 className="absolute left-[19px] top-5 bottom-5 w-px origin-top"
-                style={{ background: "linear-gradient(to bottom, rgba(42,19,99,0.2), rgba(42,19,99,0.03))" }}
+                style={{ background: "linear-gradient(to bottom, #2A1363, rgba(200,162,232,0.25), transparent)" }}
                 aria-hidden="true"
               />
 
@@ -203,8 +213,8 @@ export default function AboutSection() {
                         transition={{ delay: 0.5 + index * 0.1, type: "spring", stiffness: 300, damping: 22 }}
                         className="w-10 h-10 rounded-full flex items-center justify-center"
                         style={{
-                          background: "#FAFAF8",
-                          border: "0.5px solid rgba(42,19,99,0.15)",
+                          background: "linear-gradient(135deg, rgba(42,19,99,0.08), rgba(200,162,232,0.05))",
+                          border: "1px solid rgba(42,19,99,0.2)",
                         }}
                       >
                         <span className="text-[10px] tracking-[0.12em] tabular-nums font-semibold" style={{ color: "rgba(42,19,99,0.5)" }}>

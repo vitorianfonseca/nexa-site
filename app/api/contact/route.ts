@@ -1,27 +1,32 @@
-import { Resend } from "resend";
+import nodemailer from "nodemailer";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
-  const resend = new Resend(process.env.RESEND_API_KEY);
   try {
     const body = await req.json();
     const { name, email, company, projectType, message } = body;
 
-    // Validate required fields
     if (!name?.trim() || !email?.trim() || !projectType?.trim() || !message?.trim()) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
     }
 
-    // Basic email format validation
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       return NextResponse.json({ error: "Invalid email address" }, { status: 400 });
     }
 
-    const { error } = await resend.emails.send({
-      from: "Nexa Contact <onboarding@resend.dev>",
-      to: ["hello@bynexa.dev"],
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: process.env.GMAIL_USER,
+        pass: process.env.GMAIL_APP_PASSWORD,
+      },
+    });
+
+    await transporter.sendMail({
+      from: `"Nexa Contact Form" <${process.env.GMAIL_USER}>`,
+      to: "hello@bynexa.dev",
       replyTo: email,
-      subject: `[Nexa] ${projectType} inquiry — ${name}`,
+      subject: `[Nexa] ${projectType} — ${name}`,
       html: `
         <div style="font-family: system-ui, -apple-system, sans-serif; max-width: 600px; margin: 0 auto; color: #1a1a1a;">
           <div style="background: linear-gradient(135deg, #2A1363 0%, #7E4CC4 60%, #C8A2E8 100%); padding: 28px 32px; border-radius: 12px 12px 0 0;">
@@ -61,14 +66,9 @@ export async function POST(req: NextRequest) {
       `,
     });
 
-    if (error) {
-      console.error("Resend error:", error);
-      return NextResponse.json({ error: "Failed to send message" }, { status: 500 });
-    }
-
     return NextResponse.json({ success: true });
   } catch (err) {
     console.error("Contact route error:", err);
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+    return NextResponse.json({ error: "Failed to send message" }, { status: 500 });
   }
 }
