@@ -14,26 +14,21 @@ export default function Navbar() {
 
   useEffect(() => {
     const darkIds = new Set(["hero", "work", "cta"]);
-    const allIds = ["hero", "work", "cta", "services", "team", "contact"];
+    const allIds = ["hero", "services", "work", "team", "cta", "contact"];
 
-    const check = () => {
-      const checkY = 65; // just below navbar
-      let current = "hero";
-      for (const id of allIds) {
-        const el = document.getElementById(id);
-        if (!el) continue;
-        const rect = el.getBoundingClientRect();
-        if (rect.top <= checkY && rect.bottom > checkY) {
-          current = id;
-          break;
-        }
-      }
-      setIsDark(darkIds.has(current));
-    };
+    const observers: IntersectionObserver[] = [];
+    allIds.forEach((id) => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      const obs = new IntersectionObserver(
+        ([entry]) => { if (entry.isIntersecting) setIsDark(darkIds.has(id)); },
+        { rootMargin: "-64px 0px -90% 0px", threshold: 0 }
+      );
+      obs.observe(el);
+      observers.push(obs);
+    });
 
-    window.addEventListener("lenis-scroll", check, { passive: true });
-    check();
-    return () => window.removeEventListener("lenis-scroll", check);
+    return () => observers.forEach((o) => o.disconnect());
   }, []);
 
   // Active section detection via IntersectionObserver

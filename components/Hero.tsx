@@ -141,7 +141,7 @@ export default function Hero() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1.2 }}
-        className="absolute bottom-24 right-8 lg:bottom-20 lg:right-24 hidden lg:flex items-center justify-center"
+        className="absolute bottom-24 right-8 lg:bottom-44 lg:right-24 hidden lg:flex items-center justify-center"
         aria-hidden="true"
         style={{ width: 120, height: 120 }}
       >

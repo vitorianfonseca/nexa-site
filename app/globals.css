@@ -56,6 +56,9 @@ a, button, [role="button"], input, select, textarea, label, [href] {
     text-wrap: balance;
   }
 
+  .no-scrollbar::-webkit-scrollbar { display: none; }
+  .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
   .border-subtle {
     border-color: rgba(26, 26, 26, 0.08);
     border-width: 0.5px;
@@ -176,6 +179,11 @@ button {
 .scroll-line-pulse {
   animation: scrollLinePulse 1.5s ease-in-out infinite;
   transform-origin: top center;
+}
+
+/* GPU layers for animated 3D elements */
+[style*="animation"], .animate-spin {
+  will-change: transform;
 }
 
 /* ─── Film grain (static) ─────────────────────────────────── */

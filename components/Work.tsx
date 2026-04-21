@@ -1,7 +1,7 @@
 "use client";
 
-import { useRef } from "react";
-import { motion, useInView } from "framer-motion";
+import { useRef, useState, useCallback } from "react";
+import { motion, useInView, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import { useLanguage } from "@/context/LanguageContext";
@@ -11,13 +11,44 @@ export default function Work() {
   const ref = useRef<HTMLElement>(null);
   const inView = useInView(ref, { once: true, margin: "-80px" });
   const projects = t.work.projects;
+  const [current, setCurrent] = useState(0);
+  const [dir, setDir] = useState(1);
+
+  const canSwipe = useRef(true);
+
+  const prev = useCallback(() => {
+    setDir(-1);
+    setCurrent((i) => (i - 1 + projects.length) % projects.length);
+  }, [projects.length]);
+
+  const next = useCallback(() => {
+    setDir(1);
+    setCurrent((i) => (i + 1) % projects.length);
+  }, [projects.length]);
+
+  const onWheel = useCallback((e: React.WheelEvent) => {
+    if (Math.abs(e.deltaX) < Math.abs(e.deltaY)) return; // vertical scroll — ignore
+    if (Math.abs(e.deltaX) < 20) return; // too small
+    if (!canSwipe.current) return;
+    canSwipe.current = false;
+    if (e.deltaX > 0) next(); else prev();
+    setTimeout(() => { canSwipe.current = true; }, 600);
+  }, [next, prev]);
+
+  const project = projects[current];
+
+  const slideVariants = {
+    enter: (d: number) => ({ x: d > 0 ? 32 : -32, opacity: 0 }),
+    center: { x: 0, opacity: 1 },
+    exit: (d: number) => ({ x: d > 0 ? -32 : 32, opacity: 0 }),
+  };
 
   return (
     <section
       id="work"
       ref={ref}
       className="relative"
-      style={{ background: "#070410", paddingTop: "clamp(3rem, 6vw, 5rem)", paddingBottom: "clamp(3rem, 6vw, 5rem)" }}
+      style={{ background: "#070410", paddingTop: "clamp(3rem, 6vw, 5rem)", paddingBottom: "clamp(4rem, 8vw, 7rem)" }}
       aria-label="Our work"
     >
       <div className="max-w-[1536px] mx-auto px-10 lg:px-24">
@@ -27,7 +58,7 @@ export default function Work() {
           initial={{ opacity: 0, y: 20 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-          className="mb-12 flex items-end justify-between"
+          className="mb-14 flex items-end justify-between"
         >
           <div>
             <p className="text-xs font-semibold tracking-[0.15em] uppercase mb-3" style={{ color: "rgba(200,162,232,0.65)" }}>
@@ -37,101 +68,201 @@ export default function Work() {
               {t.work.title}
             </h2>
           </div>
-          <span className="text-sm font-mono tabular-nums pb-1 hidden sm:block" style={{ color: "rgba(255,255,255,0.18)" }}>
+          <span className="hidden sm:block font-mono text-[10px] tracking-[0.22em] uppercase pb-1" style={{ color: "rgba(255,255,255,0.15)" }}>
             {String(projects.length).padStart(2, "0")} projects
           </span>
         </motion.div>
 
-        {/* Project rows */}
-        <div>
-          {projects.map((project, i) => (
-            <motion.div
-              key={project.name}
-              initial={{ opacity: 0, y: 16 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.55, delay: 0.1 + i * 0.07, ease: [0.16, 1, 0.3, 1] }}
-              style={{ borderTop: "0.5px solid rgba(200,162,232,0.1)" }}
-            >
-              <Link
-                href={project.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group relative flex items-center gap-6 lg:gap-10 py-6 lg:py-7 -mx-4 px-4 rounded-xl transition-all duration-300"
-              >
-                {/* Hover row bg */}
-                <div
-                  className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
-                  style={{ background: "rgba(42,19,99,0.07)" }}
-                />
+        {/* Split layout */}
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.7, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
+          className="lg:grid lg:grid-cols-[1fr_400px] xl:grid-cols-[1fr_460px] lg:gap-16 xl:gap-24 items-start"
+          onWheel={onWheel}
+          style={{ touchAction: "pan-y" }}
+        >
 
-                {/* Number */}
-                <span
-                  className="hidden sm:block font-mono text-xs tracking-[0.2em] tabular-nums shrink-0 w-7 transition-colors duration-300"
-                  style={{ color: "rgba(255,255,255,0.18)" }}
+          {/* Left: single project info + nav */}
+          <div>
+            {/* Top separator */}
+            <div style={{ borderTop: "0.5px solid rgba(200,162,232,0.1)" }} />
+
+            {/* Project info — animated */}
+            <div className="relative overflow-hidden" style={{ minHeight: 180 }}>
+              <AnimatePresence mode="wait" custom={dir}>
+                <motion.div
+                  key={current}
+                  custom={dir}
+                  variants={slideVariants}
+                  initial="enter"
+                  animate="center"
+                  exit="exit"
+                  transition={{ duration: 0.38, ease: [0.16, 1, 0.3, 1] }}
+                  className="py-8 lg:py-10"
                 >
-                  {String(i + 1).padStart(2, "0")}
-                </span>
-
-                {/* Info */}
-                <div className="flex-1 min-w-0 relative z-10">
-                  <div className="flex items-center gap-3 mb-2">
-                    <h3
-                      className="font-bold tracking-[-0.03em] transition-colors duration-300 group-hover:text-white"
-                      style={{ fontSize: "clamp(1.05rem, 1.8vw, 1.4rem)", color: "rgba(237,232,255,0.65)" }}
-                    >
-                      {project.name}
-                    </h3>
+                  <Link
+                    href={project.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group flex items-start gap-5 sm:gap-7 outline-none"
+                  >
+                    {/* Number */}
                     <span
-                      className="text-sm transition-all duration-300 opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0"
-                      style={{ color: "#C8A2E8" }}
+                      className="hidden sm:block font-mono tabular-nums shrink-0 pt-1.5"
+                      style={{ fontSize: "0.68rem", letterSpacing: "0.18em", width: "2.2rem", color: "rgba(200,162,232,0.75)" }}
                     >
-                      ↗
+                      {String(current + 1).padStart(2, "0")}
                     </span>
-                  </div>
-                  <p className="text-sm leading-relaxed mb-3" style={{ color: "rgba(255,255,255,0.28)" }}>
-                    {project.description}
-                  </p>
-                  <div className="flex flex-wrap gap-1.5">
-                    {project.tags.map((tag) => (
-                      <span
-                        key={tag}
-                        className="text-[10px] font-medium px-2 py-0.5 rounded-full"
-                        style={{ background: "rgba(42,19,99,0.45)", color: "rgba(200,162,232,0.85)", border: "0.5px solid rgba(200,162,232,0.18)" }}
-                      >
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                </div>
 
-                {/* Thumbnail */}
-                <div
-                  className="hidden md:block shrink-0 rounded-xl overflow-hidden relative z-10 transition-all duration-500 group-hover:shadow-[0_8px_40px_rgba(42,19,99,0.5)] group-hover:border-[rgba(200,162,232,0.25)]"
-                  style={{
-                    width: "clamp(180px, 18vw, 260px)",
-                    aspectRatio: "16/10",
-                    border: "0.5px solid rgba(200,162,232,0.08)",
-                  }}
-                >
-                  {project.image ? (
+                    {/* Info */}
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-3 mb-3">
+                        <h3
+                          className="font-bold tracking-[-0.03em] group-hover:text-white transition-colors duration-300"
+                          style={{ fontSize: "clamp(1.4rem, 2.2vw, 2rem)", color: "rgba(237,232,255,0.9)" }}
+                        >
+                          {project.name}
+                        </h3>
+                        <span
+                          className="opacity-0 group-hover:opacity-100 -translate-x-2 group-hover:translate-x-0 transition-all duration-300"
+                          style={{ color: "#C8A2E8", fontSize: "1rem" }}
+                        >
+                          ↗
+                        </span>
+                      </div>
+
+                      <p className="text-sm leading-relaxed mb-4" style={{ color: "rgba(255,255,255,0.35)", maxWidth: "30rem" }}>
+                        {project.description}
+                      </p>
+
+                      <div className="flex flex-wrap gap-1.5">
+                        {project.tags.map((tag) => (
+                          <span
+                            key={tag}
+                            className="text-[10px] font-medium px-2 py-0.5 rounded-full"
+                            style={{ background: "rgba(42,19,99,0.5)", color: "rgba(200,162,232,0.85)", border: "0.5px solid rgba(200,162,232,0.18)" }}
+                          >
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
+
+                      {/* Mobile preview */}
+                      {project.image && (
+                        <div
+                          className="mt-5 block lg:hidden relative rounded-xl overflow-hidden"
+                          style={{ aspectRatio: "16/10", border: "0.5px solid rgba(200,162,232,0.12)" }}
+                        >
+                          <Image src={project.image} alt={project.name} fill className="object-cover object-top" sizes="90vw" />
+                        </div>
+                      )}
+                    </div>
+                  </Link>
+                </motion.div>
+              </AnimatePresence>
+            </div>
+
+            {/* Bottom separator */}
+            <div style={{ borderBottom: "0.5px solid rgba(200,162,232,0.1)" }} />
+
+            {/* Navigation */}
+            <div className="flex items-center gap-6 mt-8">
+              <button
+                onClick={prev}
+                className="w-10 h-10 rounded-full flex items-center justify-center transition-all duration-200 hover:bg-[rgba(200,162,232,0.08)]"
+                style={{ border: "0.5px solid rgba(200,162,232,0.2)", color: "rgba(200,162,232,0.7)" }}
+                aria-label="Previous project"
+              >
+                ←
+              </button>
+
+              {/* Dots */}
+              <div className="flex items-center gap-2">
+                {projects.map((_, i) => (
+                  <button
+                    key={i}
+                    onClick={() => { setDir(i > current ? 1 : -1); setCurrent(i); }}
+                    aria-label={`Go to project ${i + 1}`}
+                    style={{
+                      width: current === i ? 20 : 4,
+                      height: 3,
+                      borderRadius: 999,
+                      background: current === i ? "rgba(200,162,232,0.85)" : "rgba(200,162,232,0.22)",
+                      transition: "all 0.35s cubic-bezier(0.16,1,0.3,1)",
+                      cursor: "pointer",
+                      border: "none",
+                      padding: 0,
+                    }}
+                  />
+                ))}
+              </div>
+
+              <button
+                onClick={next}
+                className="w-10 h-10 rounded-full flex items-center justify-center transition-all duration-200 hover:bg-[rgba(200,162,232,0.08)]"
+                style={{ border: "0.5px solid rgba(200,162,232,0.2)", color: "rgba(200,162,232,0.7)" }}
+                aria-label="Next project"
+              >
+                →
+              </button>
+
+              <span className="ml-auto font-mono text-[10px] tracking-[0.2em]" style={{ color: "rgba(255,255,255,0.2)" }}>
+                {String(current + 1).padStart(2, "0")} / {String(projects.length).padStart(2, "0")}
+              </span>
+            </div>
+          </div>
+
+          {/* Right: image panel — desktop only */}
+          <div className="hidden lg:block self-start" style={{ position: "sticky", top: "6rem" }}>
+            <div
+              className="relative rounded-2xl overflow-hidden"
+              style={{
+                aspectRatio: "16/10",
+                border: "0.5px solid rgba(200,162,232,0.15)",
+                background: "#0d0921",
+              }}
+            >
+              <AnimatePresence mode="wait" custom={dir}>
+                {project.image && (
+                  <motion.div
+                    key={current}
+                    custom={dir}
+                    initial={{ clipPath: dir > 0 ? "inset(0 100% 0 0)" : "inset(0 0 0 100%)" }}
+                    animate={{ clipPath: "inset(0 0% 0 0)" }}
+                    exit={{ clipPath: dir > 0 ? "inset(0 0 0 100%)" : "inset(0 100% 0 0)" }}
+                    transition={{ duration: 0.5, ease: [0.76, 0, 0.24, 1] }}
+                    className="absolute inset-0"
+                  >
                     <Image
                       src={project.image}
                       alt={project.name}
                       fill
-                      className="object-cover object-top transition-transform duration-500 group-hover:scale-[1.06]"
-                      sizes="(max-width: 1024px) 180px, 260px"
-                      priority={i < 2}
+                      className="object-cover object-top"
+                      sizes="460px"
+                      priority
                     />
-                  ) : (
-                    <div className="absolute inset-0" style={{ background: "linear-gradient(135deg, #2A1363, #7D2B6E)" }} />
-                  )}
-                </div>
-              </Link>
-            </motion.div>
-          ))}
-          <div style={{ borderTop: "0.5px solid rgba(200,162,232,0.1)" }} />
-        </div>
+                    <div
+                      className="absolute inset-0"
+                      style={{ background: "linear-gradient(to top, rgba(7,4,16,0.6) 0%, transparent 60%)" }}
+                    />
+                  </motion.div>
+                )}
+              </AnimatePresence>
 
+              {/* Project label */}
+              <div className="absolute bottom-0 left-0 right-0 p-4 z-10">
+                <p className="font-mono text-[9px] tracking-[0.22em] uppercase mb-1" style={{ color: "rgba(200,162,232,0.65)" }}>
+                  {String(current + 1).padStart(2, "0")} / {String(projects.length).padStart(2, "0")}
+                </p>
+                <p className="font-bold tracking-[-0.02em]" style={{ color: "#EDE8FF", fontSize: "0.95rem" }}>
+                  {project.name}
+                </p>
+              </div>
+            </div>
+          </div>
+
+        </motion.div>
       </div>
     </section>
   );

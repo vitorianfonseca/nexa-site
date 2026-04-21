@@ -58,11 +58,14 @@ export default function CTASection() {
       />
 
       <div className="max-w-[1536px] mx-auto relative" style={{ zIndex: 10 }}>
-        <div className="grid lg:grid-cols-2 items-center min-h-[480px]">
+        <div className="grid lg:grid-cols-[2fr_8fr_5fr] items-center min-h-[640px]">
 
-          {/* Left: content */}
+          {/* Spacer — pushes content toward center */}
+          <div className="hidden lg:block" />
+
+          {/* Content */}
           <div
-            className="px-10 lg:px-24 py-20 lg:py-28 flex flex-col pointer-events-none"
+            className="px-10 lg:px-12 py-20 lg:py-28 flex flex-col pointer-events-none"
             style={{ pointerEvents: "none" }}
           >
             <motion.p
@@ -144,12 +147,12 @@ export default function CTASection() {
             </motion.div>
           </div>
 
-          {/* Right: Spline stars */}
-          <div className="hidden lg:block relative overflow-hidden self-stretch" aria-hidden="true">
+          {/* Right: Spline stars — bleeds vertically */}
+          <div className="hidden lg:block relative self-stretch" style={{ overflow: "visible" }} aria-hidden="true">
             {splineReady && (
               <iframe
                 src="https://my.spline.design/ai-ab586tHgjlNDgx12H1Fqd6YT/?v=3"
-                style={{ position: "absolute", inset: "-15% -15% -15% -10%", width: "125%", height: "125%", border: "none" }}
+                style={{ position: "absolute", top: "-10%", left: "-55%", right: "-15%", bottom: "-35%", width: "170%", height: "145%", border: "none" }}
                 title="CTA visual"
               />
             )}
