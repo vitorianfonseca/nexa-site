@@ -19,8 +19,10 @@ export default function Logo({ className = "", dark = false }: LogoProps) {
         src="/nexa-logo.svg"
         alt="Nexa"
         style={{
-          height: 36,
+          height: 32,
           width: "auto",
+          minWidth: 80,
+          flexShrink: 0,
           filter: dark ? "brightness(0) invert(1)" : "none",
           transition: "filter 0.4s ease",
         }}

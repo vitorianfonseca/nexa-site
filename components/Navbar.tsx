@@ -82,7 +82,7 @@ export default function Navbar() {
       }}
     >
       <nav
-        className="max-w-[1536px] mx-auto px-10 lg:px-24 h-16 flex items-center justify-between"
+        className="max-w-[1536px] mx-auto px-5 sm:px-10 lg:px-24 h-16 flex items-center justify-between"
         aria-label="Main navigation"
       >
         {/* Logo — inverted on dark hero */}
