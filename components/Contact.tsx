@@ -128,7 +128,7 @@ export default function Contact() {
           style={{
             background: "#FFFFFF",
             border: "0.5px solid rgba(42,19,99,0.08)",
-            boxShadow: "0 4px 32px rgba(42,19,99,0.04), 0 1px 0 rgba(255,255,255,0.8) inset",
+            boxShadow: "0 8px 80px rgba(42,19,99,0.12), 0 2px 16px rgba(42,19,99,0.06), 0 1px 0 rgba(255,255,255,0.8) inset",
           }}
         >
           <AnimatePresence mode="wait">
