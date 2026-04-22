@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState, useEffect } from "react";
+import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
 import Link from "next/link";
 import { useLanguage } from "@/context/LanguageContext";
@@ -9,20 +9,6 @@ export default function CTASection() {
   const { t, lang } = useLanguage();
   const ref = useRef<HTMLElement>(null);
   const inView = useInView(ref, { once: true, margin: "-80px" });
-  const [splineReady, setSplineReady] = useState(false);
-
-  useEffect(() => {
-    const hero = document.getElementById("hero");
-    if (!hero) { setSplineReady(true); return; }
-    const obs = new IntersectionObserver(
-      ([entry]) => {
-        if (!entry.isIntersecting) { setSplineReady(true); obs.disconnect(); }
-      },
-      { threshold: 0 }
-    );
-    obs.observe(hero);
-    return () => obs.disconnect();
-  }, []);
 
   return (
     <section
@@ -149,13 +135,11 @@ export default function CTASection() {
 
           {/* Right: Spline stars — bleeds vertically */}
           <div className="hidden lg:block relative self-stretch" style={{ overflow: "visible" }} aria-hidden="true">
-            {splineReady && (
-              <iframe
-                src="https://my.spline.design/ai-ab586tHgjlNDgx12H1Fqd6YT/?v=3"
-                style={{ position: "absolute", top: "-10%", left: "-55%", right: "-15%", bottom: "-35%", width: "170%", height: "145%", border: "none" }}
-                title="CTA visual"
-              />
-            )}
+            <iframe
+              src="https://my.spline.design/ai-ab586tHgjlNDgx12H1Fqd6YT/?v=3"
+              style={{ position: "absolute", top: "-10%", left: "-55%", right: "-15%", bottom: "-35%", width: "170%", height: "145%", border: "none" }}
+              title="CTA visual"
+            />
           </div>
 
         </div>
