@@ -28,28 +28,17 @@ export default function LoadingScreen() {
             flexDirection: "column",
             alignItems: "center",
             justifyContent: "center",
-            gap: 16,
+            gap: 20,
           }}
         >
-          {/* Symbol */}
+          {/* eslint-disable-next-line @next/next/no-img-element */}
           <motion.img
-            src="/logo.svg"
-            alt=""
-            aria-hidden="true"
+            src="/logo_light.svg"
+            alt="byNexa"
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
-            style={{ height: 72, width: "auto" }}
-          />
-
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <motion.img
-            src="/name_light.svg"
-            alt="Nexa"
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.55, delay: 0.08, ease: [0.16, 1, 0.3, 1] }}
-            style={{ height: 26, width: "auto", display: "block" }}
+            style={{ height: 48, width: "auto" }}
           />
 
           {/* Sweep line */}
@@ -57,7 +46,7 @@ export default function LoadingScreen() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.2 }}
-            style={{ width: 80, height: 1, background: "rgba(200,162,232,0.12)", borderRadius: 1, overflow: "hidden", marginTop: 8 }}
+            style={{ width: 80, height: 1, background: "rgba(200,162,232,0.12)", borderRadius: 1, overflow: "hidden" }}
           >
             <motion.div
               initial={{ x: "-100%" }}
