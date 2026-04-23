@@ -79,12 +79,6 @@ export default function AboutSection() {
         aria-hidden="true"
       />
 
-      {/* Watermark */}
-      <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none overflow-hidden" aria-hidden="true">
-        <span style={{ fontSize: "clamp(7rem, 20vw, 20rem)", fontWeight: 900, letterSpacing: "-0.06em", color: "rgba(26,26,26,0.035)", lineHeight: 1, userSelect: "none" }}>
-          Nexa
-        </span>
-      </div>
 
       {/* Thin purple accent line — left edge, full height */}
       <motion.div

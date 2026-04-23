@@ -29,12 +29,6 @@ export default function Services() {
         aria-hidden="true"
       />
 
-      {/* Watermark */}
-      <div className="absolute inset-0 flex items-end justify-end pointer-events-none select-none overflow-hidden" aria-hidden="true">
-        <span style={{ fontSize: "clamp(7rem, 20vw, 20rem)", fontWeight: 900, letterSpacing: "-0.06em", color: "rgba(26,26,26,0.04)", lineHeight: 1, userSelect: "none", transform: "translateX(8%)" }}>
-          Nexa
-        </span>
-      </div>
 
       <div className="max-w-[1536px] mx-auto px-10 lg:px-24 relative z-10">
         <div className="grid lg:grid-cols-[1fr_1.6fr] gap-16 lg:gap-24 items-start">
