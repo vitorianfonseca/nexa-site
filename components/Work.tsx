@@ -132,7 +132,7 @@ export default function Work() {
                         </span>
                       </div>
 
-                      <p className="text-sm leading-relaxed mb-4" style={{ color: "rgba(255,255,255,0.35)", maxWidth: "30rem" }}>
+                      <p className="text-sm leading-relaxed mb-4" style={{ color: "rgba(255,255,255,0.65)", maxWidth: "30rem" }}>
                         {project.description}
                       </p>
 
@@ -207,7 +207,7 @@ export default function Work() {
                 →
               </button>
 
-              <span className="ml-auto font-mono text-[10px] tracking-[0.2em]" style={{ color: "rgba(255,255,255,0.2)" }}>
+              <span className="ml-auto font-mono text-[10px] tracking-[0.2em]" style={{ color: "rgba(255,255,255,0.5)" }}>
                 {String(current + 1).padStart(2, "0")} / {String(projects.length).padStart(2, "0")}
               </span>
             </div>
