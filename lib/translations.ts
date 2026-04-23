@@ -189,7 +189,7 @@ export const translations = {
         about: "About",
         contact: "Contact",
       },
-      copyright: "© 2026 Nexa. All rights reserved.",
+      copyright: "© 2026 byNexa. All rights reserved.",
     },
   },
   pt: {
@@ -382,7 +382,7 @@ export const translations = {
         about: "Sobre",
         contact: "Contacto",
       },
-      copyright: "© 2026 Nexa. Todos os direitos reservados.",
+      copyright: "© 2026 byNexa. Todos os direitos reservados.",
     },
   },
 };
