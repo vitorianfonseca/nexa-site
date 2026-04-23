@@ -201,7 +201,7 @@ export const translations = {
       cta: "Pedir orçamento",
     },
     hero: {
-      headline: "Construímos websites que performam.",
+      headline: "Construímos websites que resultam.",
       subheadline: "Rápidos, modernos e feitos para converter visitantes em clientes.",
       ctaPrimary: "Ver trabalhos",
       ctaSecondary: "Falar connosco →",
