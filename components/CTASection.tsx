@@ -44,14 +44,11 @@ export default function CTASection() {
       />
 
       <div className="max-w-[1536px] mx-auto relative" style={{ zIndex: 10 }}>
-        <div className="grid lg:grid-cols-[2fr_8fr_5fr] items-center min-h-[640px]">
-
-          {/* Spacer — pushes content toward center */}
-          <div className="hidden lg:block" />
+        <div className="grid lg:grid-cols-[1fr_480px] items-center min-h-[640px]">
 
           {/* Content */}
           <div
-            className="px-10 lg:px-12 py-20 lg:py-28 flex flex-col pointer-events-none"
+            className="px-10 lg:px-24 py-20 lg:py-28 flex flex-col pointer-events-none"
             style={{ pointerEvents: "none" }}
           >
             <motion.p
@@ -93,22 +90,19 @@ export default function CTASection() {
               )}
             </div>
 
-            {/* CTA block */}
-            <motion.div
-              initial={{ opacity: 0, y: 24 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.7, delay: 0.35, ease: [0.16, 1, 0.3, 1] }}
-              className="flex flex-col sm:flex-row sm:items-center gap-6 lg:gap-10"
-              style={{ pointerEvents: "auto" }}
-            >
-              <p className="text-sm leading-relaxed max-w-xs" style={{ color: "rgba(255,255,255,0.35)" }}>
-                {t.cta.subtext}
-              </p>
+            {/* Button + trust — aligned with end of title */}
+            <div className="flex flex-col items-center gap-6" style={{ paddingLeft: "clamp(0rem, 5vw, 6rem)" }}>
 
-              <div className="flex flex-col gap-5">
+              <motion.div
+                initial={{ opacity: 0, y: 24 }}
+                animate={inView ? { opacity: 1, y: 0 } : {}}
+                transition={{ duration: 0.7, delay: 0.38, ease: [0.16, 1, 0.3, 1] }}
+                className="flex flex-col items-center gap-4"
+                style={{ pointerEvents: "auto" }}
+              >
                 <Link
                   href="#contact"
-                  className="group inline-flex items-center gap-3 px-8 py-4 rounded-full text-sm font-semibold transition-all duration-200 hover:opacity-90 self-start"
+                  className="group inline-flex items-center gap-3 px-8 py-4 rounded-full text-sm font-semibold transition-all duration-200 hover:opacity-90"
                   style={{ color: "#070410", background: "#EDE8FF" }}
                 >
                   <span>{t.cta.button}</span>
@@ -122,15 +116,15 @@ export default function CTASection() {
                       initial={{ opacity: 0 }}
                       animate={inView ? { opacity: 1 } : {}}
                       transition={{ delay: 0.55 + i * 0.08 }}
-                      className="text-[11px] tracking-wide"
-                      style={{ color: "rgba(255,255,255,0.3)" }}
+                      className="text-[11px] font-medium tracking-wide"
+                      style={{ color: "#FFFFFF" }}
                     >
                       ✓ {s}
                     </motion.span>
                   ))}
                 </div>
-              </div>
-            </motion.div>
+              </motion.div>
+            </div>
           </div>
 
           {/* Right: Spline stars — bleeds vertically */}

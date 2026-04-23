@@ -27,8 +27,8 @@ export default function Work() {
   }, [projects.length]);
 
   const onWheel = useCallback((e: React.WheelEvent) => {
-    if (Math.abs(e.deltaX) < Math.abs(e.deltaY)) return; // vertical scroll — ignore
-    if (Math.abs(e.deltaX) < 20) return; // too small
+    if (Math.abs(e.deltaX) < Math.abs(e.deltaY)) return;
+    if (Math.abs(e.deltaX) < 20) return;
     if (!canSwipe.current) return;
     canSwipe.current = false;
     if (e.deltaX > 0) next(); else prev();
@@ -68,7 +68,7 @@ export default function Work() {
               {t.work.title}
             </h2>
           </div>
-          <span className="hidden sm:block font-mono text-[10px] tracking-[0.22em] uppercase pb-1" style={{ color: "rgba(255,255,255,0.15)" }}>
+          <span className="hidden sm:block font-mono text-[10px] tracking-[0.22em] uppercase pb-1" style={{ color: "rgba(255,255,255,0.9)" }}>
             {String(projects.length).padStart(2, "0")} projects
           </span>
         </motion.div>
@@ -132,7 +132,7 @@ export default function Work() {
                         </span>
                       </div>
 
-                      <p className="text-sm leading-relaxed mb-4" style={{ color: "rgba(255,255,255,0.65)", maxWidth: "30rem" }}>
+                      <p className="text-sm leading-relaxed mb-4" style={{ color: "rgba(255,255,255,0.85)", maxWidth: "30rem" }}>
                         {project.description}
                       </p>
 
@@ -207,7 +207,7 @@ export default function Work() {
                 →
               </button>
 
-              <span className="ml-auto font-mono text-[10px] tracking-[0.2em]" style={{ color: "rgba(255,255,255,0.5)" }}>
+              <span className="ml-auto font-mono text-[10px] tracking-[0.2em]" style={{ color: "rgba(255,255,255,0.75)" }}>
                 {String(current + 1).padStart(2, "0")} / {String(projects.length).padStart(2, "0")}
               </span>
             </div>
