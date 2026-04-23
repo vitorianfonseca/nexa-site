@@ -93,7 +93,7 @@ export default function Process() {
             animate={inView ? { opacity: 1 } : {}}
             transition={{ delay: 0.2 }}
             className="text-xs tracking-[0.12em] uppercase"
-            style={{ color: "rgba(26,26,26,0.3)" }}
+            style={{ color: "rgba(26,26,26,0.55)" }}
           >
             {t.process.steps.length} steps
           </motion.p>
@@ -116,7 +116,7 @@ export default function Process() {
                 }}
               >
                 <div className="flex items-center justify-between mb-5">
-                  <span className="text-xs font-semibold tracking-[0.2em]" style={{ color: "rgba(26,26,26,0.3)" }}>
+                  <span className="text-xs font-semibold tracking-[0.2em]" style={{ color: "rgba(26,26,26,0.55)" }}>
                     {step.number}
                   </span>
                   <div
@@ -130,7 +130,7 @@ export default function Process() {
                 >
                   {step.title}
                 </h3>
-                <p className="text-sm leading-relaxed" style={{ color: "rgba(26,26,26,0.5)" }}>
+                <p className="text-sm leading-relaxed" style={{ color: "rgba(26,26,26,0.7)" }}>
                   {step.description}
                 </p>
                 <motion.div

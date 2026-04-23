@@ -86,7 +86,7 @@ export default function Footer() {
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-8 mb-10">
           <div className="flex flex-col gap-2">
             <Logo dark />
-            <p className="text-xs pl-9 tracking-[-0.01em]" style={{ color: "rgba(255,255,255,0.35)" }}>
+            <p className="text-xs pl-9 tracking-[-0.01em]" style={{ color: "rgba(255,255,255,0.6)" }}>
               {t.footer.tagline}
             </p>
           </div>
@@ -98,7 +98,7 @@ export default function Footer() {
                   <Link
                     href={link.href}
                     className="text-sm tracking-[-0.01em] transition-colors duration-200 hover:opacity-70"
-                    style={{ color: "rgba(255,255,255,0.55)" }}
+                    style={{ color: "rgba(255,255,255,0.8)" }}
                   >
                     {link.label}
                   </Link>
@@ -115,7 +115,7 @@ export default function Footer() {
                 aria-label={`Nexa on ${link.label}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                style={{ color: "rgba(255,255,255,0.2)" }}
+                style={{ color: "rgba(255,255,255,0.45)" }}
                 whileHover={{ color: "#C8A2E8", scale: 1.15 }}
                 transition={{ duration: 0.15 }}
               >
@@ -129,7 +129,7 @@ export default function Footer() {
           className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pt-6"
           style={{ borderTop: "0.5px solid rgba(26,26,26,0.06)" }}
         >
-          <p className="text-xs tracking-[-0.01em]" style={{ color: "rgba(255,255,255,0.3)" }}>
+          <p className="text-xs tracking-[-0.01em]" style={{ color: "rgba(255,255,255,0.55)" }}>
             {t.footer.copyright}
           </p>
 
@@ -138,7 +138,7 @@ export default function Footer() {
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-60" />
               <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-400" />
             </span>
-            <span className="text-[10px] tracking-wide" style={{ color: "rgba(255,255,255,0.3)" }}>All systems operational</span>
+            <span className="text-[10px] tracking-wide" style={{ color: "rgba(255,255,255,0.55)" }}>All systems operational</span>
           </div>
         </div>
       </div>

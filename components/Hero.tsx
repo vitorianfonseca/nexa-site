@@ -74,7 +74,7 @@ export default function Hero() {
             {lang === "en" ? (
               <>We build{" "}<span style={{ fontStyle: "italic", fontWeight: 200, letterSpacing: "0.01em" }}>websites</span><br />that perform.</>
             ) : (
-              <>Construímos{" "}<span style={{ fontStyle: "italic", fontWeight: 200, letterSpacing: "0.01em" }}>websites</span><br />que performam.</>
+              <>Construímos{" "}<span style={{ fontStyle: "italic", fontWeight: 200, letterSpacing: "0.01em" }}>websites</span><br />que resultam.</>
             )}
           </motion.h1>
 
@@ -83,7 +83,7 @@ export default function Hero() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.22 }}
             className="text-base lg:text-lg tracking-[-0.01em] max-w-md lg:max-w-none lg:whitespace-nowrap leading-relaxed"
-            style={{ color: "rgba(255,255,255,0.55)", textShadow: "0 1px 8px rgba(0,0,0,0.8)" }}
+            style={{ color: "rgba(255,255,255,0.8)", textShadow: "0 1px 8px rgba(0,0,0,0.8)" }}
           >
             {t.hero.subheadline}
           </motion.p>
@@ -172,7 +172,7 @@ export default function Hero() {
       >
         <span
           className="text-[10px] tracking-[0.15em] uppercase"
-          style={{ color: "rgba(255,255,255,0.25)" }}
+          style={{ color: "rgba(255,255,255,0.5)" }}
         >
           Scroll
         </span>

@@ -108,12 +108,12 @@ export default function Contact() {
             <motion.a
               href={`mailto:${t.contact.email}`}
               className="text-sm tracking-[-0.01em] transition-colors duration-200"
-              style={{ color: "rgba(26,26,26,0.5)" }}
+              style={{ color: "rgba(26,26,26,0.7)" }}
               whileHover={{ color: "#2A1363", x: 2 }}
             >
               {t.contact.email}
             </motion.a>
-            <span className="text-xs tracking-[-0.01em]" style={{ color: "rgba(26,26,26,0.3)" }}>
+            <span className="text-xs tracking-[-0.01em]" style={{ color: "rgba(26,26,26,0.55)" }}>
               {t.contact.location}
             </span>
           </motion.div>

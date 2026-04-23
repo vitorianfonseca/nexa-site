@@ -95,7 +95,7 @@ function MemberCard({
         <p className="font-semibold text-sm tracking-[-0.01em]" style={{ color: "#111111" }}>
           {member.name}
         </p>
-        <p className="text-xs mt-0.5 tracking-[-0.01em]" style={{ color: "rgba(26,26,26,0.5)" }}>
+        <p className="text-xs mt-0.5 tracking-[-0.01em]" style={{ color: "rgba(26,26,26,0.7)" }}>
           {member.role}
         </p>
       </div>
@@ -154,7 +154,7 @@ export default function Team() {
               animate={inView ? "visible" : "hidden"}
               custom={0.1}
               className="text-sm leading-relaxed max-w-lg"
-              style={{ color: "rgba(26,26,26,0.5)" }}
+              style={{ color: "rgba(26,26,26,0.7)" }}
             >
               {t.team.description}
             </motion.p>

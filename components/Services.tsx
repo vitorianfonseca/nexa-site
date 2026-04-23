@@ -64,7 +64,7 @@ export default function Services() {
               animate={inView ? { opacity: 1 } : {}}
               transition={{ duration: 0.5, delay: 0.18 }}
               className="text-sm leading-relaxed max-w-xs"
-              style={{ color: "rgba(26,26,26,0.45)" }}
+              style={{ color: "rgba(26,26,26,0.65)" }}
             >
               {lang === "en"
                 ? "Everything you need to build a strong online presence."
@@ -106,7 +106,7 @@ export default function Services() {
                 <div className="flex gap-6 py-7 pl-6">
                   <motion.span
                     className="text-xs tracking-[0.2em] tabular-nums shrink-0 pt-1 transition-colors duration-300"
-                    animate={{ color: hoveredIndex === index ? "rgba(42,19,99,0.7)" : "rgba(26,26,26,0.3)" }}
+                    animate={{ color: hoveredIndex === index ? "rgba(42,19,99,0.9)" : "rgba(26,26,26,0.5)" }}
                   >
                     {item.number}
                   </motion.span>
@@ -120,7 +120,7 @@ export default function Services() {
                     >
                       {item.title}
                     </h3>
-                    <p className="text-sm leading-relaxed" style={{ color: "rgba(26,26,26,0.5)" }}>
+                    <p className="text-sm leading-relaxed" style={{ color: "rgba(26,26,26,0.7)" }}>
                       {item.description}
                     </p>
                   </div>
