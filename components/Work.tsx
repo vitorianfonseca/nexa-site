@@ -252,9 +252,6 @@ export default function Work() {
 
               {/* Project label */}
               <div className="absolute bottom-0 left-0 right-0 p-4 z-10">
-                <p className="font-mono text-[9px] tracking-[0.22em] uppercase mb-1" style={{ color: "rgba(200,162,232,0.65)" }}>
-                  {String(current + 1).padStart(2, "0")} / {String(projects.length).padStart(2, "0")}
-                </p>
                 <p className="font-bold tracking-[-0.02em]" style={{ color: "#EDE8FF", fontSize: "0.95rem" }}>
                   {project.name}
                 </p>

@@ -15,10 +15,15 @@ export default function Logo({ className = "", dark = false }: LogoProps) {
       aria-label="byNexa — Go to homepage"
     >
       {/* eslint-disable-next-line @next/next/no-img-element */}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         src={dark ? "/logo_light.svg" : "/logo_dark.svg"}
         alt="byNexa"
-        style={{ height: "clamp(22px, 2.5vw, 34px)", width: "auto", display: "block" }}
+        style={{
+          height: "clamp(22px, 2.5vw, 34px)",
+          width: "auto",
+          display: "block",
+        }}
         className="group-hover:opacity-80 transition-opacity duration-200"
       />
     </Link>
