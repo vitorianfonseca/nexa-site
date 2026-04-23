@@ -82,7 +82,7 @@ export default function Hero() {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.22 }}
-            className="text-base lg:text-lg tracking-[-0.01em] max-w-md leading-relaxed"
+            className="text-base lg:text-lg tracking-[-0.01em] max-w-md lg:max-w-none lg:whitespace-nowrap leading-relaxed"
             style={{ color: "rgba(255,255,255,0.55)", textShadow: "0 1px 8px rgba(0,0,0,0.8)" }}
           >
             {t.hero.subheadline}
