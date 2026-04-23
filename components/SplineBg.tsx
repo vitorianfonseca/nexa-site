@@ -6,39 +6,20 @@ const SPLINE_SRC = "https://my.spline.design/abstractnirvana-KYhkRlGqxUrOI1xAsyk
 
 export default function SplineBg() {
   const ref = useRef<HTMLDivElement>(null);
-  const iframeRef = useRef<HTMLIFrameElement>(null);
 
   useEffect(() => {
     const el = ref.current;
-    const iframe = iframeRef.current;
-    if (!el || !iframe) return;
+    if (!el) return;
 
     // Ensure visible on mount
     el.style.opacity = "1";
-    if (!iframe.src || iframe.src === "about:blank") {
-      iframe.src = SPLINE_SRC;
-    }
-
-    let hideTimer: ReturnType<typeof setTimeout> | null = null;
 
     const obs = new IntersectionObserver(
       ([e]) => {
         if (e.isIntersecting) {
-          // Cancel any pending hide
-          if (hideTimer) { clearTimeout(hideTimer); hideTimer = null; }
-          // Restore src if it was cleared
-          if (!iframe.src || iframe.src === "about:blank") {
-            iframe.src = SPLINE_SRC;
-          }
           el.style.opacity = "1";
         } else {
           el.style.opacity = "0";
-          // Only clear src after the fade completes
-          hideTimer = setTimeout(() => {
-            if (el.style.opacity === "0") {
-              iframe.src = "about:blank";
-            }
-          }, 500);
         }
       },
       { threshold: 0 }
@@ -73,7 +54,6 @@ export default function SplineBg() {
       aria-hidden="true"
     >
       <iframe
-        ref={iframeRef}
         src={SPLINE_SRC}
         style={{ width: "100%", height: "100%", border: "none" }}
         title="background"

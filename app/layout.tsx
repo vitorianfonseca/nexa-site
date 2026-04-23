@@ -17,6 +17,7 @@ import LenisProvider from "@/components/LenisProvider";
 import SplineBg from "@/components/SplineBg";
 import LoadingScreen from "@/components/LoadingScreen";
 import Navbar from "@/components/Navbar";
+import ServiceWorkerRegistration from "@/components/ServiceWorkerRegistration";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -59,6 +60,14 @@ export const metadata: Metadata = {
     title: "Nexa — Web Development Agency",
     description:
       "We build modern, fast, and lasting websites for businesses that want more.",
+    images: [
+      {
+        url: "https://www.bynexa.dev/preview.png",
+        width: 1200,
+        height: 630,
+        alt: "Nexa — Web Development Agency",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
@@ -99,9 +108,11 @@ export default function RootLayout({
         <link rel="preload" href="/name_light.svg" as="image" type="image/svg+xml" />
         <link rel="preload" href="/name_dark.svg" as="image" type="image/svg+xml" />
         <link rel="icon" href="/icon.svg" type="image/svg+xml" />
+        <link rel="icon" href="/favicon.ico" type="image/x-icon" />
         <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@800,700,500&display=swap" />
       </head>
       <body className="font-sans bg-background text-foreground antialiased">
+        <ServiceWorkerRegistration />
         <LanguageProvider>
           <LoadingScreen />
           <SplineBg />
