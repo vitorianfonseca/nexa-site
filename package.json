@@ -11,6 +11,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@next/third-parties": "^16.2.4",
     "@splinetool/react-spline": "^4.1.0",
     "@splinetool/runtime": "^1.12.81",
     "@types/nodemailer": "^8.0.0",
