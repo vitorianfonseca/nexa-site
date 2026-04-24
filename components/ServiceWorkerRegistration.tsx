@@ -12,6 +12,13 @@ export default function ServiceWorkerRegistration() {
         }
 
         let updateTimer: number | null = null;
+        let fallbackTimer: number | null = null;
+        let idleId: number | null = null;
+
+        const runtimeWindow = window as Window & {
+            requestIdleCallback?: (callback: IdleRequestCallback, options?: IdleRequestOptions) => number;
+            cancelIdleCallback?: (handle: number) => void;
+        };
 
         const registerServiceWorker = async () => {
             try {
@@ -41,11 +48,35 @@ export default function ServiceWorkerRegistration() {
             }
         };
 
-        void registerServiceWorker();
+        const scheduleRegistration = () => {
+            if (typeof runtimeWindow.requestIdleCallback === "function") {
+                idleId = runtimeWindow.requestIdleCallback(() => {
+                    void registerServiceWorker();
+                }, { timeout: 2500 });
+                return;
+            }
+
+            fallbackTimer = window.setTimeout(() => {
+                void registerServiceWorker();
+            }, 1200);
+        };
+
+        if (document.readyState === "complete") {
+            scheduleRegistration();
+        } else {
+            window.addEventListener("load", scheduleRegistration, { once: true });
+        }
 
         return () => {
+            window.removeEventListener("load", scheduleRegistration);
             if (updateTimer !== null) {
                 window.clearInterval(updateTimer);
+            }
+            if (fallbackTimer !== null) {
+                window.clearTimeout(fallbackTimer);
+            }
+            if (idleId !== null && typeof runtimeWindow.cancelIdleCallback === "function") {
+                runtimeWindow.cancelIdleCallback(idleId);
             }
         };
     }, []);

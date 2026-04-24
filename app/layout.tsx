@@ -12,6 +12,7 @@ import LenisProvider from "@/components/LenisProvider";
 import SplineBg from "@/components/SplineBg";
 import LoadingScreen from "@/components/LoadingScreen";
 import Navbar from "@/components/Navbar";
+import FontshareStyles from "@/components/FontshareStyles";
 import ServiceWorkerRegistration from "@/components/ServiceWorkerRegistration";
 
 const cormorant = Cormorant_Garamond({
@@ -117,19 +118,10 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <head>
-        <link rel="preconnect" href="https://my.spline.design" />
+        <link rel="preconnect" href="https://my.spline.design" crossOrigin="" />
         <link rel="dns-prefetch" href="//my.spline.design" />
-        <link rel="preconnect" href="https://prod.spline.design" />
+        <link rel="preconnect" href="https://prod.spline.design" crossOrigin="" />
         <link rel="dns-prefetch" href="//prod.spline.design" />
-
-        <link rel="preload" href="/logo.svg" as="image" />
-        <link rel="preload" href="/name_light.svg" as="image" />
-        <link rel="preload" href="/name_dark.svg" as="image" />
-
-        <link
-          rel="stylesheet"
-          href="https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@800,700,500&display=swap"
-        />
       </head>
 
       <body className="font-sans bg-background text-foreground antialiased">
@@ -137,6 +129,7 @@ export default function RootLayout({
         <GoogleAnalytics gaId="G-PR7MLF19JH" />
 
         <ServiceWorkerRegistration />
+        <FontshareStyles />
 
         <LanguageProvider>
           <LoadingScreen />
