@@ -10,7 +10,6 @@ import LenisProvider from "@/components/LenisProvider";
 import SplineBg from "@/components/SplineBg";
 import LoadingScreen from "@/components/LoadingScreen";
 import Navbar from "@/components/Navbar";
-import FontshareStyles from "@/components/FontshareStyles";
 import ServiceWorkerRegistration from "@/components/ServiceWorkerRegistration";
 import AnalyticsConsent from "@/components/AnalyticsConsent";
 import CookieBanner from "@/components/CookieBanner";
@@ -137,7 +136,6 @@ export default function RootLayout({
       <body className="font-sans bg-background text-foreground antialiased">
         <AnalyticsConsent />
         <ServiceWorkerRegistration />
-        <FontshareStyles />
 
         <LanguageProvider>
           <CookieBanner />
