@@ -103,6 +103,7 @@ export default function SplineBg() {
           src={SPLINE_SRC}
           title="background"
           loading="lazy"
+          sandbox="allow-scripts allow-same-origin"
           onLoad={() => {
             setIsIframeLoaded(true);
             const globalWindow = window as Window & { __nexaSplineReady?: boolean };
@@ -162,6 +163,7 @@ export default function SplineBg() {
           }}
         />
       </div>
+
 
       <div style={{ position: "absolute", bottom: 0, right: 0, width: 220, height: 44, background: "#070410" }} />
 
