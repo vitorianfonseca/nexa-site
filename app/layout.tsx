@@ -35,6 +35,16 @@ const geistMono = localFont({
   weight: "100 900",
 });
 
+const cabinetGrotesk = localFont({
+  src: [
+    { path: "./fonts/CabinetGrotesk-Medium.woff2", weight: "500", style: "normal" },
+    { path: "./fonts/CabinetGrotesk-Bold.woff2", weight: "700", style: "normal" },
+    { path: "./fonts/CabinetGrotesk-ExtraBold.woff2", weight: "800", style: "normal" },
+  ],
+  variable: "--font-cabinet",
+  display: "swap",
+});
+
 export const metadata: Metadata = {
   metadataBase: new URL("https://bynexa.dev"),
 
@@ -114,7 +124,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} ${cormorant.variable}`}
+      className={`${geistSans.variable} ${geistMono.variable} ${cormorant.variable} ${cabinetGrotesk.variable}`}
       suppressHydrationWarning
     >
       <head>
