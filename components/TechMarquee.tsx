@@ -39,7 +39,7 @@ export default function TechMarquee() {
           {doubled.map((item, i) => (
             <span key={i} className="flex items-center">
               <span className="text-sm font-medium tracking-wide px-5 whitespace-nowrap"
-                style={{ color: "rgba(26,26,26,0.4)" }}>
+                style={{ color: "rgba(26,26,26,0.85)" }}>
                 {item}
               </span>
               <span style={{ color: "rgba(42,19,99,0.3)", fontSize: 10 }}>◆</span>
@@ -51,7 +51,7 @@ export default function TechMarquee() {
           {doubled.map((item, i) => (
             <span key={i} className="flex items-center">
               <span className="text-sm font-medium tracking-wide px-5 whitespace-nowrap"
-                style={{ color: "rgba(26,26,26,0.4)" }}>
+                style={{ color: "rgba(26,26,26,0.85)" }}>
                 {item}
               </span>
               <span style={{ color: "rgba(42,19,99,0.3)", fontSize: 10 }}>◆</span>

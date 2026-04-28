@@ -54,7 +54,7 @@ function MemberCard({
       </div>
       <div className="flex-1 min-w-0">
         <p className="font-semibold text-sm tracking-[-0.01em]" style={{ color: "#111111" }}>{member.name}</p>
-        <p className="text-xs mt-0.5" style={{ color: "rgba(26,26,26,0.45)" }}>{member.role}</p>
+        <p className="text-xs mt-0.5" style={{ color: "rgba(26,26,26,0.75)" }}>{member.role}</p>
       </div>
     </motion.div>
   );
@@ -123,7 +123,7 @@ export default function AboutSection() {
               animate={inView ? "visible" : "hidden"}
               custom={0.1}
               className="text-sm leading-relaxed mb-8 max-w-sm"
-              style={{ color: "rgba(26,26,26,0.5)" }}
+              style={{ color: "rgba(26,26,26,0.8)" }}
             >
               {t.team.description}
             </motion.p>
@@ -153,7 +153,7 @@ export default function AboutSection() {
               animate={inView ? "visible" : "hidden"}
               custom={0.3}
               className="text-sm leading-relaxed mb-10 max-w-sm"
-              style={{ color: "rgba(26,26,26,0.5)" }}
+              style={{ color: "rgba(26,26,26,0.8)" }}
             >
               {lang === "en"
                 ? "A clear, collaborative process from first conversation to final launch."
@@ -208,7 +208,7 @@ export default function AboutSection() {
                       >
                         {step.title}
                       </h3>
-                      <p className="text-sm leading-relaxed" style={{ color: "rgba(26,26,26,0.48)" }}>
+                      <p className="text-sm leading-relaxed" style={{ color: "rgba(26,26,26,0.75)" }}>
                         {step.description}
                       </p>
                     </div>

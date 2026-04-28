@@ -83,7 +83,7 @@ export default function Hero() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.22 }}
             className="text-base lg:text-lg tracking-[-0.01em] max-w-md lg:max-w-none lg:whitespace-nowrap leading-relaxed"
-            style={{ color: "rgba(255,255,255,0.8)", textShadow: "0 1px 8px rgba(0,0,0,0.8)" }}
+            style={{ color: "rgba(255,255,255,0.95)", textShadow: "0 1px 8px rgba(0,0,0,0.8)" }}
           >
             {t.hero.subheadline}
           </motion.p>
@@ -113,7 +113,7 @@ export default function Hero() {
                 <span className="transition-transform duration-300 group-hover:translate-x-1">→</span>
               </Link>
             </div>
-            <Link href="#contact" className="text-sm font-medium tracking-[-0.01em]" style={{ color: "rgba(255,255,255,0.65)" }}>
+            <Link href="#contact" className="text-sm font-medium tracking-[-0.01em]" style={{ color: "rgba(255,255,255,0.85)" }}>
               {t.hero.ctaSecondary}
             </Link>
           </motion.div>
@@ -129,7 +129,7 @@ export default function Hero() {
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-60" style={{ background: "#4ade80" }} />
               <span className="relative inline-flex rounded-full h-2 w-2" style={{ background: "#4ade80" }} />
             </span>
-            <span className="text-xs tracking-[0.08em] uppercase font-medium" style={{ color: "rgba(255,255,255,0.7)" }}>
+            <span className="text-xs tracking-[0.08em] uppercase font-medium" style={{ color: "rgba(255,255,255,0.9)" }}>
               {lang === "en" ? "Available for new projects" : "Disponível para novos projetos"}
             </span>
           </motion.div>
@@ -172,7 +172,7 @@ export default function Hero() {
       >
         <span
           className="text-[10px] tracking-[0.15em] uppercase"
-          style={{ color: "rgba(255,255,255,0.5)" }}
+          style={{ color: "rgba(255,255,255,0.75)" }}
         >
           Scroll
         </span>
