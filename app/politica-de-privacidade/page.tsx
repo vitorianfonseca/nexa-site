@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import Link from "next/link";
+import s from "../legal.module.css";
 
 export const metadata: Metadata = {
   title: "Política de Privacidade",
@@ -13,7 +14,6 @@ const LAST_UPDATED = "28 de abril de 2026";
 export default function PrivacyPolicy() {
   return (
     <main className="min-h-screen" style={{ background: "#FAFAF8" }}>
-      {/* Header */}
       <div className="border-b" style={{ borderColor: "rgba(26,26,26,0.06)" }}>
         <div className="max-w-3xl mx-auto px-6 py-8 flex items-center justify-between">
           <Link
@@ -40,7 +40,7 @@ export default function PrivacyPolicy() {
           Última atualização: {LAST_UPDATED}
         </p>
 
-        <div className="prose-legal">
+        <div className={s.prose}>
 
           <Section title="1. Quem somos">
             <p>
@@ -56,9 +56,7 @@ export default function PrivacyPolicy() {
           </Section>
 
           <Section title="2. Que dados recolhemos e porquê">
-            <p>
-              Apenas recolhemos dados estritamente necessários para prestar o nosso serviço.
-            </p>
+            <p>Apenas recolhemos dados estritamente necessários para prestar o nosso serviço.</p>
             <Table headers={["Dados", "Finalidade", "Base legal", "Retenção"]} rows={[
               ["Nome, email, empresa, mensagem", "Responder a pedidos de contacto e orçamento", "Interesse legítimo", "2 anos"],
               ["Endereço IP", "Segurança (limitação de pedidos)", "Interesse legítimo", "Sessão / memória temporária"],
@@ -94,13 +92,13 @@ export default function PrivacyPolicy() {
               <li><strong>Retirar consentimento</strong> — a qualquer momento, sem prejuízo do tratamento anterior</li>
             </ul>
             <p>
-              Para exercer qualquer direito, contacte-nos por email:{" "}
-              <a href="mailto:hello@bynexa.dev" className="legal-link">hello@bynexa.dev</a>.
+              Para exercer qualquer direito, contacte-nos:{" "}
+              <a href="mailto:hello@bynexa.dev" className={s.link}>hello@bynexa.dev</a>.
               Respondemos em até 30 dias.
             </p>
             <p>
               Tem também o direito de apresentar reclamação à{" "}
-              <a href="https://www.cnpd.pt" target="_blank" rel="noopener noreferrer" className="legal-link">
+              <a href="https://www.cnpd.pt" target="_blank" rel="noopener noreferrer" className={s.link}>
                 CNPD — Comissão Nacional de Proteção de Dados
               </a>.
             </p>
@@ -123,7 +121,7 @@ export default function PrivacyPolicy() {
 
           <Section title="7. Alterações a esta política">
             <p>
-              Podemos atualizar esta política quando necessário. A data de "última atualização"
+              Podemos atualizar esta política quando necessário. A data de &ldquo;última atualização&rdquo;
               no topo indica quando foi revista pela última vez. Alterações relevantes serão
               comunicadas de forma visível no website.
             </p>
@@ -132,72 +130,28 @@ export default function PrivacyPolicy() {
           <Section title="8. Contacto">
             <p>
               Para qualquer questão sobre privacidade ou proteção de dados:{" "}
-              <a href="mailto:hello@bynexa.dev" className="legal-link">hello@bynexa.dev</a>
+              <a href="mailto:hello@bynexa.dev" className={s.link}>hello@bynexa.dev</a>
             </p>
           </Section>
 
           <div className="mt-12 pt-8" style={{ borderTop: "0.5px solid rgba(26,26,26,0.08)" }}>
-            <Link
-              href="/politica-de-cookies"
-              className="text-sm transition-opacity hover:opacity-70"
-              style={{ color: "#2A1363" }}
-            >
+            <Link href="/politica-de-cookies" className={s.link} style={{ fontSize: "0.875rem" }}>
               Ver também: Política de Cookies →
             </Link>
           </div>
+
         </div>
       </div>
-
-      <style jsx>{`
-        .prose-legal p {
-          font-size: 0.9rem;
-          line-height: 1.75;
-          color: rgba(26, 26, 26, 0.75);
-          margin-bottom: 1rem;
-        }
-        .prose-legal ul {
-          list-style: none;
-          padding: 0;
-          margin-bottom: 1rem;
-        }
-        .prose-legal ul li {
-          font-size: 0.9rem;
-          line-height: 1.75;
-          color: rgba(26, 26, 26, 0.75);
-          padding-left: 1.25rem;
-          position: relative;
-          margin-bottom: 0.4rem;
-        }
-        .prose-legal ul li::before {
-          content: "–";
-          position: absolute;
-          left: 0;
-          color: rgba(42, 19, 99, 0.4);
-        }
-        .prose-legal strong {
-          color: rgba(26, 26, 26, 0.9);
-          font-weight: 600;
-        }
-        :global(.legal-link) {
-          color: #2A1363;
-          text-decoration: underline;
-          text-underline-offset: 3px;
-          transition: opacity 0.15s;
-        }
-        :global(.legal-link:hover) {
-          opacity: 0.7;
-        }
-      `}</style>
     </main>
   );
 }
 
 function Section({ title, children }: { title: string; children: ReactNode }) {
   return (
-    <section className="mb-10">
+    <section style={{ marginBottom: "2.5rem" }}>
       <h2
-        className="font-semibold tracking-[-0.02em] mb-4"
-        style={{ fontSize: "1rem", color: "#111111" }}
+        className="font-semibold tracking-[-0.02em]"
+        style={{ fontSize: "1rem", color: "#111111", marginBottom: "1rem" }}
       >
         {title}
       </h2>
@@ -206,13 +160,7 @@ function Section({ title, children }: { title: string; children: ReactNode }) {
   );
 }
 
-function Table({
-  headers,
-  rows,
-}: {
-  headers?: string[];
-  rows: string[][];
-}) {
+function Table({ headers, rows }: { headers?: string[]; rows: string[][] }) {
   return (
     <div className="overflow-x-auto my-4 rounded-xl" style={{ border: "0.5px solid rgba(26,26,26,0.08)" }}>
       <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "0.82rem" }}>
@@ -220,17 +168,7 @@ function Table({
           <thead>
             <tr style={{ background: "rgba(42,19,99,0.04)" }}>
               {headers.map((h) => (
-                <th
-                  key={h}
-                  style={{
-                    padding: "10px 14px",
-                    textAlign: "left",
-                    fontWeight: 600,
-                    color: "rgba(26,26,26,0.6)",
-                    borderBottom: "0.5px solid rgba(26,26,26,0.08)",
-                    whiteSpace: "nowrap",
-                  }}
-                >
+                <th key={h} style={{ padding: "10px 14px", textAlign: "left", fontWeight: 600, color: "rgba(26,26,26,0.6)", borderBottom: "0.5px solid rgba(26,26,26,0.08)", whiteSpace: "nowrap" }}>
                   {h}
                 </th>
               ))}
@@ -239,20 +177,9 @@ function Table({
         )}
         <tbody>
           {rows.map((row, i) => (
-            <tr
-              key={i}
-              style={{ borderBottom: i < rows.length - 1 ? "0.5px solid rgba(26,26,26,0.06)" : "none" }}
-            >
+            <tr key={i} style={{ borderBottom: i < rows.length - 1 ? "0.5px solid rgba(26,26,26,0.06)" : "none" }}>
               {row.map((cell, j) => (
-                <td
-                  key={j}
-                  style={{
-                    padding: "10px 14px",
-                    color: j === 0 && !headers ? "rgba(26,26,26,0.5)" : "rgba(26,26,26,0.75)",
-                    fontWeight: j === 0 && !headers ? 500 : 400,
-                    verticalAlign: "top",
-                  }}
-                >
+                <td key={j} style={{ padding: "10px 14px", color: j === 0 && !headers ? "rgba(26,26,26,0.5)" : "rgba(26,26,26,0.75)", fontWeight: j === 0 && !headers ? 500 : 400, verticalAlign: "top" }}>
                   {cell}
                 </td>
               ))}

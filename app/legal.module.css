@@ -1,0 +1,54 @@
+.prose p {
+  font-size: 0.9rem;
+  line-height: 1.75;
+  color: rgba(26, 26, 26, 0.75);
+  margin-bottom: 1rem;
+}
+
+.prose ul {
+  list-style: none;
+  padding: 0;
+  margin-bottom: 1rem;
+}
+
+.prose ul li {
+  font-size: 0.9rem;
+  line-height: 1.75;
+  color: rgba(26, 26, 26, 0.75);
+  padding-left: 1.25rem;
+  position: relative;
+  margin-bottom: 0.4rem;
+}
+
+.prose ul li::before {
+  content: "–";
+  position: absolute;
+  left: 0;
+  color: rgba(42, 19, 99, 0.4);
+}
+
+.prose strong {
+  color: rgba(26, 26, 26, 0.9);
+  font-weight: 600;
+}
+
+.link {
+  color: #2a1363;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: opacity 0.15s;
+}
+
+.link:hover {
+  opacity: 0.7;
+}
+
+.categoryLabel {
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(42, 19, 99, 0.7);
+  margin-bottom: 0.5rem;
+  margin-top: 1.5rem;
+}
