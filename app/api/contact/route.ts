@@ -31,6 +31,10 @@ const ALLOWED_PROJECT_TYPES = new Set([
   "Institutional Website",
   "Web Application",
   "Other",
+  // Portuguese
+  "Website Institucional",
+  "Aplicação Web",
+  "Outro",
 ]);
 
 const ALLOWED_ORIGINS = new Set([
