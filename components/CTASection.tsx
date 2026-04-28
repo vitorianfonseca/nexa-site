@@ -133,7 +133,7 @@ export default function CTASection() {
               src="https://my.spline.design/ai-ab586tHgjlNDgx12H1Fqd6YT/?v=3"
               style={{ position: "absolute", top: "-10%", left: "-55%", right: "-15%", bottom: "-35%", width: "170%", height: "145%", border: "none" }}
               title="CTA visual"
-              sandbox="allow-scripts allow-same-origin"
+              sandbox="allow-scripts"
             />
           </div>
 

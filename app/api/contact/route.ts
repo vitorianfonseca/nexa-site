@@ -92,7 +92,7 @@ export async function POST(req: NextRequest) {
     await transporter.sendMail({
       from: `"Nexa Contact" <${process.env.GMAIL_USER}>`,
       to: "hello@bynexa.dev",
-      replyTo: `"${safeName}" <${email.trim()}>`,
+      replyTo: `"${name.trim().replace(/[\r\n"]/g, "")}" <${email.trim()}>`,
       subject: `[Nexa] ${safeProjectType} — ${safeName}`,
       html: `
         <div style="font-family: system-ui, -apple-system, sans-serif; max-width: 600px; margin: 0 auto; color: #1a1a1a;">
