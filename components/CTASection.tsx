@@ -127,13 +127,14 @@ export default function CTASection() {
             </div>
           </div>
 
-          {/* Right: Spline stars — bleeds vertically */}
-          <div className="hidden lg:block relative self-stretch" style={{ overflow: "visible" }} aria-hidden="true">
+          {/* Right: Spline stars */}
+          <div className="hidden lg:block relative self-stretch" style={{ overflow: "hidden" }} aria-hidden="true">
             <iframe
               src="https://my.spline.design/ai-ab586tHgjlNDgx12H1Fqd6YT/?v=3"
-              style={{ position: "absolute", top: "-10%", left: "-55%", right: "-15%", bottom: "-35%", width: "170%", height: "145%", border: "none" }}
+              style={{ position: "absolute", top: "-10%", left: "-20%", right: "0", bottom: "-10%", width: "120%", height: "120%", border: "none" }}
               title="CTA visual"
               sandbox="allow-scripts allow-same-origin"
+              loading="lazy"
             />
           </div>
 
