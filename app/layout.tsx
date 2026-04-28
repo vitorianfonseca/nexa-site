@@ -3,8 +3,6 @@ import localFont from "next/font/local";
 import { Cormorant_Garamond } from "next/font/google";
 import "./globals.css";
 
-import { GoogleAnalytics } from "@next/third-parties/google";
-
 import { LanguageProvider } from "@/context/LanguageContext";
 import Cursor from "@/components/Cursor";
 import LangSync from "@/components/LangSync";
@@ -14,6 +12,8 @@ import LoadingScreen from "@/components/LoadingScreen";
 import Navbar from "@/components/Navbar";
 import FontshareStyles from "@/components/FontshareStyles";
 import ServiceWorkerRegistration from "@/components/ServiceWorkerRegistration";
+import AnalyticsConsent from "@/components/AnalyticsConsent";
+import CookieBanner from "@/components/CookieBanner";
 
 const cormorant = Cormorant_Garamond({
   subsets: ["latin"],
@@ -135,13 +135,12 @@ export default function RootLayout({
       </head>
 
       <body className="font-sans bg-background text-foreground antialiased">
-        {/* Google Analytics (Next official way) */}
-        <GoogleAnalytics gaId="G-PR7MLF19JH" />
-
+        <AnalyticsConsent />
         <ServiceWorkerRegistration />
         <FontshareStyles />
 
         <LanguageProvider>
+          <CookieBanner />
           <LoadingScreen />
           <SplineBg />
           <Navbar />

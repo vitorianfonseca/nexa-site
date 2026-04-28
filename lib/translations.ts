@@ -189,6 +189,11 @@ export const translations = {
         about: "About",
         contact: "Contact",
       },
+      legal: {
+        privacy: "Privacy Policy",
+        cookies: "Cookie Policy",
+        cookiePrefs: "Cookie preferences",
+      },
       copyright: "© 2026 byNexa. All rights reserved.",
     },
   },
@@ -381,6 +386,11 @@ export const translations = {
         services: "Serviços",
         about: "Sobre",
         contact: "Contacto",
+      },
+      legal: {
+        privacy: "Política de Privacidade",
+        cookies: "Política de Cookies",
+        cookiePrefs: "Preferências de cookies",
       },
       copyright: "© 2026 byNexa. Todos os direitos reservados.",
     },
