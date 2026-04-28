@@ -79,6 +79,7 @@ export async function POST(req: NextRequest) {
     const safeCompany = company?.trim() ? esc(company.trim()) : "";
     const safeProjectType = esc(projectType);
     const safeMessage = esc(message.trim()).replace(/\n/g, "<br>");
+    const rawEmail = email.trim();
 
     const transporter = nodemailer.createTransport({
       service: "gmail",
@@ -107,7 +108,7 @@ export async function POST(req: NextRequest) {
               </tr>
               <tr style="border-bottom: 0.5px solid rgba(26,26,26,0.08);">
                 <td style="padding: 10px 0; font-weight: 600; font-size: 13px; color: #6B6B6B; vertical-align: top;">Email</td>
-                <td style="padding: 10px 0; font-size: 14px;"><a href="mailto:${safeEmail}" style="color: #2A1363; text-decoration: none;">${safeEmail}</a></td>
+                <td style="padding: 10px 0; font-size: 14px;"><a href="mailto:${rawEmail}" style="color: #2A1363; text-decoration: none;">${safeEmail}</a></td>
               </tr>
               ${safeCompany ? `
               <tr style="border-bottom: 0.5px solid rgba(26,26,26,0.08);">
@@ -124,7 +125,7 @@ export async function POST(req: NextRequest) {
               <p style="font-size: 14px; line-height: 1.7; margin: 0; color: #1a1a1a;">${safeMessage}</p>
             </div>
             <div style="margin-top: 24px; padding-top: 20px; border-top: 0.5px solid rgba(26,26,26,0.08);">
-              <a href="mailto:${safeEmail}" style="display: inline-flex; align-items: center; gap: 6px; padding: 10px 20px; background: linear-gradient(135deg, #2A1363, #7E4CC4); color: white; border-radius: 100px; font-size: 13px; font-weight: 600; text-decoration: none;">Reply to ${safeName}</a>
+              <a href="mailto:${rawEmail}" style="display: inline-flex; align-items: center; gap: 6px; padding: 10px 20px; background: linear-gradient(135deg, #2A1363, #7E4CC4); color: white; border-radius: 100px; font-size: 13px; font-weight: 600; text-decoration: none;">Reply to ${safeName}</a>
             </div>
           </div>
           <p style="text-align: center; font-size: 11px; color: rgba(26,26,26,0.3); margin-top: 20px;">Sent via bynexa.dev contact form</p>
