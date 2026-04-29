@@ -5,9 +5,11 @@ import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import Logo from "./Logo";
 import { useLanguage } from "@/context/LanguageContext";
+import { usePathname } from "next/navigation";
 
 export default function Navbar() {
   const { t, lang, toggle } = useLanguage();
+  const pathname = usePathname();
   const [isDark, setIsDark] = useState(true);
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState<string>("");
@@ -28,8 +30,13 @@ export default function Navbar() {
       observers.push(obs);
     });
 
+    // If we didn't find any section elements (e.g., on a route without hero), set fallback
+    if (observers.length === 0) {
+      setIsDark(pathname === "/");
+    }
+
     return () => observers.forEach((o) => o.disconnect());
-  }, []);
+  }, [pathname]);
 
   // Active section detection via IntersectionObserver
   useEffect(() => {
@@ -49,15 +56,21 @@ export default function Navbar() {
       observers.push(observer);
     });
 
+    if (observers.length === 0) {
+      setActiveSection("");
+    }
+
     return () => observers.forEach((o) => o.disconnect());
-  }, []);
+  }, [pathname]);
 
   const navLinks = [
-    { label: t.navbar.services, href: "#services", id: "services" },
-    { label: t.navbar.work, href: "#work", id: "work" },
-    { label: t.navbar.about, href: "#team", id: "team" },
-    { label: t.navbar.contact, href: "#contact", id: "contact" },
+    { label: t.navbar.services, href: "/#services", id: "services" },
+    { label: t.navbar.work, href: "/#work", id: "work" },
+    { label: t.navbar.about, href: "/#team", id: "team" },
+    { label: t.navbar.contact, href: "/#contact", id: "contact" },
   ];
+
+  // Do not prefetch `/` automatically to avoid loading heavy background assets.
 
 
   return (

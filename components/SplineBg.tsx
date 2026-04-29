@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { usePathname } from "next/navigation";
 
 const SPLINE_SRC = "https://my.spline.design/abstractnirvana-KYhkRlGqxUrOI1xAsyknGLDl/";
 
@@ -8,6 +9,8 @@ export default function SplineBg() {
   const ref = useRef<HTMLDivElement>(null);
   const [isIframeLoaded, setIsIframeLoaded] = useState(false);
   const [canLoadSpline, setCanLoadSpline] = useState(false);
+  const [hasSplineMounted, setHasSplineMounted] = useState(false);
+  const pathname = usePathname();
 
   useEffect(() => {
     const el = ref.current;
@@ -39,6 +42,12 @@ export default function SplineBg() {
         globalThis.setTimeout(schedule, 900);
       }
     };
+
+    // Reset when navigating to home or when pathname changes
+    if (pathname !== "/" && pathname.includes("#")) {
+      setCanLoadSpline(false);
+      setIsIframeLoaded(false);
+    }
 
     if (globalWindow.__nexaPageLoaded === true || document.readyState === "complete") {
       markPageLoaded();
@@ -83,7 +92,35 @@ export default function SplineBg() {
       window.removeEventListener("load", markPageLoaded);
       obs.disconnect();
     };
-  }, []);
+  }, [pathname]);
+
+  // Only mount the Spline iframe when the hero actually becomes visible (first time).
+  useEffect(() => {
+    if (!canLoadSpline || hasSplineMounted) return;
+
+    let hero = document.getElementById("hero");
+    if (!hero) {
+      // try again shortly if hero isn't in DOM yet
+      const t = setTimeout(() => {
+        hero = document.getElementById("hero");
+        if (hero) observer.observe(hero);
+      }, 200);
+      return () => clearTimeout(t);
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && pathname === "/") {
+          setHasSplineMounted(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.25, rootMargin: "-20% 0px -40% 0px" }
+    );
+
+    observer.observe(hero);
+    return () => observer.disconnect();
+  }, [canLoadSpline, hasSplineMounted, pathname]);
 
   return (
     <div
@@ -95,10 +132,12 @@ export default function SplineBg() {
         pointerEvents: "none",
         transition: "opacity 0.4s",
         background: "#070410",
+        opacity: pathname === "/" ? 1 : 0,
+        visibility: pathname === "/" ? "visible" : "hidden",
       }}
       aria-hidden="true"
     >
-      {canLoadSpline && (
+      {hasSplineMounted && (
         <iframe
           src={SPLINE_SRC}
           title="background"
@@ -119,53 +158,54 @@ export default function SplineBg() {
         />
       )}
 
-      <div
-        className="spline-fallback"
-        style={{
-          position: "absolute",
-          inset: 0,
-          zIndex: 1,
-          opacity: isIframeLoaded ? 0 : 1,
-          transition: "opacity 0.4s ease",
-          background:
-            "radial-gradient(1400px 900px at 70% 35%, rgba(130, 70, 220, 0.28), transparent 60%), radial-gradient(900px 700px at 30% 75%, rgba(74, 31, 153, 0.2), transparent 60%), linear-gradient(135deg, #06030f 0%, #070410 45%, #0a0720 100%)",
-        }}
-      >
+      {pathname === "/" && (
         <div
-          className="spline-fallback-orb spline-fallback-orb-a"
+          className="spline-fallback"
           style={{
             position: "absolute",
-            top: "16%",
-            left: "52%",
-            width: "26vw",
-            height: "26vw",
-            maxWidth: 360,
-            maxHeight: 360,
-            borderRadius: "50%",
-            background: "radial-gradient(circle, rgba(203,155,255,0.24) 0%, rgba(203,155,255,0) 70%)",
-            filter: "blur(16px)",
-            transform: "translate(-50%, -50%)",
+            inset: 0,
+            zIndex: 1,
+            opacity: isIframeLoaded ? 0 : 1,
+            transition: "opacity 0.4s ease",
+            background:
+              "radial-gradient(1400px 900px at 70% 35%, rgba(130, 70, 220, 0.28), transparent 60%), radial-gradient(900px 700px at 30% 75%, rgba(74, 31, 153, 0.2), transparent 60%), linear-gradient(135deg, #06030f 0%, #070410 45%, #0a0720 100%)",
           }}
-        />
-        <div
-          className="spline-fallback-orb spline-fallback-orb-b"
-          style={{
-            position: "absolute",
-            bottom: "14%",
-            right: "12%",
-            width: "20vw",
-            height: "20vw",
-            maxWidth: 300,
-            maxHeight: 300,
-            borderRadius: "50%",
-            background: "radial-gradient(circle, rgba(143,87,255,0.18) 0%, rgba(143,87,255,0) 70%)",
-            filter: "blur(14px)",
-          }}
-        />
-      </div>
+        >
+          <div
+            className="spline-fallback-orb spline-fallback-orb-a"
+            style={{
+              position: "absolute",
+              top: "16%",
+              left: "52%",
+              width: "26vw",
+              height: "26vw",
+              maxWidth: 360,
+              maxHeight: 360,
+              borderRadius: "50%",
+              background: "radial-gradient(circle, rgba(203,155,255,0.24) 0%, rgba(203,155,255,0) 70%)",
+              filter: "blur(16px)",
+              transform: "translate(-50%, -50%)",
+            }}
+          />
+          <div
+            className="spline-fallback-orb spline-fallback-orb-b"
+            style={{
+              position: "absolute",
+              bottom: "14%",
+              right: "12%",
+              width: "20vw",
+              height: "20vw",
+              maxWidth: 300,
+              maxHeight: 300,
+              borderRadius: "50%",
+              background: "radial-gradient(circle, rgba(143,87,255,0.18) 0%, rgba(143,87,255,0) 70%)",
+              filter: "blur(14px)",
+            }}
+          />
 
-
-      <div style={{ position: "absolute", bottom: 0, right: 0, width: 220, height: 44, background: "#070410" }} />
+          <div style={{ position: "absolute", bottom: 0, right: 0, width: 220, height: 44, background: "#070410" }} />
+        </div>
+      )}
 
       <style jsx>{`
         .spline-fallback {

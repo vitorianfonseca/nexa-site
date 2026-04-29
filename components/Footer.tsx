@@ -1,10 +1,11 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import Logo from "./Logo";
 import { useLanguage } from "@/context/LanguageContext";
+import { useRouter } from "next/navigation";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 function GitHubIcon() {
@@ -35,13 +36,16 @@ function InstagramIcon() {
 
 export default function Footer() {
   const { t } = useLanguage();
+  const router = useRouter();
 
   const navLinks = [
-    { label: t.footer.links.work, href: "#work" },
-    { label: t.footer.links.services, href: "#services" },
-    { label: t.footer.links.about, href: "#team" },
-    { label: t.footer.links.contact, href: "#contact" },
+    { label: t.footer.links.work, href: "/#work" },
+    { label: t.footer.links.services, href: "/#services" },
+    { label: t.footer.links.about, href: "/#team" },
+    { label: t.footer.links.contact, href: "/#contact" },
   ];
+
+  // Avoid prefetching `/` to prevent loading Spline assets prematurely
 
   // Social links — re-enable when URLs are ready
   // const socialLinks = [
