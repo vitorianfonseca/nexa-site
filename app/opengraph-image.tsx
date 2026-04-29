@@ -111,7 +111,7 @@ export default function OgImage() {
               letterSpacing: "-0.5px",
             }}
           >
-            Nexa
+            byNexa
           </span>
           <span
             style={{

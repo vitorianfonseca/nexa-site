@@ -17,17 +17,32 @@ export default function CTASection() {
     const section = ref.current;
     if (!section) return;
 
+    // Start loading as soon as the hero Spline is ready (or immediately if already done)
+    const load = () => setShowSpline(true);
+
+    const globalWindow = window as Window & { __nexaSplineReady?: boolean };
+    if (globalWindow.__nexaSplineReady) {
+      load();
+      return;
+    }
+
+    // Fall back to IntersectionObserver with a large margin so we preload well ahead
     const obs = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          setShowSpline(true);
+          load();
           obs.disconnect();
         }
       },
-      { rootMargin: "200px" }
+      { rootMargin: "1200px" }
     );
     obs.observe(section);
-    return () => obs.disconnect();
+
+    window.addEventListener("nexa:spline-ready", load, { once: true });
+    return () => {
+      obs.disconnect();
+      window.removeEventListener("nexa:spline-ready", load);
+    };
   }, []);
 
   return (

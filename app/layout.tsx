@@ -48,14 +48,15 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://bynexa.dev"),
 
   title: {
-    default: "Nexa — Web Development Agency",
-    template: "%s | Nexa",
+    default: "byNexa — Web Development Agency",
+    template: "%s | byNexa",
   },
 
   description:
     "We build modern, fast, and lasting websites for businesses that want more than just a website. Based in Leiria, Portugal.",
 
   keywords: [
+    "byNexa",
     "web development",
     "agency",
     "Leiria",
@@ -66,21 +67,25 @@ export const metadata: Metadata = {
     "web applications",
   ],
 
-  authors: [{ name: "Nexa", url: "https://bynexa.dev" }],
-  creator: "Nexa",
+  authors: [{ name: "byNexa", url: "https://bynexa.dev" }],
+  creator: "byNexa",
 
   icons: {
-    icon: "/icon.svg",
+    icon: [
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/icon.svg", type: "image/svg+xml" },
+    ],
     shortcut: "/favicon.ico",
+    apple: "/favicon.ico",
   },
 
   openGraph: {
     type: "website",
-    locale: "en_US",
-    alternateLocale: ["pt_PT"],
+    locale: "pt_PT",
+    alternateLocale: ["en_US"],
     url: "https://bynexa.dev",
-    siteName: "Nexa",
-    title: "Nexa — Web Development Agency",
+    siteName: "byNexa",
+    title: "byNexa — Web Development Agency",
     description:
       "We build modern, fast, and lasting websites for businesses that want more.",
 
@@ -89,14 +94,14 @@ export const metadata: Metadata = {
         url: "https://bynexa.dev/preview.png",
         width: 1200,
         height: 630,
-        alt: "Nexa — Web Development Agency",
+        alt: "byNexa — Web Development Agency",
       },
     ],
   },
 
   twitter: {
     card: "summary_large_image",
-    title: "Nexa — Web Development Agency",
+    title: "byNexa — Web Development Agency",
     description:
       "We build modern, fast, and lasting websites for businesses that want more.",
     images: ["https://bynexa.dev/preview.png"],
@@ -115,6 +120,22 @@ export const metadata: Metadata = {
   },
 };
 
+const organizationSchema = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: "byNexa",
+  url: "https://bynexa.dev",
+  logo: "https://bynexa.dev/logo_light.svg",
+  description:
+    "We build modern, fast, and lasting websites for businesses that want more than just a website. Based in Leiria, Portugal.",
+  address: {
+    "@type": "PostalAddress",
+    addressLocality: "Leiria",
+    addressCountry: "PT",
+  },
+  sameAs: ["https://bynexa.dev"],
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -122,11 +143,15 @@ export default function RootLayout({
 }>) {
   return (
     <html
-      lang="en"
+      lang="pt"
       className={`${geistSans.variable} ${geistMono.variable} ${cormorant.variable} ${cabinetGrotesk.variable}`}
       suppressHydrationWarning
     >
       <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
+        />
         <link rel="preconnect" href="https://my.spline.design" crossOrigin="" />
         <link rel="dns-prefetch" href="//my.spline.design" />
         <link rel="preconnect" href="https://prod.spline.design" crossOrigin="" />
