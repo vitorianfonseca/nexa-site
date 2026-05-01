@@ -1,11 +1,10 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import Logo from "./Logo";
 import { useLanguage } from "@/context/LanguageContext";
-import { useRouter } from "next/navigation";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 function GitHubIcon() {
@@ -36,7 +35,6 @@ function InstagramIcon() {
 
 export default function Footer() {
   const { t } = useLanguage();
-  const router = useRouter();
 
   const navLinks = [
     { label: t.footer.links.work, href: "/#work" },
