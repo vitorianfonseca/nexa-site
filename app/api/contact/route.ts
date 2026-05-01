@@ -40,16 +40,13 @@ const ALLOWED_PROJECT_TYPES = new Set([
 const ALLOWED_ORIGINS = new Set([
   "https://bynexa.dev",
   "https://www.bynexa.dev",
-  "http://localhost:3000",
-  "http://localhost:3001",
-  "http://localhost:3002",
-  "http://localhost:3003",
 ]);
 
 export async function POST(req: NextRequest) {
   // CSRF: validate Origin header
   const origin = req.headers.get("origin") ?? "";
-  if (!ALLOWED_ORIGINS.has(origin)) {
+  const isLocalhost = /^http:\/\/localhost(:\d+)?$/.test(origin);
+  if (!ALLOWED_ORIGINS.has(origin) && !isLocalhost) {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
 
@@ -95,7 +92,7 @@ export async function POST(req: NextRequest) {
 
     await transporter.sendMail({
       from: `"Nexa Contact" <${process.env.GMAIL_USER}>`,
-      to: "hello@bynexa.dev",
+      to: process.env.GMAIL_USER,
       replyTo: `"${name.trim().replace(/[\r\n"]/g, "")}" <${email.trim()}>`,
       subject: `[Nexa] ${safeProjectType} — ${safeName}`,
       html: `

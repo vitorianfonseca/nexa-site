@@ -55,7 +55,7 @@ export default function Contact() {
   };
 
   const borderColor = (field: string) =>
-    focused === field ? "border-accent" : "border-[rgba(26,26,26,0.12)]";
+    focused === field ? "border-transparent" : "border-[rgba(26,26,26,0.12)]";
 
   return (
     <section
