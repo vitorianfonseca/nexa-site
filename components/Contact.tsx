@@ -275,6 +275,13 @@ export default function Contact() {
                     )}
                   </motion.button>
 
+                  <p className="text-[11px] leading-relaxed" style={{ color: "rgba(26,26,26,0.38)" }}>
+                    {t.contact.privacyNotice}{" "}
+                    <a href="/politica-de-privacidade" className="underline underline-offset-2 hover:opacity-70 transition-opacity">
+                      {t.contact.privacyLink}
+                    </a>.
+                  </p>
+
                   <AnimatePresence>
                     {error && (
                       <motion.p initial={{ opacity: 0, y: -4 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}

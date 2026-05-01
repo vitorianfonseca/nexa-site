@@ -133,7 +133,12 @@ const organizationSchema = {
     addressLocality: "Leiria",
     addressCountry: "PT",
   },
-  sameAs: ["https://bynexa.dev"],
+  sameAs: [
+    "https://bynexa.dev",
+    "https://www.linkedin.com/company/bynexa",
+    "https://github.com/bynexa",
+    "https://www.instagram.com/bynexa",
+  ],
 };
 
 export default function RootLayout({

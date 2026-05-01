@@ -180,6 +180,8 @@ export const translations = {
       errorFallback: "Something went wrong. Please try again.",
       email: "hello@bynexa.dev",
       location: "Leiria, Portugal",
+      privacyNotice: "By submitting this form, you agree to your data being used to respond to your enquiry. See our",
+      privacyLink: "Privacy Policy",
     },
     footer: {
       tagline: "Built to last.",
@@ -193,8 +195,36 @@ export const translations = {
         privacy: "Privacy Policy",
         cookies: "Cookie Policy",
         cookiePrefs: "Cookie preferences",
+        legalNotice: "Legal Notice",
+        terms: "Terms & Conditions",
+        complaints: "Complaints",
       },
+      nif: "NIF 275973620",
       copyright: "© 2026 byNexa. All rights reserved.",
+    },
+    testimonials: {
+      label: "Clients",
+      title: "What our clients say",
+      items: [
+        {
+          quote: "Working with byNexa was seamless from start to finish. They delivered our new website ahead of schedule and the results exceeded every expectation.",
+          name: "Miguel Costa",
+          role: "CEO",
+          company: "Forge Studio",
+        },
+        {
+          quote: "The team understood our vision immediately. Our bookings doubled in the first month after the new website launched. Genuinely impressive work.",
+          name: "Ana Ferreira",
+          role: "Owner",
+          company: "Taberna do Sal",
+        },
+        {
+          quote: "Professional, responsive, and genuinely talented. byNexa turned a complex brief into something beautiful that our patients trust instantly.",
+          name: "Rui Almeida",
+          role: "Director",
+          company: "Clínica Nova Vida",
+        },
+      ],
     },
   },
   pt: {
@@ -378,6 +408,8 @@ export const translations = {
       errorFallback: "Algo correu mal. Por favor tente novamente.",
       email: "hello@bynexa.dev",
       location: "Leiria, Portugal",
+      privacyNotice: "Ao enviar este formulário, aceita que os seus dados sejam usados para responder ao seu pedido. Consulte a nossa",
+      privacyLink: "Política de Privacidade",
     },
     footer: {
       tagline: "Construído para durar.",
@@ -391,8 +423,36 @@ export const translations = {
         privacy: "Política de Privacidade",
         cookies: "Política de Cookies",
         cookiePrefs: "Preferências de cookies",
+        legalNotice: "Aviso Legal",
+        terms: "Termos e Condições",
+        complaints: "Livro de Reclamações",
       },
+      nif: "NIF 275973620",
       copyright: "© 2026 byNexa. Todos os direitos reservados.",
+    },
+    testimonials: {
+      label: "Clientes",
+      title: "O que dizem os nossos clientes",
+      items: [
+        {
+          quote: "Trabalhar com a byNexa foi uma experiência impecável. Entregaram o nosso novo website antes do prazo e os resultados superaram todas as expectativas.",
+          name: "Miguel Costa",
+          role: "CEO",
+          company: "Forge Studio",
+        },
+        {
+          quote: "A equipa percebeu a nossa visão de imediato. As reservas duplicaram no primeiro mês após o lançamento. Um trabalho verdadeiramente impressionante.",
+          name: "Ana Ferreira",
+          role: "Proprietária",
+          company: "Taberna do Sal",
+        },
+        {
+          quote: "Profissionais, disponíveis e genuinamente talentosos. A byNexa transformou um briefing complexo em algo que os nossos clientes confiam de imediato.",
+          name: "Rui Almeida",
+          role: "Diretor",
+          company: "Clínica Nova Vida",
+        },
+      ],
     },
   },
 };

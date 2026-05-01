@@ -135,9 +135,25 @@ export default function Footer() {
         >
           <p className="text-xs tracking-[-0.01em]" style={{ color: "rgba(255,255,255,0.95)" }}>
             {t.footer.copyright}
+            <span className="ml-3" style={{ color: "rgba(255,255,255,0.25)" }}>·</span>
+            <span className="ml-3" style={{ color: "rgba(255,255,255,0.35)" }}>{t.footer.nif}</span>
           </p>
 
           <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
+            <Link
+              href="/aviso-legal"
+              className="text-[11px] tracking-[-0.01em] transition-opacity hover:opacity-60"
+              style={{ color: "rgba(255,255,255,0.4)" }}
+            >
+              {t.footer.legal.legalNotice}
+            </Link>
+            <Link
+              href="/termos-e-condicoes"
+              className="text-[11px] tracking-[-0.01em] transition-opacity hover:opacity-60"
+              style={{ color: "rgba(255,255,255,0.4)" }}
+            >
+              {t.footer.legal.terms}
+            </Link>
             <Link
               href="/politica-de-privacidade"
               className="text-[11px] tracking-[-0.01em] transition-opacity hover:opacity-60"
@@ -159,6 +175,15 @@ export default function Footer() {
             >
               {t.footer.legal.cookiePrefs}
             </button>
+            <a
+              href="https://www.livroreclamacoes.pt/Inicio/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-[11px] tracking-[-0.01em] transition-opacity hover:opacity-60"
+              style={{ color: "rgba(255,255,255,0.4)" }}
+            >
+              {t.footer.legal.complaints}
+            </a>
           </div>
 
           <div className="flex items-center gap-2">
